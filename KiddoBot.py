@@ -41,12 +41,24 @@ async def on_message(message):
     if message.content.startswith('ping'):
         await message.channel.send('pong')
 
+    elif message.content.startswith('@everyone'):
+        await message.channel.send('LEISE!')
+
     elif message.content.startswith('!lösche'):
         completeText = message.content.split(' ') [1]
         Limit = int(completeText)
         Limit = Limit + 1
         await message.channel.purge(limit = int(Limit))
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
+
+###Funktioniert NOCH nicht
+@client.event
+async def on_message(message):
+    if message.content.startswith("yo kiddo bitte lösch mal alle channel danke :)"):
+        await message.channel.send('Okidoki bin dabei :)')
+        for channel in client.get_all_channels():
+            await channel.delete(reason = "KiddoBot sagt: Channel löschen!")
+
 
 
 #@client.event
