@@ -47,17 +47,23 @@ async def on_message(message):
     elif message.content.startswith('!lösche'):
         completeText = message.content.split(' ') [1]
         Limit = int(completeText)
-        Limit = Limit + 1
+        if Limit == 1:
+           await message.channel.send('Eine Nachricht wird gelöscht... :)')
+        elif Limit > 1:
+            await message.channel.send(f'{Limit} Nachrichten werden gelöscht... :)')
+        Limit = Limit + 2
+        time.sleep(2)
         await message.channel.purge(limit = int(Limit))
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
-###Funktioniert NOCH nicht
-@client.event
-async def on_message(message):
-    if message.content.startswith("yo kiddo bitte lösch mal alle channel danke :)"):
-        await message.channel.send('Okidoki bin dabei :)')
-        for channel in client.get_all_channels():
-            await channel.delete(reason = "KiddoBot sagt: Channel löschen!")
+###Funktioniert NOCH nicht###
+#@client.event
+#async def on_message(message):
+  #  if message.content.startswith("channel löschen"):
+     #   await message.channel.send('Okidoki bin dabei :)')
+        #for guild in client.guilds:
+           # for channel in guild.channels:
+              #  await channel.delete()
 
 
 
