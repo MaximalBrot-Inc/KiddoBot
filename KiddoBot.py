@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 import time
 
+
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
 
@@ -31,7 +32,7 @@ async def on_ready ():
 async def on_member_join(member):
     await member.create_dm()
     await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
-                                 f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig.Also keine Zeit verschwenden!!')
+                                 f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
 
 @client.event
 async def on_message(message):
@@ -56,7 +57,29 @@ async def on_message(message):
         await message.channel.purge(limit = int(Limit))
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
-###Funktioniert NOCH nicht###
+    if message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
+        args = message.content.split(' ')
+        if len(args) == 2:
+            member : Member = discord.utils.find(lambda m: args[1] in m.name, message.guild.members)
+            if member:
+                await message.channel.send(f'{member} wird gebannt... Tschüssi {member} :)')
+                time.sleep(2)
+                await member.ban()
+                await message.channel.send(f'{member} wurde gebannt :)')
+            else:
+                await message.channel.send('Der User wurde nicht gefunden!')
+
+    if message.content.startswith('!bänn all'):
+        await message.channel.send('Alle User werden gebannt... Tschüssi :)')
+        time.sleep(2)
+        for guild in message.client.guild:
+            for member in guild.members:
+                await member.ban()
+                await message.channel.send(f'{member} wurde gebannt!')
+        #await message.guild.ban()
+        #await message.channel.send('Alle User wurden gebannt!')
+
+###Funktioniert NOCH nicht###Notiz: Wahrscheinlich kann man keine Channel in einem Community Server löschen###
 #@client.event
 #async def on_message(message):
   #  if message.content.startswith("channel löschen"):
@@ -76,7 +99,7 @@ async def on_message(message):
        # await message.channel.purge(limit = int(Limit))
        # print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
-###Unendliche Nachrichten###Notitz: Wenn man sie aktiviert funktioniert alles andere nicht mehr keine ahnung warum###
+###Unendliche Nachrichten###Notiz: Wenn man sie aktiviert funktioniert alles andere nicht mehr keine ahnung warum###
 #@client.event
 #async def on_message(message):
   #  if message.content =='happy birthday':
