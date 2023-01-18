@@ -16,12 +16,14 @@ client = discord.Client(intents = intents)
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-schalter = 1
 
-def Schalter (frage):
-    if frage == "y":
+def check(reaction, user):
+    return user == message.author
+
+def Schalter (response):
+    if response == "y" or response == "yes" or response == "ja":
         switch = "an"
-    if frage =="n":
+    if frage =="n" or response == "no" or response == "nein":
         switch = "aus"
     return switch
 
@@ -42,6 +44,8 @@ async def on_member_join(member):
     await member.create_dm()
     ###Nicht so nette Nachrichten lol###
     if schalter == an:
+        ###Banne alle neuen Mitglieder###
+        await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
         await member.dm_channel.send('Tut mir leid, aber du bist noch nicht groß genug für den Server... :( Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
 
     elif schalter == aus:
@@ -49,8 +53,8 @@ async def on_member_join(member):
         await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
                                  f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
 
-###Banne alle neuen Mitglieder###
-    await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
+
+
 
 
 
@@ -60,10 +64,21 @@ async def on_message(message):
         return
 
     if message.content.startswith('!switchstatus'):
+
         await message.channel.send(f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
-        if message.content == "y" or message.content == "yes" or message.content == "ja":
-            frage = "y"
-            await message.channel.send(f'Der Status deines Schalters ist {Schalter(frage)}')
+        response =  await client.wait_for("y", check=check , timeout = 15)
+        if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
+            await client.say('Der Schalter ist ' + Schalter(response))
+
+        elif response.clean_content.lower() == 'n' or response.clean_content.lower() == 'no' or response.clean_content.lower() == 'nein':
+            await client.say('Okidoki, dann halt nicht :)')
+
+        else:
+            await client.say("Du bist zu dumm um zu verstehen, was ich dir sage :)")
+        ###Wenn wir ganz gemein unterwegs sind###
+            #await message.author.ban(reason = "Kiddo meint, du bist zu dumm um zu verstehen, was ich dir sage. Du bist gebannt :)")
+
+        #await message.channel.send(f'Der Status deines Schalters ist {Schalter(frage)}')
 
        # if a == ('y' or 'yes' or 'ja'):
           #  frage = "y"
@@ -163,4 +178,4 @@ async def on_message(message):
        # print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
 
-client.run(TOKEN)
+client.run('TOKEN')
