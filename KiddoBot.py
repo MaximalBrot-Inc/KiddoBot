@@ -7,7 +7,8 @@ import discord
 import os
 from dotenv import load_dotenv
 import time
-
+import math
+import random
 
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
@@ -15,6 +16,14 @@ client = discord.Client(intents = intents)
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
+schalter = 1
+
+def Schalter (frage):
+    if frage == "y":
+        switch = "an"
+    if frage =="n":
+        switch = "aus"
+    return switch
 
 @client.event
 async def on_ready ():
@@ -31,13 +40,44 @@ async def on_ready ():
 @client.event
 async def on_member_join(member):
     await member.create_dm()
-    await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
+    ###Nicht so nette Nachrichten lol###
+    if schalter == an:
+        await member.dm_channel.send('Tut mir leid, aber du bist noch nicht groß genug für den Server... :( Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
+
+    elif schalter == aus:
+    ###Nette Nachrichten für neue Mitglieder###
+        await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
                                  f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
+
+###Banne alle neuen Mitglieder###
+    await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
+
+
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
+
+    if message.content.startswith('!switchstatus'):
+        await message.channel.send(f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
+        if message.content == "y" or message.content == "yes" or message.content == "ja":
+            frage = "y"
+            await message.channel.send(f'Der Status deines Schalters ist {Schalter(frage)}')
+
+       # if a == ('y' or 'yes' or 'ja'):
+          #  frage = "y"
+            #await message.channel.send(f'Der Schalter ist zur Zeit {Schalter(frage)} :)')
+       # elif a == ('n' or 'no' or 'nein'):
+          #  frage = "n"
+            #await message.channel.send(f'Der Schalter ist zur Zeit {Schalter(frage)} :)')
+
+
+        #if message.content.startswith('y' , 'yes' , 'ja'):
+           # Switch = "y"
+        #elif message.content.startswith('n' , 'no' , 'nein'):
+           # Switch = "n"
+            #await message.channel.send('OK! Der Schalter wurde nicht geändert :)')
 
     if message.content.startswith('ping'):
         await message.channel.send('pong')
@@ -57,6 +97,7 @@ async def on_message(message):
         await message.channel.purge(limit = int(Limit))
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
+
     if message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
         args = message.content.split(' ')
         if len(args) == 2:
@@ -69,6 +110,7 @@ async def on_message(message):
             else:
                 await message.channel.send('Der User wurde nicht gefunden!')
 
+
     if message.content.startswith('!bänn all'):
         await message.channel.send('Alle User werden gebannt... Tschüssi :)')
         time.sleep(2)
@@ -76,8 +118,31 @@ async def on_message(message):
             for member in guild.members:
                 await member.ban()
                 await message.channel.send(f'{member} wurde gebannt!')
+
+
+    if message.content.startswith('!help'):
+        await message.channel.send('Du brauchst wirklich hilfe :nauseated_face: :face_vomiting:')
+        time.sleep(2)
+        await message.channel.send(" ```"
+                                   "Hier ist die Hilfe: \n"
+                                   "!help: Zeigt diese Nachricht dödel! \n"
+                                   "ping: Pong \n"
+                                   "@ everyone: tu's nicht. \n"
+                                   "!lösche belieb. Zahl: löscht beliebig viele Nachrichten \n"
+                                   "!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
+                                   "```")
+
+
+###Unendliche Nachrichten###
+    if message.content == 'happy birthday':
+        while True:
+            await message.channel.send('Happy Birthday! 🎈🎉')
+            time.sleep(0.6)
         #await message.guild.ban()
         #await message.channel.send('Alle User wurden gebannt!')
+
+
+
 
 ###Funktioniert NOCH nicht###Notiz: Wahrscheinlich kann man keine Channel in einem Community Server löschen###
 #@client.event
@@ -88,8 +153,6 @@ async def on_message(message):
            # for channel in guild.channels:
               #  await channel.delete()
 
-
-
 #@client.event
 #async def on_message(message):
   #  if message.content.startswith('!lösche'):
@@ -98,14 +161,6 @@ async def on_message(message):
         #Limit = Limit + 1
        # await message.channel.purge(limit = int(Limit))
        # print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
-
-###Unendliche Nachrichten###Notiz: Wenn man sie aktiviert funktioniert alles andere nicht mehr keine ahnung warum###
-#@client.event
-#async def on_message(message):
-  #  if message.content =='happy birthday':
-     #   while True:
-        #    await message.channel.send('Happy Birthday! 🎈🎉')
-           # time.sleep(0.6)
 
 
 client.run(TOKEN)
