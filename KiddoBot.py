@@ -17,18 +17,12 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 
-def check(reaction, user):
-    return user == message.author
 
-def Schalter (response):
-    if response == "y" or response == "yes" or response == "ja":
-        switch = "an"
-    if frage =="n" or response == "no" or response == "nein":
-        switch = "aus"
-    return switch
+
 
 @client.event
 async def on_ready ():
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='durch dein Fenster :)'))
     for guild in client.guilds:
        if guild.name == GUILD:
            break
@@ -38,6 +32,10 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Was geht! Ich bin bereit ein paar Server zu crashen baby!")
+
+
+##############################################################################################
+
 
 @client.event
 async def on_member_join(member):
@@ -63,36 +61,43 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!switchstatus'):
 
+    def check(m):
+       return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
+
+    def Schalter(switch_state):
+        switch = "error"
+        if switch_state:
+            switch = "an"
+        if switch_state== False:
+            switch = "aus"
+        return switch
+
+    if message.content.startswith('!switchpls'):
+        if switch_state== False:
+            await message.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt.")
+            switch_state = True
+        if schalter:
+            await message.channel.send("Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt.")
+            switch_state = False
+
+    if message.content.startswith('!switchstatus'):
+        switch_state = False
         await message.channel.send(f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
-        response =  await client.wait_for("y", check=check , timeout = 15)
+        response =  await client.wait_for('message', check=check , timeout = 15)
         if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
-            await client.say('Der Schalter ist ' + Schalter(response))
+            await message.channel.send('Der Schalter ist ' + Schalter(switch_state))
 
         elif response.clean_content.lower() == 'n' or response.clean_content.lower() == 'no' or response.clean_content.lower() == 'nein':
-            await client.say('Okidoki, dann halt nicht :)')
+            await message.channel.send('Okidoki, dann halt nicht :)')
 
         else:
-            await client.say("Du bist zu dumm um zu verstehen, was ich dir sage :)")
+            await message.channel.send("Du bist zu dumm um zu verstehen, was ich dir sage :)")
         ###Wenn wir ganz gemein unterwegs sind###
             #await message.author.ban(reason = "Kiddo meint, du bist zu dumm um zu verstehen, was ich dir sage. Du bist gebannt :)")
 
         #await message.channel.send(f'Der Status deines Schalters ist {Schalter(frage)}')
 
-       # if a == ('y' or 'yes' or 'ja'):
-          #  frage = "y"
-            #await message.channel.send(f'Der Schalter ist zur Zeit {Schalter(frage)} :)')
-       # elif a == ('n' or 'no' or 'nein'):
-          #  frage = "n"
-            #await message.channel.send(f'Der Schalter ist zur Zeit {Schalter(frage)} :)')
-
-
-        #if message.content.startswith('y' , 'yes' , 'ja'):
-           # Switch = "y"
-        #elif message.content.startswith('n' , 'no' , 'nein'):
-           # Switch = "n"
-            #await message.channel.send('OK! Der Schalter wurde nicht geändert :)')
 
     if message.content.startswith('ping'):
         await message.channel.send('pong')
@@ -134,6 +139,12 @@ async def on_message(message):
                 await member.ban()
                 await message.channel.send(f'{member} wurde gebannt!')
 
+    if message.content.startswith('!changenickpls'):
+        await message.channel.send('Jawoll Chef alle Nicknames werden geändert... :)')
+        time.sleep(2)
+        for member in message.guild.members:  # loop through every member in the guild
+            await member.edit(nick="727 WYSi WYFSi")  # reset their nickname
+
 
     if message.content.startswith('!help'):
         await message.channel.send('Du brauchst wirklich hilfe :nauseated_face: :face_vomiting:')
@@ -168,14 +179,6 @@ async def on_message(message):
            # for channel in guild.channels:
               #  await channel.delete()
 
-#@client.event
-#async def on_message(message):
-  #  if message.content.startswith('!lösche'):
-     #   completeText = message.content.split(' ') [1]
-        #Limit = int(completeText)
-        #Limit = Limit + 1
-       # await message.channel.purge(limit = int(Limit))
-       # print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
 
 client.run('TOKEN')
