@@ -43,8 +43,8 @@ async def on_member_join(member):
     ###Nicht so nette Nachrichten lol###
     if schalter == an:
         ###Banne alle neuen Mitglieder###
-        await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
         await member.dm_channel.send('Tut mir leid, aber du bist noch nicht groß genug für den Server... :( Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
+        await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
 
     elif schalter == aus:
     ###Nette Nachrichten für neue Mitglieder###
@@ -75,7 +75,7 @@ async def on_message(message):
 
     if message.content.startswith('!switchpls'):
         if switch_state== False:
-            await message.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt.")
+            await message.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)")
             switch_state = True
         if schalter:
             await message.channel.send("Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt.")
@@ -105,7 +105,15 @@ async def on_message(message):
     elif message.content.startswith('@everyone'):
         await message.channel.send('LEISE!')
 
-    elif message.content.startswith('!lösche'):
+    if message.content.startswith('!rolldice'):
+        completeRoll = message.content.split(' ') [1]
+        roll = int(completeRoll)
+        while roll > 0:
+            await message.channel.send('You rolled a ' + str(random.randint(1,6)))
+            roll = roll - 1
+            time.sleep(1)
+
+    if message.content.startswith('!lösche'):
         completeText = message.content.split(' ') [1]
         Limit = int(completeText)
         if Limit == 1:
