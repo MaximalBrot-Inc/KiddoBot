@@ -105,6 +105,7 @@ async def on_message(message):
     elif message.content.startswith('@everyone'):
         await message.channel.send('LEISE!')
 
+#Würfel
     elif message.content.startswith('!rolldice'):
         completeRoll = message.content.split(' ') [1]
         roll = int(completeRoll)
@@ -113,6 +114,7 @@ async def on_message(message):
             roll = roll - 1
             time.sleep(1)
 
+#lösche eine bestimmte anzahl an nachrichten
     elif message.content.startswith('!lösche'):
         completeText = message.content.split(' ') [1]
         Limit = int(completeText)
@@ -125,7 +127,7 @@ async def on_message(message):
         await message.channel.purge(limit = int(Limit))
         print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
 
-
+#bann einen user
     elif message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
         args = message.content.split(' ')
         if len(args) == 2:
@@ -138,7 +140,7 @@ async def on_message(message):
             else:
                 await message.channel.send('Der User wurde nicht gefunden!')
 
-
+#bann alle user
     elif message.content.startswith('!bänn all'):
         await message.channel.send('Alle User werden gebannt... Tschüssi :)')
         time.sleep(2)
@@ -147,22 +149,31 @@ async def on_message(message):
                 await member.ban()
                 await message.channel.send(f'{member} wurde gebannt!')
 
-
-    elif message.content.startswith('!changenickpls'):
-        await message.channel.send('Jawoll Chef alle Nicknames werden geändert... :)')
+#ändert alle nicknames zu dem, was du willst
+    elif message.content.startswith('!changenickto'):
+        fast = message.content.split(' ') [1]
+        await message.channel.send(f'Jawoll Chef alle Nicknames werden zu {fast} geändert... :)')
         time.sleep(2)
-        for member in message.guild.members:  # loop through every member in the guild
-            await member.edit(nick="727 WYSi WYFSi")  # reset their nickname
+        for member in message.guild.members:
+            await member.edit(nick=f"{fast}")
 
-
+#tanzt mit dir :)
     elif message.content.startswith('!dance'):
         await message.channel.send("Let's dance :)" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\dance.mp4"))
 
-    elif message.content.startswith('!ABFAHRT'):
-        await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
-        time.sleep(8)
-        for channel in message.guild.channels:
-            await channel.delete( reason = 'MFG KiddoBot :)')
+#löscht alle channels
+    #elif message.content.startswith('!ABFAHRT'):
+       # await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        #time.sleep(8)
+        #for channel in message.guild.channels:
+           # await channel.delete( reason = 'MFG KiddoBot :)')
+
+#####################2BHEL Zeug#############################################################################################
+
+    elif message.content.startwith('leon'):
+        await message.channel.send('Ab ins Timeout mit dir :)')
+
+###########################################################################################################################
 
     elif message.content.startswith('!help'):
         await message.channel.send('Du brauchst wirklich hilfe :nauseated_face: :face_vomiting:')
@@ -216,4 +227,4 @@ async def on_message(message):
 
 
 
-client.run('TOKEN')
+client.run('MTA2MTI1NzcxMTUwMjc3MDIxNg.Gk90gC.xSGh8AG-2MZ-7uKSYLNg1_JfRh_v2iYCeYhrkY')
