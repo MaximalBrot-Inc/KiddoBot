@@ -3,9 +3,10 @@ A very friendly Discord bot
 Maximlian
 12.01.2023
 '''
+
 import discord
 import os
-from dotenv import load_dotenv
+import csv
 import time
 import math
 import random
@@ -13,12 +14,14 @@ import random
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
 
-TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
+with open("data.txt") as token:
+  reader = csv.reader(token)
+  TOKEN = next(reader)
+  GUILD = next(reader)
 
+TOKEN = TOKEN[0]
 
-
-
+##############################################################################################
 
 @client.event
 async def on_ready ():
@@ -74,36 +77,42 @@ async def on_message(message):
         return switch
 
     if message.content.startswith('!switchpls'):
-        if switch_state== False:
-            await message.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)")
-            switch_state = True
-        if schalter:
-            await message.channel.send("Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt.")
-            switch_state = False
+        if message.author.id == 695885580629704734 or message.author.id == 408627107795828746:
+            if switch_state== False:
+                await message.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)")
+                switch_state = True
+            elif switch_state:
+                await message.channel.send("Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt. :)")
+                switch_state = False
+            else:
+                await message.channel.send("!Switchpls broken, bitte Brot#0685 kontaktieren, er muss wieder reparieren kommen :)")
+        else:
+            await message.channel.send("Du bist nicht berechtigt diesen Befehl auszuführen. Tut mir leid :)")
 
-    if message.content.startswith('!switchstatus'):
-        switch_state = False
-        await message.channel.send(f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
-        response =  await client.wait_for('message', check=check , timeout = 15)
-        if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
-            await message.channel.send('Der Schalter ist ' + Schalter(switch_state))
+    if message.content.startswith('!switchstate'):
+        #global switch_state
+        if message.author.id == 695885580629704734 or message.author.id == 408627107795828746:
+            await message.channel.send(f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
+            response =  await client.wait_for('message', check=check , timeout = 15)
+            if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
+                await message.channel.send('Der Schalter ist ' + Schalter(switch_state))
 
-        elif response.clean_content.lower() == 'n' or response.clean_content.lower() == 'no' or response.clean_content.lower() == 'nein':
-            await message.channel.send('Okidoki, dann halt nicht :)')
+            elif response.clean_content.lower() == 'n' or response.clean_content.lower() == 'no' or response.clean_content.lower() == 'nein':
+                await message.channel.send('Okidoki, dann halt nicht :)')
+
+            else:
+                await message.channel.send("Du bist zu dumm um zu verstehen, was ich dir sage :)")
 
         else:
-            await message.channel.send("Du bist zu dumm um zu verstehen, was ich dir sage :)")
+            await message.channel.send("Du bist nicht berechtigt diesen Befehl auszuführen. Tut mir leid :)")
         ###Wenn wir ganz gemein unterwegs sind###
             #await message.author.ban(reason = "Kiddo meint, du bist zu dumm um zu verstehen, was ich dir sage. Du bist gebannt :)")
 
         #await message.channel.send(f'Der Status deines Schalters ist {Schalter(frage)}')
 
-
+#Ping
     if message.content.startswith('ping'):
         await message.channel.send('pong')
-
-    elif message.content.startswith('@everyone'):
-        await message.channel.send('LEISE!')
 
 #Würfel
     elif message.content.startswith('!rolldice'):
@@ -125,7 +134,7 @@ async def on_message(message):
         Limit = Limit + 2
         time.sleep(2)
         await message.channel.purge(limit = int(Limit))
-        print(f'{Limit} Nachrichten wurden gelöscht. Glückwunsch!')
+        print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
 
 #bann einen user
     elif message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
@@ -157,9 +166,19 @@ async def on_message(message):
         for member in message.guild.members:
             await member.edit(nick=f"{fast}")
 
-#tanzt mit dir :)
-    elif message.content.startswith('!dance'):
-        await message.channel.send("Let's dance :)" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\dance.mp4"))
+#wählt aus einem random pool von gifs eines aus und sendet es
+    elif message.content.startswith("!dance"):
+        dance = open("gifs.txt", "r")
+        dance = dance.readlines()
+        dance = random.choice(dance)
+        await message.channel.send(f"Let's dance :)")
+        await message.channel.send(dance)
+
+    elif message.content.startswith('!L'):
+        message.channel.send('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL' , tts = True)
+
+    if message.content.startswith('!details'):
+        print(message.channel.id)
 
 #löscht alle channels
     #elif message.content.startswith('!ABFAHRT'):
@@ -170,38 +189,48 @@ async def on_message(message):
 
 #####################2BHEL Zeug#############################################################################################
 
-    elif message.content.startwith('leon'):
+    elif message.content.startswith('leon'):
         await message.channel.send('Ab ins Timeout mit dir :)')
+
+
+    elif message.content.startswith('mods'):
+        mods = 100
+        while mods > 0:
+            await message.author.create_dm()
+            await message.author.send('https://tenor.com/view/mrbeast-mr-beast-gif-25629645')
+            time.sleep(0.5)
+            await message.author.send('https://tenor.com/view/dont-do-not-do-not-cat-dangerous-individual-man-dancing-while-cat-threatens-your-family-gif-26522356')
+            mods = mods - 1
 
 ###########################################################################################################################
 
     elif message.content.startswith('!help'):
-        await message.channel.send('Du brauchst wirklich hilfe :nauseated_face: :face_vomiting:')
         time.sleep(0.5)
         await message.channel.send(" ```"
+                                   "Du brauchst wirklich Hilfe 🤢🤮 \n"
                                    "Hier ist die Hilfe: \n"
-                                   "!help: Zeigt diese Nachricht dödel! \n"
-                                   "-----------------------------------------------------------------------\n"
+                                   "!help: Zeigt diese Nachricht Dödel! \n"
+                                   "--------------------------------------------------------------------------\n"
                                    "ping: Pong \n"
-                                   "-----------------------------------------------------------------------\n"
+                                   "--------------------------------------------------------------------------\n"
                                    "@everyone: tu's nicht. \n"
-                                   "-----------------------------------------------------------------------\n"
+                                   "--------------------------------------------------------------------------\n"
                                    "!lösche belieb. Zahl: löscht beliebig viele Nachrichten \n"
-                                    "-----------------------------------------------------------------------\n"
-                                    "!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
-                                    "-----------------------------------------------------------------------\n"
-                                    "!bänn all: Bannt alle Member, wenn du die Rechte hast, das zu tun \n"
-                                    "-----------------------------------------------------------------------\n"
-                                    "!changenickpls: Ändert alle Nicknames \n"
-                                    "-----------------------------------------------------------------------\n"
+                                    #"--------------------------------------------------------------------------\n"
+                                    #"!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
+                                    #"--------------------------------------------------------------------------\n"
+                                    #"!bänn all: Bannt alle Member, wenn du die Rechte hast, das zu tun \n"
+                                    #"--------------------------------------------------------------------------\n"
+                                    #"!changenickpls: Ändert alle Nicknames \n"
+                                    "--------------------------------------------------------------------------\n"
                                     "!rolldice belieb. Zahl: Würfelt beliebig oft \n"
-                                    "-----------------------------------------------------------------------\n"
-                                   "!switchpls: Schaltet den Switch um \n"
-                                    "-----------------------------------------------------------------------\n"
-                                   "!switchstatus: Fragt, ob du den Status deines Schalters wissen willst \n"
-                                    "-----------------------------------------------------------------------\n"
-                                   "!dance: Zeigt dir ein Video, wo Kiddo mit seinen Freunden tanzt \n"
-                                    "-----------------------------------------------------------------------\n"
+                                    "--------------------------------------------------------------------------\n"
+                                   "!switchpls: Schaltet den Switch um (nur wenn du cool bist)\n"
+                                    "--------------------------------------------------------------------------\n"
+                                   "!switchstate: Fragt, ob du den Status deines Schalters wissen willst (nur wenn du cool bist)\n"
+                                    "--------------------------------------------------------------------------\n"
+                                   "!dance: Zeigt dir ein Video, wo Kiddo allein, oder mit seinen Freunden tanzt \n"
+                                    "--------------------------------------------------------------------------\n"
                                    "```")
 
 
@@ -213,18 +242,7 @@ async def on_message(message):
         #await message.guild.ban()
         #await message.channel.send('Alle User wurden gebannt!')
 
+##############################################################################################
 
 
-
-###Funktioniert NOCH nicht###Notiz: Wahrscheinlich kann man keine Channel in einem Community Server löschen###
-#@client.event
-#async def on_message(message):
-  #  if message.content.startswith("channel löschen"):
-     #   await message.channel.send('Okidoki bin dabei :)')
-        #for guild in client.guilds:
-           # for channel in guild.channels:
-              #  await channel.delete()
-
-
-
-client.run('MTA2MTI1NzcxMTUwMjc3MDIxNg.Gk90gC.xSGh8AG-2MZ-7uKSYLNg1_JfRh_v2iYCeYhrkY')
+client.run(TOKEN)
