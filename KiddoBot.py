@@ -10,6 +10,8 @@ import csv
 import time
 import math
 import random
+import music
+import ffmpeg
 
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
@@ -186,6 +188,29 @@ async def on_message(message):
         #time.sleep(8)
         #for channel in message.guild.channels:
            # await channel.delete( reason = 'MFG KiddoBot :)')
+
+#######Music-Bot############################################################################################################
+
+    if message.content.startswith('=play'):
+        channel = message.author.voice.channel
+        vc = await channel.connect()
+        vc.play(discord.FFmpegPCMAudio(executable="C:\_FSST\Jaeger\Shooting Range\KiddoBot\ffmpeg.exe", source='C:\_FSST\Jaeger\Shooting Range\KiddoBot\music.mp3'))
+        vc.is_playing()
+        await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
+
+    elif message.content.startswith('=pause'):
+        await message.guild.voice_client.pause()
+        await message.channel.send('Ich habe die Musik pausiert :)')
+
+    elif message.content.startswith('=resume'):
+        await message.guild.voice_client.resume()
+        await message.channel.send('Ich habe die Musik fortgesetzt :)')
+
+    elif message.content.startswith('=leave'):
+        await message.guild.voice_client.disconnect()
+        await message.channel.send('Ich habe den Voice-Channel verlassen :)')
+
+
 
 #####################2BHEL Zeug#############################################################################################
 
