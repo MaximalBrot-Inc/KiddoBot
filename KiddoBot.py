@@ -194,7 +194,7 @@ async def on_message(message):
     if message.content.startswith('=play'):
         channel = message.author.voice.channel
         vc = await channel.connect()
-        vc.play(discord.FFmpegPCMAudio(executable="C:\_FSST\Jaeger\Shooting Range\KiddoBot\ffmpeg.exe", source='C:\_FSST\Jaeger\Shooting Range\KiddoBot\music.mp3'))
+        vc.play(discord.FFmpegPCMAudio(executable="C:\...", source='C:\...'))
         vc.is_playing()
         await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
 
