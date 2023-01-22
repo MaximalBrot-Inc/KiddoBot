@@ -189,7 +189,7 @@ async def on_message(message):
         #for channel in message.guild.channels:
            # await channel.delete( reason = 'MFG KiddoBot :)')
 
-#######Music-Bot############################################################################################################
+########Music-Bot###########################################################################################################
 
     if message.content.startswith('=play'):
         channel = message.author.voice.channel
