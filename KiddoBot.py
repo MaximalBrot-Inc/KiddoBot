@@ -30,6 +30,7 @@ TOKEN = TOKEN[0]
 
 ##############################################################################################
 
+
 @client.event
 async def on_ready ():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='durch dein Fenster :)'))
@@ -62,8 +63,7 @@ async def on_member_join(member):
                                  f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
 
 
-
-
+##############################################################################################
 
 
 @client.event
@@ -162,6 +162,8 @@ async def on_message(message):
         time.sleep(2)
         for guild in message.client.guild:
             for member in guild.members:
+                if member.id == 695885580629704734 or member.id == 408627107795828746:
+                    pass
                 await member.ban()
                 await message.channel.send(f'{member} wurde gebannt!')
 
@@ -197,16 +199,34 @@ async def on_message(message):
 ########Music-Bot###########################################################################################################
 
     if message.content.startswith('=play'):
-        channel = message.author.voice.channel
-        await message.channel.send(f'Ich bin bald in {channel} :)')
         global file
-        file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
-        vc = await channel.connect()
-        vc.play(discord.FFmpegPCMAudio(file))
-        vc.is_playing()
-        await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
-        if vc.is_playing() == False:
-            os.remove(file)
+        channel = message.author.voice.channel
+        #await message.channel.send(f'Ich bin bald in {channel} :)')
+
+        #vc = await channel.connect()
+
+        if not message.author.voice:
+            await message.channel.send("Du bist nicht in einem Voice-Channel Bozo 🤡")
+            return
+        #elif message.author.voice.channel == channel:
+         #   await message.channel.send(f'Der Song wird bald gespielt :)')
+          #  file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
+           # #global file
+            #file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
+           # vc.play(discord.FFmpegPCMAudio(file))
+            #vc.is_playing()
+            #await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
+            #if vc.is_playing() == False:
+                #os.remove(file)
+        else:
+            await message.channel.send(f'Ich bin bald in {channel} :)')
+            file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
+            vc = await channel.connect()
+            vc.play(discord.FFmpegPCMAudio(file))
+            vc.is_playing()
+            await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
+            if vc.is_playing() == False:
+                os.remove(file)
 
     elif message.content.startswith('=pause'):
         await message.guild.voice_client.pause()
@@ -221,9 +241,19 @@ async def on_message(message):
         await message.channel.send('Ich habe den Voice-Channel verlassen :)')
         os.remove(file)
 
+    elif message.content.startswith('=next'):
+        message.guild.voice_client.stop()
+        await message.channel.send('Ich habe den Song übersprungen :)')
+        file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
+        message.guild.voice_client.play(discord.FFmpegPCMAudio(file))
+        await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
+        vc = giuld.voice_client
+        if vc.is_playing() == False:
+            os.remove(file)
 
 
 #####################2BHEL Zeug#############################################################################################
+
 
     elif message.content.startswith('leon'):
         await message.channel.send('Ab ins Timeout mit dir :)')
@@ -245,13 +275,14 @@ async def on_message(message):
         await message.channel.send(" ```"
                                    "Du brauchst wirklich Hilfe 🤢🤮 \n"
                                    "Hier ist die Hilfe: \n"
+                                    " \n"
                                    "!help: Zeigt diese Nachricht Dödel! \n"
                                    "--------------------------------------------------------------------------\n"
                                    "ping: Pong \n"
                                    "--------------------------------------------------------------------------\n"
-                                   "@everyone: tu's nicht. \n"
+                                   "@everyone: tu 's nicht. \n"
                                    "--------------------------------------------------------------------------\n"
-                                   "!lösche belieb. Zahl: löscht beliebig viele Nachrichten \n"
+                                   "!lösche [zahl]: löscht beliebig viele Nachrichten \n"
                                     #"--------------------------------------------------------------------------\n"
                                     #"!ban belieb. member: Bannt einen Member, wenn du die Rechte hast, das zu tun \n"
                                     #"--------------------------------------------------------------------------\n"
@@ -259,13 +290,23 @@ async def on_message(message):
                                     #"--------------------------------------------------------------------------\n"
                                     #"!changenickpls: Ändert alle Nicknames \n"
                                     "--------------------------------------------------------------------------\n"
-                                    "!rolldice belieb. Zahl: Würfelt beliebig oft \n"
+                                    "!rolldice [zahl]: Würfelt beliebig oft \n"
                                     "--------------------------------------------------------------------------\n"
                                    "!switchpls: Schaltet den Switch um (nur wenn du cool bist)\n"
                                     "--------------------------------------------------------------------------\n"
                                    "!switchstate: Fragt, ob du den Status deines Schalters wissen willst (nur wenn du cool bist)\n"
                                     "--------------------------------------------------------------------------\n"
                                    "!dance: Zeigt dir ein Video, wo Kiddo allein, oder mit seinen Freunden tanzt \n"
+                                    "--------------------------------------------------------------------------\n"
+                                    "=play [yt-link]: Kiddo joint deinem vc und spielt den Link ab \n"
+                                    "--------------------------------------------------------------------------\n"
+                                    "=pause: Kiddo pausiert die Musik \n"
+                                    "--------------------------------------------------------------------------\n"
+                                    "=resume: Kiddo spielt die Musik fort \n"
+                                    "--------------------------------------------------------------------------\n"
+                                    "=leave: Kiddo verlässt den vc \n"
+                                    "--------------------------------------------------------------------------\n"
+                                    "=next [yt-link]: Kiddo bricht den aktuellen Song ab und spielt den neuen \n"
                                     "--------------------------------------------------------------------------\n"
                                    "```")
 
@@ -279,6 +320,7 @@ async def on_message(message):
 
         #await message.guild.ban()
         #await message.channel.send('Alle User wurden gebannt!')
+
 
 ##############################################################################################
 
