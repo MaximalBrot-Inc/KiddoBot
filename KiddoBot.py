@@ -12,6 +12,8 @@ import math
 import random
 import music
 import ffmpeg
+import pytube
+import os
 
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
@@ -22,6 +24,9 @@ with open("data.txt") as token:
   GUILD = next(reader)
 
 TOKEN = TOKEN[0]
+
+
+
 
 ##############################################################################################
 
@@ -179,7 +184,7 @@ async def on_message(message):
     elif message.content.startswith('!L'):
         message.channel.send('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL' , tts = True)
 
-    if message.content.startswith('!details'):
+    elif message.content.startswith('!details'):
         print(message.channel.id)
 
 #löscht alle channels
@@ -193,10 +198,15 @@ async def on_message(message):
 
     if message.content.startswith('=play'):
         channel = message.author.voice.channel
+        await message.channel.send(f'Ich bin bald in {channel} :)')
+        global file
+        file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
         vc = await channel.connect()
-        vc.play(discord.FFmpegPCMAudio(message.content[6:]))
+        vc.play(discord.FFmpegPCMAudio(file))
         vc.is_playing()
         await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
+        if vc.is_playing() == False:
+            os.remove(file)
 
     elif message.content.startswith('=pause'):
         await message.guild.voice_client.pause()
@@ -209,6 +219,7 @@ async def on_message(message):
     elif message.content.startswith('=leave'):
         await message.guild.voice_client.disconnect()
         await message.channel.send('Ich habe den Voice-Channel verlassen :)')
+        os.remove(file)
 
 
 
@@ -261,9 +272,11 @@ async def on_message(message):
 
 ###Unendliche Nachrichten###
     if message.content == 'happy birthday':
-        while True:
+        BIRTHDAY = 100000
+        while BIRTHDAY > 0:
             await message.channel.send('Happy Birthday! 🎈🎉')
             time.sleep(0.6)
+
         #await message.guild.ban()
         #await message.channel.send('Alle User wurden gebannt!')
 
