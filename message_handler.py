@@ -3,16 +3,11 @@ import discord
 
 import random
 import time
-import csv
-
-#from kiddo_bot import client
 
 
-async def main_handler(message,client):
+async def main_handler(message, client):
     if message.author == client.user:
         return None
-
-
 
     def check(m):
         return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
