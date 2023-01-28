@@ -1,6 +1,7 @@
 import music
-import discord
+import BHEL
 
+import discord
 import random
 import time
 
@@ -176,23 +177,14 @@ async def main_handler(message, client):
     #####################2BHEL Zeug#############################################################################################
 
     elif message.content.startswith('leon'):
-        await message.channel.send('Ab ins Timeout mit dir :)')
+        BHEL.leon(message)
 
 
     elif message.content.startswith('mods'):
-        mods = 100
-        while mods > 0:
-            await message.author.create_dm()
-            await message.author.send('https://tenor.com/view/mrbeast-mr-beast-gif-25629645')
-            time.sleep(0.5)
-            await message.author.send(
-                'https://tenor.com/view/dont-do-not-do-not-cat-dangerous-individual-man-dancing-while-cat-threatens-your-family-gif-26522356')
-            mods = mods - 1
+        BHEL.mods(message)
+
     elif "Berat" in message.content or "berat" in message.content:
-        berat = open("berat.txt", "r")
-        berat = berat.readlines()
-        berat = random.choice(berat)
-        await message.channel.send(berat)
+        BHEL.berat(message)
 
     ###########################################################################################################################
 
