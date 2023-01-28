@@ -1,5 +1,5 @@
 '''
-The new and improved kiddo_bot.py file
+The new and improved KiddoBot.py file
 Maximlian && Phillip
 12.01.2023
 '''
