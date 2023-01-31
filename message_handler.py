@@ -128,11 +128,11 @@ async def main_handler(message, client):
 
     elif message.content.startswith('!L'):
         await message.channel.send(
-            'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+            'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
             tts=True)
 
     elif message.content.startswith('!details'):
-        print(message.channel.id)
+        print(message.details)
 
     # löscht alle channels
     elif message.content.startswith('!ABFAHRT'):
@@ -177,14 +177,14 @@ async def main_handler(message, client):
     #####################2BHEL Zeug#############################################################################################
 
     elif message.content.startswith('leon'):
-        BHEL.leon(message)
+        await BHEL.leon(message)
 
 
     elif message.content.startswith('mods'):
-        BHEL.mods(message)
+        await BHEL.mods(message)
 
     elif "Berat" in message.content or "berat" in message.content:
-        BHEL.berat(message)
+        await BHEL.berat(message)
 
     ###########################################################################################################################
 
