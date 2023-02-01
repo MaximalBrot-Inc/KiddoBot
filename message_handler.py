@@ -126,7 +126,6 @@ async def main_handler(message, client):
         dance = open("gifs.txt", "r")
         dance = dance.readlines()
         dance = random.choice(dance)
-        await message.channel.send("💃💃🕺🕺")
         await message.channel.send(dance)
 
     elif message.content.startswith('!L'):
