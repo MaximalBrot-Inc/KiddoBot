@@ -86,7 +86,10 @@ async def main_handler(message, client):
         Limit = Limit + 2
         time.sleep(2)
         await message.channel.purge(limit=int(Limit))
-        print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
+        if Limit == 3:
+            print('Eine Nachricht wurde gelöscht. Glückwunsch!')
+        else:
+            print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
 
     # bann einen user
     elif message.content.startswith('!ban') and message.author.guild_permissions.ban_members:
@@ -137,7 +140,7 @@ async def main_handler(message, client):
             await message.author.dm_channel.send(f"```"
                                                 f"Halli Hallo 💕\n"
                                                 f"Hier sind ein paar Details zu dem Channel :) \n"
-                                                f"Channel : {message.channel}\n"
+                                                f"Channel: {message.channel}\n"
                                                 f"Channel ID: {message.channel.id}\n"
                                                 f"Channel Name: {message.channel.name}\n"
                                                 f"Channel Type: {message.channel.type}\n"
