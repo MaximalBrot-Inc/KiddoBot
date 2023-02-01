@@ -63,6 +63,17 @@ async def on_message(message):
     if message.author != client.user:
         await message_handler.main_handler(message, client)
 
+#Kann voice channel erstellen aber noch nicht den member reinziehen!
+@client.event
+async def on_voice_state_update(member, before, after):
+    if str(after.channel) == '➕ Erstelle Channel':
+        if str(after) != str(before):
+            await after.channel.clone(name=f'{member}s channel')
+            person_to_move = member
+            channel = discord.utils.get(GUILD.text_channels, name=f"{member}'s channel")
+            await member.move_to(channel)
+
+
 ##############################################################################################
 
 
