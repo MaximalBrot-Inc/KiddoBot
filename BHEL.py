@@ -6,7 +6,7 @@ async def leon(message):
         await message.channel.send('Ab ins Timeout mit dir :)')
 
 async def mods(message):
-    if "mods" in message.content:
+    if "mods" or "Mods" in message.content:
         mods = 100
         while mods > 0:
             await message.author.create_dm()
