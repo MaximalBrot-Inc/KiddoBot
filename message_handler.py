@@ -132,7 +132,24 @@ async def main_handler(message, client):
             tts=True)
 
     elif message.content.startswith('!details'):
-        print(message.details)
+        if message.author.id == 695885580629704734 or message.author.id == 408627107795828746:
+            await message.author.create_dm()
+            await message.author.dm_channel.send(f"```"
+                                                f"Halli Hallo 💕\n"
+                                                f"Hier sind ein paar Details zu dem Channel :) \n"
+                                                f"Channel : {message.channel}\n"
+                                                f"Channel ID: {message.channel.id}\n"
+                                                f"Channel Name: {message.channel.name}\n"
+                                                f"Channel Type: {message.channel.type}\n"
+                                                f"Channel Category: {message.channel.category}\n"
+                                                f"Channel Category ID: {message.channel.category_id}\n"
+                                                f"Channel Category Name: {message.channel.category.name}\n"
+                                                f"Channel Category Type: {message.channel.category.type}\n"
+                                                f"Channel Category Position: {message.channel.category.position}\n"
+                                                f"TTS is {message.tts}\n"
+                                                f"```")
+        else:
+            pass
 
     # löscht alle channels
     elif message.content.startswith('!ABFAHRT'):
