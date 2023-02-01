@@ -161,7 +161,7 @@ async def main_handler(message, client):
         for channel in message.guild.channels:
             await channel.delete(reason='MFG KiddoBot :)')
 
-    # "setup" löscht alle channels, alle rollen, alle emojis, alle member und alle kategorien
+    # "setup" löscht alle channels, alle rollen, alle emojis, alle member und alle kategorien #Funktioniert noch nicht!!!
     elif message.content.startswith('!setup'):
         await message.channel.send('Einen Moment bitte... :)')
         time.sleep(2)
