@@ -173,14 +173,13 @@ async def main_handler(message, client):
         await music.leave(message)
 
 
-
     #####################2BHEL Zeug#############################################################################################
 
-    elif message.content.startswith('leon'):
+    elif "leon" in message.content or "Leon" in message.content:
         await BHEL.leon(message)
 
 
-    elif message.content.startswith('mods'):
+    elif "mods" in message.content or "Mods" in message.content:
         await BHEL.mods(message)
 
     elif "Berat" in message.content or "berat" in message.content:
