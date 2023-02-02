@@ -73,6 +73,13 @@ async def on_voice_state_update(member, before, after):
             await after.channel.set_permissions(role , overwrite=discord.PermissionOverwrite(manage_channels=True, connect=True, speak=True, stream=True, view_channel=True))
             await member.add_roles(role)
 
+        for member in client.get_all_members():
+            if member != role:
+                await after.channel.set_permissions(member, overwrite=discord.PermissionOverwrite(manage_channels=False, connect=True, speak=True, stream=True, view_channel=True))
+
+            else:
+                await after.channel.set_permissions(member, overwrite=discord.PermissionOverwrite(manage_channels=True, connect=True, speak=True, stream=True, view_channel=True))
+
     if str(before.channel) != '➕ Erstelle Channel' and str(before.channel) != 'None' and str(before.channel) != '🎵 Musik':
         if before.channel.category.name == '⋙ 🎤 Voice Channels ⋘' or'🎤 Voice Channels':
             if len(before.channel.members) == 0:
