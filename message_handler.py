@@ -4,6 +4,7 @@ import BHEL
 import discord
 import random
 import time
+import daytime
 
 
 async def main_handler(message, client):
@@ -241,6 +242,9 @@ async def main_handler(message, client):
         while BIRTHDAY > 0:
             await message.channel.send('Happy Birthday! 🎈🎉')
             time.sleep(0.6)
+
+
+
 
         # await message.guild.ban()
         # await message.channel.send('Alle User wurden gebannt!')
