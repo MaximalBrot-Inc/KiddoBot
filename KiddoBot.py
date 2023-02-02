@@ -63,14 +63,12 @@ async def on_message(message):
     if message.author != client.user:
         await message_handler.main_handler(message, client)
 
-#Kann voice channel erstellen aber noch nicht den member reinziehen!
 @client.event
 async def on_voice_state_update(member, before, after):
     if str(after.channel) == '➕ Erstelle Channel':
         #if str(after) != str(before):
         channel= await after.channel.clone(name=f'{member}s channel')
         await member.move_to(channel)
-    #lölsche den channel wenn der member den channel verlässt
     if str(before.channel) != '➕ Erstelle Channel' and str(before.channel) != 'None' and str(before.channel) != '🎵 Musik':
         if before.channel.category.name == '⋙ 🎤 Voice Channels ⋘' or'🎤 Voice Channels':
             if len(before.channel.members) == 0:
