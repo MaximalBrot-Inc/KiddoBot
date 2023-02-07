@@ -9,7 +9,6 @@ import time
 
 bot = commands.Bot(command_prefix = '-' , description = 'KiddoBot' , intents = discord.Intents.all())
 bot.remove_command('help')
-bot.remove_command('switchstate')
 
 async def main_handler(message , client):
 
@@ -23,7 +22,7 @@ async def main_handler(message , client):
             switch = "aus"
         return switch
 
-    @bot.command(name = 'switchstate' , help = 'Zeigt den Status des Schalters an')
+    @bot.command(name = 'switchstate' , help = 'Zeigt den Status des Schalters an' , aliases = ['switchstate'])
     async def switchstate(ctx):
         switch = Schalter()
         await ctx.send(f'Der Schalter ist {switch}')
