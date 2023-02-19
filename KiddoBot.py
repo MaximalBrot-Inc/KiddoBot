@@ -298,12 +298,10 @@ async def on_message(message):
   #      kiss = kiss.replace(">", "")
    #     kiss = kiss.replace("@", "")
     #    user = await bot.fetch_user(kiss)
+
         file = open("kiss.txt", "r")
-        #gif = random.choice(file.readlines())
-
         embedVar = discord.Embed(title="😘Kiss!", color=0xff00ff)
-        embedVar.add_field(name='@' + f"{message.author} küsst " '@' + f"{message.mentions[0]}!" , value = "" , inline=False)
-
+        embedVar.add_field(name='@' + f"{message.mentions[0]}! " 'Du wirst von @' + f"{message.author} geküsst!" , value = "" , inline=False)
         embedVar.set_image(url = str(random.choice(file.readlines())))
         await message.channel.send(embed=embedVar)
 
