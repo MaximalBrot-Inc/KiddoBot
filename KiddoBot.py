@@ -8,6 +8,7 @@ Maximlian && Phillip
 import VoiceChannel
 import discord
 from discord.ext import commands
+from discord import app_commands
 import csv
 #import message_handler
 import time
@@ -46,6 +47,8 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
+
+    await bot.tree.sync()
 
 
 ##############################################################################################
@@ -138,7 +141,9 @@ async def switch(ctx):
 async def on_message(message):
     #####MEGA GEBURTSTAG EVENT AAAAAAAAAAAAAAAAAAAAAAAAAAAA#############################################################
     if message.content == 'Geburtstag!':
-        await message.channel.send('Oh hallo! Es is scho der 13. Februar? Des is heftig... I hab was tolles vorbereitet schau mal:')
+        await message.channel.send('Oh hallo! Es is scho der 13. Februar? Warte mal... Es is doch gar nicht der 13. Februar! Maxi ist wohl zu faul '
+                                   'um die Geschichte zu entfernen. So ein loser. Naja i lass sie trotzdem noch da und warte, bis Maxi es merkt ;)')
+        #await message.channel.send('Oh hallo! Es is scho der 13. Februar? Des is heftig... I hab was tolles vorbereitet schau mal:')
         time.sleep(2)
         await message.channel.send("Lea war an diesem Tag besonders müde, denn sie hatte einen langen Schultag hinter sich.",
                                    file=discord.File("Bild1.JPG"))
@@ -295,7 +300,6 @@ async def on_message(message):
         pass
 
     if message.content.startswith("!!kiss"):
-        #finde den Nickname des users der geküsst werden soll
         kiss = message.content.split(' ')[1]
 
         kiss = message.mentions[0].nick
@@ -312,10 +316,34 @@ async def on_message(message):
         embedVar.add_field(name='**' + f"{kiss}**! " 'Du wirst von **' + f"{kisser}** geküsst!" , value = "" , inline=False)
         embedVar.set_image(url = str(random.choice(file.readlines())))
         await message.channel.send(embed=embedVar)
+        file.close()
 
+    if message.content.startswith("!!hug"):
+        hug = message.content.split(' ')[1]
+        hug = message.mentions[0].nick
+        if hug == None:
+            hug = message.mentions[0].name
+
+        hugger = message.author.nick
+        if hugger == None:
+            hugger = message.author.name
+
+        file = open("hug.txt", "r")
+        embedVar = discord.Embed(title="🥰Hug!", color=0xff00ff)
+        embedVar.add_field(name='**' + f"{hug}**! " 'Du wirst von **' + f"{hugger}** umarmt!" , value = "" , inline=False)
+        embedVar.set_image(url = str(random.choice(file.readlines())))
+        await message.channel.send(embed=embedVar)
+        file.close()
+
+    bot.process_commands(message)
+
+#Slash commands in bearbeitung. Muss schaun wie de funktionieren lol
+#@app_commands.command()
+#async def rolldice(bot, interaction: discord.Interaction , member: discord.Member):
+#    await interaction.response.send_message('Rolling the dice...' , ephemeral=True)
 ##############################################################################################
 
-
+#BAUSTELLE
 #    if message.content.startswith('.record'):
  #       channel = message.author.voice.channel
   #      await channel.connect()
