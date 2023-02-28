@@ -5,7 +5,6 @@ Maximilian && Phillip
 12.01.2023
 '''
 
-import VoiceChannel
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -13,6 +12,7 @@ import csv
 import message_handler
 import time
 import random
+import voice_handler
 
 
 def check(message):
@@ -70,12 +70,14 @@ async def on_member_join(member):
         await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
                                  f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
 
+##############################################################################################
+
 @bot.event
 async def on_message(message):
     if message.author != bot.user:
         await message_handler.main_handler(message, bot)
 
-
+##############################################################################################
 
 #Slash commands in bearbeitung. Muss schaun wie de funktionieren lol
 #@app_commands.command()
@@ -83,35 +85,10 @@ async def on_message(message):
 #    await interaction.response.send_message('Rolling the dice...' , ephemeral=True)
 ##############################################################################################
 
-#BAUSTELLE
-#    if message.content.startswith('.record'):
- #       channel = message.author.voice.channel
-  #      await channel.connect()
-   #     await message.channel.send('Recording...')
-    #    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f'{time.asctime([t])}.mp3'))
-     #   message.guild.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
-      #  await message.channel.send('Finished!')
-       # await message.guild.voice_client.disconnect()
-
-    #ctx.voice_client.start_recording(discord.sinks.MP3Sink(), finished_callback, ctx) # Start the recording
-    #await ctx.respond("Recording...")
-
-#async def finished_callback(sink, ctx):
- #   # Here you can access the recorded files:
-  #  recorded_users = [
-   #     f"<@{user_id}>"
-    #    for user_id, audio in sink.audio_data.items()
-    #]
-    #files = [discord.File(audio.file, f"{user_id}.{sink.encoding}") for user_id, audio in sink.audio_data.items()]
-    #await ctx.channel.send(f"Finished! Recorded audio for {', '.join(recorded_users)}.", files=files)
-
-#@bot.command()
-#async def stop_recording(ctx):
- #   ctx.voice_client.stop_recording() # Stop the recording, finished_callback will shortly after be called
-  #  await ctx.respond("Stopped!")
-
+@bot.event
+async def on_voice_state_update(member, before, after):
+    await voice_handler.voice(member, before, after)
 
 ##############################################################################################
-
 
 bot.run(TOKEN)
