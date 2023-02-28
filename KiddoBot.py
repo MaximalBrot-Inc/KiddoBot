@@ -71,6 +71,7 @@ async def on_member_join(member):
                                  f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
 
 ##############################################################################################
+
 @bot.event
 async def on_message(message):
     if message.author != bot.user:
