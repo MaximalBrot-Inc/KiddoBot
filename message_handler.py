@@ -3,6 +3,7 @@ import voice_handler
 import random
 import time
 import geburtstag_handler
+import qrcode_handler
 from discord.ext import commands
 #import pathlib
 
@@ -115,6 +116,21 @@ async def main_handler(message , bot):
         dance = dance.readlines()
         dance = random.choice(dance)
         await message.channel.send(dance)
+
+    if message.content == '!!witz':
+        zahl = random.randint(1 , 100)
+        if zahl == 1:
+            await message.channel.send("Du bist so hässlich, dass man dich nicht mal mit einem Taschenrechner vergleichen kann. Kein Witz. Einfach die Wahrheit.")
+        else:
+            witze = open("witze.txt", "r")
+            witze = witze.readlines()
+            witze = random.choice(witze)
+            witze = str(witze)
+            await message.channel.send(witze)
+
+    if message.content == '!!qrcodepls':
+        await qrcode_handler.qrcode(message, bot)
+
 
     if message.content == '!!recordpls' or message.content =='!!stoppls' or message.content == '!!disconnectpls':
         await voice_handler.record_voice(bot, message)
