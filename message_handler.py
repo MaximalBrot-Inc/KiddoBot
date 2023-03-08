@@ -1,9 +1,8 @@
 import discord
-import voice_handler
 import random
 import time
-import geburtstag_handler
 import qrcode_handler
+import weather_handler
 from discord.ext import commands
 #import pathlib
 
@@ -256,4 +255,9 @@ async def main_handler(message , bot):
             await message.channel.send(embed=embedVar)
             file.close()
 
+
+    if message.content.startswith("!!Wetter" or "!!wetter"):
+        await weather_handler.get_weather(message)
+    elif message.content.startswith("!!Morgen"):
+        await weather_handler.get_weather_forecast(message)
 
