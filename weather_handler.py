@@ -12,10 +12,8 @@ mgr = owm.weather_manager()
 mgg = owm.geocoding_manager()
 #observation = mgr.weather_at_place('Paris, FR')
 
-def decoder(message):
+def decoder(ort):
     ruckgabe = []
-    ort = message.content.split(' ')[1:]
-    ort = ' '.join(ort)
     list_of_locations = mgg.geocode(ort)
     gps = list_of_locations[0]
     ruckgabe.append(ort)
@@ -61,7 +59,7 @@ def emoji_lookup (status):
 
 
 
-async def get_weather(message):
+async def get_weather(message, ctx):
     ort = decoder(message)
 
     try:
@@ -83,16 +81,16 @@ async def get_weather(message):
         embedVar.add_field(name="**Wetter**", value=f'In {ort[0]} ist es gerade {daten} {emoji}', inline=False)
         embedVar.add_field(name="**Temperatur**", value=f'In {ort[0]} hat es gerade {temp}°C 🌡', inline=False)
 
-        await message.channel.send(embed=embedVar)
+        await ctx.send(embed=embedVar)
     except NotFoundError:
-        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
+        await ctx.send(f'Ich konnte {ort[0]} nicht finden :(')
     except IndexError:
-        await message.channel.send('Bitte gib einen Ort an :)')
+        await ctx.send('Bitte gib einen Ort an :)')
     except:
-         await message.channel.send('Es ist ein Fehler aufgetreten :(')
+         await ctx.send('Es ist ein Fehler aufgetreten :(')
 
 
-async def get_weather_forecast(message):
+async def get_weather_forecast(message, ctx):
     ort = decoder(message)
     try:
         one_call = mgr.one_call(lon=ort[1], lat=ort[2])
@@ -114,30 +112,36 @@ async def get_weather_forecast(message):
         embedVar.add_field(name="**Temperatur**", value=f'In {ort[0]} hat es morgen maximal {temp["max"]}°C 🌡'
                                                         f'und minimal {temp["min"]}🌡', inline=False)
 
-        await message.channel.send(embed=embedVar)
+        await ctx.send(embed=embedVar)
 
 
     except NotFoundError:
-        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
+        await ctx.send(f'Ich konnte {ort[0]} nicht finden :(')
     except IndexError:
-        await message.channel.send('Bitte gib einen Ort an :)')
+        await ctx.send('Bitte gib einen Ort an :)')
     except:
-        await message.channel.send('Es ist ein Fehler aufgetreten :(')
+        await ctx.send('Es ist ein Fehler aufgetreten :(')
 
-async def get_weather_alert(message):
+async def get_weather_alert(message, ctx):
     try:
         ort = decoder(message)
 
         one_call = mgr.one_call(lon=ort[1], lat=ort[2])
-        w = one_call.national_weather_alerts
-        daten = w[0].description
-        embedVar = discord.Embed(title="**Wetterwarnung**", color=0xff0000)
-        embedVar.add_field(name="**Warnung**", value=f'In {ort[0]} gibt es eine Wetterwarnung: {daten}', inline=False)
-        await message.channel.send(embed=embedVar)
+        try:
+            w = one_call.national_weather_alerts
+            daten = w[0].description
+            embedVar = discord.Embed(title="**Wetterwarnung**", color=0xff0000)
+            embedVar.add_field(name="**Warnung**", value=f'In {ort[0]} gibt es eine Wetterwarnung: {daten}', inline=False)
+        except TypeError:
+            embedVar = discord.Embed(title="**Wetterwarnung**", color=0x36a822)
+            embedVar.add_field(name="**Warnung**", value=f'In {ort[0]} gibt es keine Wetterwarnung.', inline=False)
+
+        await ctx.send(embed=embedVar)
+
     except NotFoundError:
-        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
+        await ctx.send(f'Ich konnte {ort[0]} nicht finden :(')
     except AssertionError:
-        await message.channel.send('Bitte gib einen Ort an :)')
-    except:
-        await message.channel.send('Es ist ein Fehler aufgetreten :(')
+        await ctx.send('Bitte gib einen Ort an :)')
+    #except:
+        #await ctx.send('Es ist ein Fehler aufgetreten :(')
 

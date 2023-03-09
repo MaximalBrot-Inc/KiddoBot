@@ -9,10 +9,12 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import csv
-import message_handler
+from message_handler_temp import KiddoBot
+import asyncio
+import message_handler_temp
 import time
 import random
-import voice_handler
+#import voice_handler
 
 
 def check(message):
@@ -47,8 +49,10 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
+    await bot.add_cog(message_handler_temp.KiddoBot(bot))
 
-    await bot.tree.sync()
+    print(await bot.tree.sync())
+
 
 
 ##############################################################################################
@@ -72,10 +76,17 @@ async def on_member_join(member):
 
 ##############################################################################################
 
-@bot.event
-async def on_message(message):
-    if message.author != bot.user:
-        await message_handler.main_handler(message, bot)
+#@bot.event
+#async def on_message(message):
+    #if message.author != bot.user:
+
+
+@bot.command()
+async def help(self,ctx):
+    self.bot.get_cog
+
+
+
 
 ##############################################################################################
 
@@ -88,6 +99,7 @@ async def on_message(message):
 @bot.event
 async def on_voice_state_update(member, before, after):
     await voice_handler.voice(member, before, after)
+
 
 ##############################################################################################
 

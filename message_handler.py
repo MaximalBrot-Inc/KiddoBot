@@ -1,8 +1,8 @@
 import discord
-import voice_handler
+#import voice_handler
 import random
 import time
-import geburtstag_handler
+#import geburtstag_handler
 import qrcode_handler
 import weather_handler
 from discord.ext import commands
