@@ -267,5 +267,7 @@ async def main_handler(message , bot):
         await weather_handler.get_weather(message)
     elif message.content.startswith("!!Morgen"):
         await weather_handler.get_weather_forecast(message)
+    elif message.content.startswith("!!Alarm"):
+        await weather_handler.get_weather_alert(message)
 
 

@@ -13,9 +13,15 @@ mgg = owm.geocoding_manager()
 #observation = mgr.weather_at_place('Paris, FR')
 
 def decoder(message):
+    ruckgabe = []
     ort = message.content.split(' ')[1:]
     ort = ' '.join(ort)
-    return ort
+    list_of_locations = mgg.geocode(ort)
+    gps = list_of_locations[0]
+    ruckgabe.append(ort)
+    ruckgabe.append(gps.lon)
+    ruckgabe.append(gps.lat)
+    return ruckgabe
 
 def emoji_lookup (status):
     match status:
@@ -59,7 +65,7 @@ async def get_weather(message):
     ort = decoder(message)
 
     try:
-        observation = mgr.weather_at_place(ort)
+        observation = mgr.weather_at_place(ort[0])
         w = observation.weather
         temp = w.temperature('celsius')['temp']
         daten = w.detailed_status
@@ -74,12 +80,12 @@ async def get_weather(message):
             color = 0x36a822
 
         embedVar = discord.Embed(title="**Wetterbericht**", color=color)
-        embedVar.add_field(name="**Wetter**", value=f'In {ort} ist es gerade {daten} {emoji}', inline=False)
-        embedVar.add_field(name="**Temperatur**", value=f'In {ort} hat es gerade {temp}°C 🌡', inline=False)
+        embedVar.add_field(name="**Wetter**", value=f'In {ort[0]} ist es gerade {daten} {emoji}', inline=False)
+        embedVar.add_field(name="**Temperatur**", value=f'In {ort[0]} hat es gerade {temp}°C 🌡', inline=False)
 
         await message.channel.send(embed=embedVar)
     except NotFoundError:
-        await message.channel.send(f'Ich konnte {ort} nicht finden :(')
+        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
     except IndexError:
         await message.channel.send('Bitte gib einen Ort an :)')
     except:
@@ -89,10 +95,7 @@ async def get_weather(message):
 async def get_weather_forecast(message):
     ort = decoder(message)
     try:
-        list_of_locations = mgg.geocode(ort)
-        gps = list_of_locations[0]  # taking the first London in the list
-
-        one_call = mgr.one_call(lon=gps.lon, lat=gps.lat)
+        one_call = mgr.one_call(lon=ort[1], lat=ort[2])
         w = one_call.forecast_daily
         temp = w[0].temperature('celsius')
         daten = w[0].detailed_status
@@ -106,17 +109,35 @@ async def get_weather_forecast(message):
             color = 0x36a822
 
 
-        embedVar = discord.Embed(title="**Wettervorschaut**", color=color)
-        embedVar.add_field(name="**Wetter**", value=f'In {ort} gibt es morgen {daten} {emoji}', inline=False)
-        embedVar.add_field(name="**Temperatur**", value=f'In {ort} hat es morgen maximal {temp["max"]}°C 🌡'
+        embedVar = discord.Embed(title="**Wettervorschau**", color=color)
+        embedVar.add_field(name="**Wetter**", value=f'In {ort[0]} gibt es morgen {daten} {emoji}', inline=False)
+        embedVar.add_field(name="**Temperatur**", value=f'In {ort[0]} hat es morgen maximal {temp["max"]}°C 🌡'
                                                         f'und minimal {temp["min"]}🌡', inline=False)
 
         await message.channel.send(embed=embedVar)
 
 
     except NotFoundError:
-        await message.channel.send(f'Ich konnte {ort} nicht finden :(')
+        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
     except IndexError:
         await message.channel.send('Bitte gib einen Ort an :)')
     except:
         await message.channel.send('Es ist ein Fehler aufgetreten :(')
+
+async def get_weather_alert(message):
+    try:
+        ort = decoder(message)
+
+        one_call = mgr.one_call(lon=ort[1], lat=ort[2])
+        w = one_call.national_weather_alerts
+        daten = w[0].description
+        embedVar = discord.Embed(title="**Wetterwarnung**", color=0xff0000)
+        embedVar.add_field(name="**Warnung**", value=f'In {ort[0]} gibt es eine Wetterwarnung: {daten}', inline=False)
+        await message.channel.send(embed=embedVar)
+    except NotFoundError:
+        await message.channel.send(f'Ich konnte {ort[0]} nicht finden :(')
+    except AssertionError:
+        await message.channel.send('Bitte gib einen Ort an :)')
+    except:
+        await message.channel.send('Es ist ein Fehler aufgetreten :(')
+
