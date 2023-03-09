@@ -12,7 +12,7 @@ import csv
 import message_handler
 import time
 import random
-#import voice_handler
+import voice_handler
 
 
 def check(message):

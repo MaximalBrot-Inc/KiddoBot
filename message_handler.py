@@ -1,8 +1,9 @@
 import discord
+import voice_handler
 import random
 import time
+import geburtstag_handler
 import qrcode_handler
-import weather_handler
 from discord.ext import commands
 #import pathlib
 
@@ -68,12 +69,18 @@ async def main_handler(message , bot):
     if message.content == 'ping':
         await message.channel.send('pong')
 
+    if message.content == 'hallo' or message.content == 'Hallo' or message.content == 'hallo kiddo' or message.content == 'Hallo kiddo' or message.content == 'hallo Kiddo' or message.content == 'Hallo Kiddo':
+        await message.channel.send(f'Hallo {message.author.mention} :)')
+
     if message.content == '!!help':
         embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
+        embedVar.set_thumbnail(url="https://i.imgur.com/ed0LHRk.jpg")
         embedVar.add_field(name="!!help", value="Zeigt dir alle Commands", inline=False)
         embedVar.add_field(name="ping", value="pong", inline=False)
         embedVar.add_field(name="!!roll_dice", value="Würfelt eine Zahl", inline=False)
         embedVar.add_field(name="!!dance", value="Kiddo tanzt", inline=False)
+        embedVar.add_field(name="!!witz", value="Kiddo erzählt dir einen Witz", inline=False)
+        embedVar.add_field(name="!!qrcodepls", value="Kiddo erstellt dir einen QR-Code", inline=False)
         embedVar.add_field(name="!!details", value="Zeigt dir die Konfigurationen des Channels", inline=True)
         embedVar.add_field(name="!!details2", value="Zeigt dir die Konfigurationen des Servers", inline=False)
         embedVar.add_field(name="!!ABFAHRT", value="KIDDO FÄHRT DAVON!!", inline=False)
@@ -255,9 +262,4 @@ async def main_handler(message , bot):
             await message.channel.send(embed=embedVar)
             file.close()
 
-
-    if message.content.startswith("!!Wetter" or "!!wetter"):
-        await weather_handler.get_weather(message)
-    elif message.content.startswith("!!Morgen"):
-        await weather_handler.get_weather_forecast(message)
 
