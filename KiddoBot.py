@@ -49,6 +49,7 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
+    bot.remove_command('help')
     await bot.add_cog(message_handler_temp.KiddoBot(bot))
 
     print(await bot.tree.sync())
@@ -81,9 +82,7 @@ async def on_member_join(member):
     #if message.author != bot.user:
 
 
-@bot.command()
-async def help(self,ctx):
-    self.bot.get_cog
+
 
 
 
