@@ -9,11 +9,12 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import csv
-from message_handler_temp import KiddoBot
+from command_handler import KiddoBot
 import asyncio
-import message_handler_temp
+import command_handler
 import time
 import random
+import process_messages
 #import voice_handler
 
 
@@ -50,7 +51,7 @@ async def on_ready ():
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
     bot.remove_command('help')
-    await bot.add_cog(message_handler_temp.KiddoBot(bot))
+    await bot.add_cog(KiddoBot(bot))
 
     print(await bot.tree.sync())
 
@@ -80,6 +81,7 @@ async def on_member_join(member):
 #@bot.event
 #async def on_message(message):
     #if message.author != bot.user:
+        #await process_messages.main_handler(message)
 
 
 

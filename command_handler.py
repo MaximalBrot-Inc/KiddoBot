@@ -115,11 +115,9 @@ class KiddoBot(commands.Cog):
         embedVar.add_field(name="!!hug", value="+ @User um jemanden zu umarmen", inline=False)
         await ctx.send(embed=embedVar)
 
-    @bot.command()
+    @bot.command(aliases=['lösche'])
     async def clear(self, ctx, Limit=0):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            completeText = ctx.content.split(' ')[1]
-            Limit = int(completeText)
             if Limit == 1:
                 await ctx.channel.send('Eine Nachricht wird gelöscht... :)')
             elif Limit > 1:
@@ -127,10 +125,10 @@ class KiddoBot(commands.Cog):
             Limit = Limit + 2
             time.sleep(2)
             await ctx.channel.purge(limit=int(Limit))
-            if Limit == 3:
-                print('Eine Nachricht wurde gelöscht. Glückwunsch!')
-            else:
-                print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
+            #if Limit == 3:
+                #print('Eine Nachricht wurde gelöscht. Glückwunsch!')
+            #else:
+                #print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
         else:
             await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
@@ -298,15 +296,24 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(embed=embedVar)
             file.close()
 
-    @bot.command()
-    async def Wetter(self, ctx, *, content):
-        await weather_handler.get_weather(content, ctx)
-    @bot.command()
-    async def Morgen(self, ctx, *, content):
-        await weather_handler.get_weather_forecast(content, ctx)
-    @bot.command()
-    async def Alarm(self, ctx, *, content):
-        await weather_handler.get_weather_alert(content, ctx)
+    @bot.command(aliases=['Wetter','heute'])
+    async def wetter(self, ctx, *, content=None):
+        if content == None:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+        else:
+            await weather_handler.get_weather(content, ctx)
+    @bot.command(aliases=['Morgen'])
+    async def morgen(self, ctx, *, content=None):
+        if content == None:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+        else:
+            await weather_handler.get_weather_forecast(content, ctx)
+    @bot.command(aliases=['Alarm'])
+    async def alarm(self, ctx, *, content = None):
+        if content == None:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+        else:
+            await weather_handler.get_weather_alert(content, ctx)
 
     @bot.command()
     async def pingr(self, ctx):
