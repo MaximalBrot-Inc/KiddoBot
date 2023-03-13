@@ -6,9 +6,7 @@ import time
 import qrcode_handler
 import weather_handler
 from discord.ext import commands
-
-
-
+from discord_components import DiscordComponents, Button
 #import pathlib
 
 
@@ -85,17 +83,17 @@ class KiddoBot(commands.Cog):
         await geburtstag_handler.geburtstag(ctx, bot)
 
 
-    @bot.command()
+    @bot.command(aliases=['Ping'])
     async def ping(self, ctx):
         await ctx.send('pong')
 
-    @bot.command()
+    @bot.command(aliases=['Hallo' , 'hallo kiddo' , 'Hallo kiddo' , 'hallo Kiddo' , 'Hallo Kiddo'])
     async def hallo(self,ctx):
         await ctx.send(f'Hallo {ctx.author.mention} :)')
     #if ctx.content == 'hallo' or ctx.content == 'Hallo' or ctx.content == 'hallo kiddo' or ctx.content == 'Hallo kiddo' or ctx.content == 'hallo Kiddo' or ctx.content == 'Hallo Kiddo':
        # await ctx.channel.send(f'Hallo {ctx.author.mention} :)')
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(aliases=['Hilfe'])
     async def hilfe(self, ctx):
         embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
         embedVar.set_thumbnail(url="https://i.imgur.com/ed0LHRk.jpg")
@@ -132,7 +130,7 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
-    @bot.command()
+    @bot.command(aliases=['roll dice'])
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
         await ctx.channel.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
         time.sleep(1)
@@ -213,13 +211,25 @@ class KiddoBot(commands.Cog):
         else:
             pass
 
+    @bot.command()
+    async def higherlower(self, ctx):
+        higher = discord.ui.Button(label="Größer", style=discord.ButtonStyle.green)
+        lower = discord.ui.Button(label="Kleiner", style=discord.ButtonStyle.red)
+        number = random.randint(1, 100)
+        hlembed = discord.Embed(title="**Higher or Lower?**", color=0xff00ff)
+        hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
+                               f"du hast 10 Sekunden Zeit! ⏱" , value=" " , inline=False)
+        hlembed.set_footer(text="Schaffste eh nicht :D")
+        await ctx.channel.send(embed=hlembed , components=[higher, lower])
+
+
+
 
     @bot.command()
     async def kiss(self, ctx, name: discord.Member = None):
         try:
             backup = name
             name = name.nick
-            print(name)
             if name == None:
                 name = backup
 
