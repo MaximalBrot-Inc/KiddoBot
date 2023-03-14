@@ -211,6 +211,7 @@ class KiddoBot(commands.Cog):
         else:
             pass
 
+
     @bot.command()
     async def higherlower(self, ctx):
         higher = discord.ui.Button(label="Größer", style=discord.ButtonStyle.green)
