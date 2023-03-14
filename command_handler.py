@@ -226,8 +226,6 @@ class KiddoBot(commands.Cog):
 
         await view.wait()
 
-
-
         if view.value == None:
             await ctx.channel.send(content="Du hast zu lang gebraucht! Du hast verloren!")
         elif view.value == "higher":
