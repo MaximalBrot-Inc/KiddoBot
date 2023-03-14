@@ -6,7 +6,8 @@ import time
 import qrcode_handler
 import weather_handler
 from discord.ext import commands
-from discord_components import DiscordComponents, Button
+from Buttons import HL_Buttons
+#from discord_components import DiscordComponents, Button
 #import pathlib
 
 
@@ -23,7 +24,7 @@ def Schalter():
         return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
 
 class KiddoBot(commands.Cog):
-    bot = commands.Bot(command_prefix='!!', intents=discord.Intents.all())
+    bot = commands.Bot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 
     def __init__(self, bot):
         self.bot = bot
@@ -214,14 +215,34 @@ class KiddoBot(commands.Cog):
 
     @bot.command()
     async def higherlower(self, ctx):
-        higher = discord.ui.Button(label="Größer", style=discord.ButtonStyle.green)
-        lower = discord.ui.Button(label="Kleiner", style=discord.ButtonStyle.red)
+        view = HL_Buttons()
+
         number = random.randint(1, 100)
         hlembed = discord.Embed(title="**Higher or Lower?**", color=0xff00ff)
         hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
                                f"du hast 10 Sekunden Zeit! ⏱" , value=" " , inline=False)
         hlembed.set_footer(text="Schaffste eh nicht :D")
-        await ctx.channel.send(embed=hlembed , components=[higher, lower])
+        message = await ctx.channel.send(embed=hlembed, view=view)
+
+        await view.wait()
+
+
+
+        if view.value == None:
+            await ctx.channel.send(content="Du hast zu lang gebraucht! Du hast verloren!")
+        elif view.value == "higher":
+            await ctx.channel.send("Du hast gewonnen!")
+        elif view.value == "lower":
+            await ctx.channel.send("Du hast verloren!")
+
+        # comparen dann embed neu setzen
+        await message.edit(embed=hlembed, view=view) #anschließend ausführen
+
+
+
+
+
+
 
 
 
