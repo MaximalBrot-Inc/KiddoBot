@@ -213,11 +213,12 @@ class KiddoBot(commands.Cog):
             pass
 
 
-    @bot.command()
+    @bot.hybrid_command()
     async def higherlower(self, ctx):
         view = HL_Buttons()
 
         number = random.randint(1, 100)
+        number2 = random.randint(1, 100)
         hlembed = discord.Embed(title="**Higher or Lower?**", color=0xff00ff)
         hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
                                f"du hast 10 Sekunden Zeit! ⏱" , value=" " , inline=False)
@@ -225,13 +226,16 @@ class KiddoBot(commands.Cog):
         message = await ctx.channel.send(embed=hlembed, view=view)
 
         await view.wait()
-
+        hlembed.clear_fields()
         if view.value == None:
-            await ctx.channel.send(content="Du hast zu lang gebraucht! Du hast verloren!")
-        elif view.value == "higher":
-            await ctx.channel.send("Du hast gewonnen!")
-        elif view.value == "lower":
-            await ctx.channel.send("Du hast verloren!")
+            hlembed.add_field(name="Du hast zu lang gebraucht! Du hast verloren!", value=" ", inline=False)
+        elif view.value == "größer" and number2 > number:
+            hlembed.add_field(name="Du hast gewonnen!", value="Die Zahl war {}".format(number2), inline=False)
+        elif view.value == "kleiner" and number2 < number:
+            hlembed.add_field(name="Du hast gewonnen!", value="Die Zahl war {}".format(number2), inline=False)
+        else:
+            hlembed.add_field(name="Du hast verloren!", value="{} ist nicht {} als {}".format(number2,view.value,number), inline=False)
+
 
         # comparen dann embed neu setzen
         await message.edit(embed=hlembed, view=view) #anschließend ausführen

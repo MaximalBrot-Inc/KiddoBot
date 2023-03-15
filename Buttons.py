@@ -18,7 +18,7 @@ class HL_Buttons(discord.ui.View):
             button.disabled = True
         await interaction.response.edit_message(view=self)
 
-        self.value = "higher"
+        self.value = "größer"
         self.stop()
 
 
@@ -28,7 +28,7 @@ class HL_Buttons(discord.ui.View):
             button.disabled = True
         await interaction.response.edit_message(view=self)
 
-        self.value = "lower"
+        self.value = "kleiner"
         self.stop()
 
 
