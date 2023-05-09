@@ -54,6 +54,7 @@ async def on_ready ():
     await bot.add_cog(KiddoBot(bot))
 
     print(await bot.tree.sync())
+    await bot.tree.sync()
 
 
 

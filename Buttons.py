@@ -28,6 +28,7 @@ class HL_Buttons(discord.ui.View):
             button.disabled = True
         await interaction.response.edit_message(view=self)
 
+
         self.value = "kleiner"
         self.stop()
 

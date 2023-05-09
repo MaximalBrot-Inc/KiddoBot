@@ -24,22 +24,24 @@ def Schalter():
         return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
 
 class KiddoBot(commands.Cog):
-    bot = commands.Bot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
+    bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 
     def __init__(self, bot):
         self.bot = bot
 
     def freigabe():
-        async def predicate(ctx):
-            if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-                return True
-            else:
-                raise commands.MissingPermissions("Du bist nicht berechtigt diesen Befehl auszuführen. Tut mir leid :)")
+        def predicate(ctx):
+            return (ctx.author.id == 695885580629704734) or (ctx.author.id == 408627107795828746)
+
+        print(predicate)
         return commands.check(predicate)
 
+    #async def freigabe(ctx):
 
-    @bot.command()
-    @freigabe()
+
+
+    @bot.hybrid_command()
+    @commands.check(freigabe)
     async def switchpls(self, ctx):
             readline = open("switch.txt", "r")
             switch_state = readline.read()
@@ -84,11 +86,11 @@ class KiddoBot(commands.Cog):
         await geburtstag_handler.geburtstag(ctx, bot)
 
 
-    @bot.command(aliases=['Ping'])
+    @bot.hybrid_command(aliases=['Ping'])
     async def ping(self, ctx):
         await ctx.send('pong')
 
-    @bot.command(aliases=['Hallo' , 'hallo kiddo' , 'Hallo kiddo' , 'hallo Kiddo' , 'Hallo Kiddo'])
+    @bot.hybrid_command(aliases=['Hallo' , 'hallo kiddo' , 'Hallo kiddo' , 'hallo Kiddo' , 'Hallo Kiddo'])
     async def hallo(self,ctx):
         await ctx.send(f'Hallo {ctx.author.mention} :)')
     #if ctx.content == 'hallo' or ctx.content == 'Hallo' or ctx.content == 'hallo kiddo' or ctx.content == 'Hallo kiddo' or ctx.content == 'hallo Kiddo' or ctx.content == 'Hallo Kiddo':
@@ -114,38 +116,50 @@ class KiddoBot(commands.Cog):
         embedVar.add_field(name="!!hug", value="+ @User um jemanden zu umarmen", inline=False)
         await ctx.send(embed=embedVar)
 
-    @bot.command(aliases=['lösche'])
-    async def clear(self, ctx, Limit=0):
+    @freigabe()
+    @bot.hybrid_command(aliases=['lösche'], description='Löscht eine bestimmte Anzahl an Nachrichten')
+
+    async def clear(self, ctx, anzahl=0):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            if Limit == 1:
-                await ctx.channel.send('Eine Nachricht wird gelöscht... :)')
-            elif Limit > 1:
-                await ctx.channel.send(f'{Limit} Nachrichten werden gelöscht... :)')
-            Limit = Limit + 2
+
+            #await ctx.typing()
             time.sleep(2)
-            await ctx.channel.purge(limit=int(Limit))
+            async with ctx.typing():
+                await ctx.channel.purge(limit=int(anzahl))
+
+            if anzahl == 1:
+                await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True )
+            elif anzahl > 1:
+                await ctx.interaction.response.followup.send(content="Testt")
+                #await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
+
+            #ctx.interaction.response.followup
             #if Limit == 3:
                 #print('Eine Nachricht wurde gelöscht. Glückwunsch!')
             #else:
                 #print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
+
+            #await ctx.interaction.response.send_message(f"only you, , can see this!", ephemeral=True)
+            #ctx.I
+
         else:
             await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
-    @bot.command(aliases=['roll dice'])
+    @bot.hybrid_command(aliases=['roll dice'])
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
         await ctx.channel.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
         time.sleep(1)
         for i in range(int(numberofrolls)):
             await ctx.channel.send(random.randint(1, int(numberofsides)))
 
-    @bot.command()
+    @bot.hybrid_command()
     async def dance(self, ctx):
         dance = open("gifs.txt", "r")
         dance = dance.readlines()
         dance = random.choice(dance)
         await ctx.channel.send(dance)
 
-    @bot.command()
+    @bot.hybrid_command()
     async def witz(self, ctx):
         zahl = random.randint(1 , 100)
         if zahl == 1:
@@ -157,7 +171,7 @@ class KiddoBot(commands.Cog):
             witze = str(witze)
             await ctx.channel.send(witze)
 
-    @bot.command()
+    @bot.hybrid_command()
     async def qrcodepls (self, ctx):
         await qrcode_handler.qrcode(ctx, self)
     #TODO: Fix the qrcode handler
@@ -170,7 +184,7 @@ class KiddoBot(commands.Cog):
         await voice_handler.record_voice(bot, ctx)
     '''
 
-    @bot.command()
+    @bot.hybrid_command()
     async def details(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
             await ctx.author.create_dm()
@@ -190,7 +204,7 @@ class KiddoBot(commands.Cog):
         else:
             pass
 
-    @bot.command()
+    @bot.hybrid_command()
     async def details2(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
             await ctx.author.create_dm()
@@ -249,7 +263,7 @@ class KiddoBot(commands.Cog):
 
 
 
-    @bot.command()
+    @bot.hybrid_command()
     async def kiss(self, ctx, name: discord.Member = None):
         try:
             backup = name
@@ -275,7 +289,7 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(embed=embedVar)
             file.close()
 
-    @bot.command()
+    @bot.hybrid_command()
     async def hug(self, ctx, name: discord.Member = None):
         try:
             backup = name
@@ -303,7 +317,7 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(embed=embedVar)
             file.close()
 
-    @bot.command()
+    @bot.hybrid_command()
     async def hit(self, ctx, name: discord.Member = None):
         try:
             backup = name
@@ -330,25 +344,37 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(embed=embedVar)
             file.close()
 
-    @bot.command(aliases=['Wetter','heute'])
-    async def wetter(self, ctx, *, content=None):
-        if content == None:
+    @bot.hybrid_command(aliases=['Wetter','heute'])
+    async def wetter(self, ctx, *, location=None):
+        if location == None:
             await ctx.channel.send("Bitte gib einen Ort an!")
         else:
-            await weather_handler.get_weather(content, ctx)
-    @bot.command(aliases=['Morgen'])
-    async def morgen(self, ctx, *, content=None):
-        if content == None:
+            await weather_handler.get_weather(location, ctx)
+    @bot.hybrid_command(aliases=['Morgen'])
+    async def morgen(self, ctx, *, location=None):
+        if location == None:
             await ctx.channel.send("Bitte gib einen Ort an!")
         else:
-            await weather_handler.get_weather_forecast(content, ctx)
-    @bot.command(aliases=['Alarm'])
-    async def alarm(self, ctx, *, content = None):
-        if content == None:
+            await weather_handler.get_weather_forecast(location, ctx)
+    @bot.hybrid_command(aliases=['Alarm'])
+    async def alarm(self, ctx, *, location=None):
+        if location == None:
             await ctx.channel.send("Bitte gib einen Ort an!")
         else:
-            await weather_handler.get_weather_alert(content, ctx)
+            await weather_handler.get_weather_alert(location, ctx)
 
-    @bot.command()
+    @bot.hybrid_command()
     async def pingr(self, ctx):
-        await ctx.channel.send('Pong! {0}'.format(round(bot.latency, 1)))
+        await ctx.channel.send('Pong! mit {0}ms'.format(round(self.bot.latency, 1)))
+
+    @bot.event
+    async def on_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.channel.send("Dieser Befehl existiert nicht!")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.channel.send("Bitte gib einen Ort an!")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)', epidermal=True)
+        else:
+            await ctx.channel.send("Ein Fehler ist aufgetreten!")
+            print(error)
