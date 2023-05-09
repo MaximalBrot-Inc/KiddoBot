@@ -18,8 +18,6 @@ import process_messages
 #import voice_handler
 
 
-def check(message):
-    return message.content == 'a'
 
 def getname(ctx):
     user = ctx.author.guild.fetch_member.name(id)
