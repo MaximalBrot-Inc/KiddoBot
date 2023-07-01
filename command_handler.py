@@ -265,7 +265,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command()
     async def kiss(self, ctx, name: discord.Member = None):
-        try:
+        if name:
             backup = name
             name = name.nick
             if name == None:
@@ -281,7 +281,7 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=str(random.choice(file.readlines())))
             await ctx.channel.send(embed=embedVar)
             file.close()
-        except IndexError:
+        else:
             file = open("kiss.txt", "r")
             embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
             embedVar.add_field(name=f"**{ctx.author.nick}**! " 'küsst jeden!', value="", inline=False)
@@ -291,7 +291,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command()
     async def hug(self, ctx, name: discord.Member = None):
-        try:
+        if name:
             backup = name
             name = name.nick
             if name == None:
@@ -309,7 +309,7 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(embed=embedVar)
             file.close()
 
-        except IndexError:
+        else:
             file = open("hug.txt", "r")
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
@@ -319,7 +319,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command()
     async def hit(self, ctx, name: discord.Member = None):
-        try:
+        if name:
             backup = name
             name = name.nick
             if name == None:
@@ -336,7 +336,7 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=str(random.choice(file.readlines())))
             await ctx.channel.send(embed=embedVar)
             file.close()
-        except IndexError:
+        else:
             file = open("hit.txt", "r")
             embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
@@ -346,22 +346,25 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(aliases=['Wetter','heute'])
     async def wetter(self, ctx, *, location=None):
-        if location == None:
-            await ctx.channel.send("Bitte gib einen Ort an!")
-        else:
+        if location:
             await weather_handler.get_weather(location, ctx)
+        else:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+
     @bot.hybrid_command(aliases=['Morgen'])
     async def morgen(self, ctx, *, location=None):
-        if location == None:
-            await ctx.channel.send("Bitte gib einen Ort an!")
-        else:
+        if location:
             await weather_handler.get_weather_forecast(location, ctx)
+        else:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+
     @bot.hybrid_command(aliases=['Alarm'])
     async def alarm(self, ctx, *, location=None):
-        if location == None:
-            await ctx.channel.send("Bitte gib einen Ort an!")
-        else:
+        if location:
             await weather_handler.get_weather_alert(location, ctx)
+        else:
+            await ctx.channel.send("Bitte gib einen Ort an!")
+
 
     @bot.hybrid_command()
     async def pingr(self, ctx):
