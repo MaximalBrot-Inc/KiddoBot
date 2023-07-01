@@ -22,7 +22,7 @@ import process_messages
 def getname(ctx):
     user = ctx.author.guild.fetch_member.name(id)
     return user
-
+#ballz
 with open("data.txt") as token:
   reader = csv.reader(token)
   TOKEN = next(reader)
