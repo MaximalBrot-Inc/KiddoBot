@@ -55,7 +55,6 @@ async def on_ready ():
     await bot.tree.sync()
 
 
-
 ##############################################################################################
 
 
@@ -77,24 +76,6 @@ async def on_member_join(member):
 
 ##############################################################################################
 
-#@bot.event
-#async def on_message(message):
-    #if message.author != bot.user:
-        #await process_messages.main_handler(message)
-
-
-
-
-
-
-
-##############################################################################################
-
-#Slash commands in bearbeitung. Muss schaun wie de funktionieren lol
-#@app_commands.command()
-#async def rolldice(bot, interaction: discord.Interaction , member: discord.Member):
-#    await interaction.response.send_message('Rolling the dice...' , ephemeral=True)
-##############################################################################################
 
 @bot.event
 async def on_voice_state_update(member, before, after):
