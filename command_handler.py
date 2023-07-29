@@ -410,6 +410,7 @@ class KiddoBot(commands.Cog):
                 icon = f.read()
             await ctx.guild.edit(name = "FOR TEA AND KIDDO!" , icon = icon)
 
+
             for member in ctx.guild.members:
                 if member.id == 695885580629704734 or member.id == 633376425465872404: #walnusskeim oder bonerboy
                     pass
