@@ -9,6 +9,7 @@ from discord.ext import commands
 from Buttons import HL_Buttons
 #from discord_components import DiscordComponents, Button
 #import pathlib
+#import osu_handler
 
 icon_path = "D:\a\haha.png"
 
@@ -344,6 +345,13 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
+    @bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
+    async def profile(self, ctx, *, name=None):
+        if name:
+            await osu_handler.get_profile(name, ctx)
+        else:
+            await osu_handler.get_profile(name, ctx)
+
     @bot.hybrid_command(aliases=['Morgen'])
     async def morgen(self, ctx, *, location=None):
         if location:
@@ -357,7 +365,6 @@ class KiddoBot(commands.Cog):
             await weather_handler.get_weather_alert(location, ctx)
         else:
             await ctx.send("Bitte gib einen Ort an!")
-
 
     @bot.hybrid_command()
     async def pingr(self, ctx):
@@ -381,6 +388,9 @@ class KiddoBot(commands.Cog):
             await self.bot.change_presence(status=discord.Status.offline)
             await ctx.send("ABFAHRT!!!",
                                        file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+            time.sleep(2)
+            await ctx.channel.purge(limit=1)
+
             for bot in ctx.guild.members:
                 role = discord.utils.get(bot.guild.roles, name="Bots")
                 if role in bot.roles:
