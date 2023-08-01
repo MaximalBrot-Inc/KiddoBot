@@ -389,7 +389,6 @@ class KiddoBot(commands.Cog):
             await ctx.send("ABFAHRT!!!",
                                        file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
             time.sleep(2)
-
             await ctx.channel.purge(limit=1)
 
             for bot in ctx.guild.members:
