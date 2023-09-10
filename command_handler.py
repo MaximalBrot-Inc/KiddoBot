@@ -383,12 +383,12 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
-    @bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
-    async def profile(self, ctx, *, name=None):
-        if name:
-            await osu_handler.get_profile(name, ctx)
-        else:
-            await osu_handler.get_profile(name, ctx)
+    #@bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
+    #async def profile(self, ctx, *, name=None):
+     #   if name:
+      #      await osu_handler.get_profile(name, ctx)
+       # else:
+        #    await osu_handler.get_profile(name, ctx)
 
     @bot.hybrid_command(aliases=['Morgen'])
     async def morgen(self, ctx, *, location=None):
