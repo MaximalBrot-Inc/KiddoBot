@@ -2,10 +2,12 @@ import discord
 #import voice_handler
 import random
 import time
+import requests
 #import geburtstag_handler
 import qrcode_handler
 import weather_handler
 from discord.ext import commands
+from discord.ui import Button, View
 from Buttons import HL_Buttons
 #from discord_components import DiscordComponents, Button
 #import pathlib
@@ -86,18 +88,23 @@ class KiddoBot(commands.Cog):
         await geburtstag_handler.geburtstag(ctx, bot)
 
 
-    @bot.hybrid_command(aliases=['Ping'])
-    async def ping(self, ctx):
-        await ctx.send('pong')
-
     @bot.hybrid_command(aliases=['Hallo' , 'hallo kiddo' , 'Hallo kiddo' , 'hallo Kiddo' , 'Hallo Kiddo'])
     async def hallo(self,ctx):
         await ctx.send(f'Hallo {ctx.author.mention} :)')
-    #if ctx.content == 'hallo' or ctx.content == 'Hallo' or ctx.content == 'hallo kiddo' or ctx.content == 'Hallo kiddo' or ctx.content == 'hallo Kiddo' or ctx.content == 'Hallo Kiddo':
-       # await ctx.channel.send(f'Hallo {ctx.author.mention} :)')
 
     @bot.hybrid_command(aliases=['Hilfe'])
     async def hilfe(self, ctx):
+        button = Button(label=">>", style=discord.ButtonStyle.primary)
+
+        async def button_callback(interaction):
+            await interaction.response.edit_message(content="A")
+
+        button.callback = button_callback
+
+        view = View()
+        view.add_item(button)
+
+
         embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
         embedVar.set_thumbnail(url="https://i.imgur.com/ed0LHRk.jpg")
         embedVar.add_field(name="!!hilfe", value="Zeigt dir alle Commands", inline=False)
@@ -114,7 +121,8 @@ class KiddoBot(commands.Cog):
         embedVar.add_field(name="!!hit", value="+ @User um jemanden zu schlagen", inline=False)
         embedVar.add_field(name="!!kiss", value="+ @User um jemanden zu küssen", inline=False)
         embedVar.add_field(name="!!hug", value="+ @User um jemanden zu umarmen", inline=False)
-        await ctx.send(embed=embedVar)
+        await ctx.send(embed=embedVar , view=view)
+
 
     @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
@@ -337,6 +345,37 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=str(random.choice(file.readlines())))
             await ctx.send(embed=embedVar)
             file.close()
+
+    @bot.hybrid_command(description = 'Kiddo kürzt dir einen beliebigen Link <3')
+    async def shorten(self, ctx, link=None):
+        file = open("data.txt", "r")
+        lines = file.readlines()
+        AcT = lines[10]
+        AcT = AcT[0:len(AcT) - 1]
+        file.close()
+
+        if link:
+            await ctx.send('Einen Moment :3')
+            try:
+                headers = {
+                    'Authorization': f'Bearer {AcT}',
+                    'Content-Type': 'application/json',
+                }
+                payload = {"long_url": link}
+                response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
+                result = response.json()
+
+                shortened = result["link"]
+
+                await ctx.send("Hier dein gekürzter Link:\n" + shortened + "\nViel Spaß <3")
+
+            except:
+                time.sleep(2)
+                await ctx.send("Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
+
+        else:
+            await ctx.send("Ewwor!")
+
 
     @bot.hybrid_command(aliases=['Wetter','heute'] , description = 'Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
