@@ -376,7 +376,6 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Ewwor!")
 
-
     @bot.hybrid_command(aliases=['Wetter','heute'] , description = 'Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
         if location:
