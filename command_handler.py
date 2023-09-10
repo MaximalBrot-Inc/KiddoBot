@@ -235,7 +235,6 @@ class KiddoBot(commands.Cog):
         else:
             pass
 
-
     @bot.hybrid_command(description = 'Ist die nächste Zahl größer oder kleiner?')
     async def higherlower(self, ctx):
         view = HL_Buttons()
@@ -245,7 +244,7 @@ class KiddoBot(commands.Cog):
         hlembed = discord.Embed(title="**Higher or Lower?**", color=0xff00ff)
         hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
                                f"du hast 10 Sekunden Zeit! ⏱" , value=" " , inline=False)
-        hlembed.set_footer(text="Schaffste eh nicht :D")
+        hlembed.set_footer(text="Zwischen 0 und 100!")
         message = await ctx.send(embed=hlembed, view=view)
 
         await view.wait()
@@ -263,11 +262,9 @@ class KiddoBot(commands.Cog):
         # comparen dann embed neu setzen
         await message.edit(embed=hlembed, view=view) #anschließend ausführen
 
-
-
     @bot.hybrid_command(description = 'Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
-        if name:
+        if name != ctx.author:
             backup = name
             name = name.nick
             if name == None:
@@ -283,6 +280,17 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=str(random.choice(file.readlines())))
             await ctx.send(embed=embedVar)
             file.close()
+
+        elif name == ctx.author:
+            name = name.nick
+
+            file = open("kiss.txt", "r")
+            embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
+            embedVar.add_field(name=f"**{name}** Küsst sich selber! Geht das überhaupt??", value="", inline=False)
+            embedVar.set_image(url=str(random.choice(file.readlines())))
+            await ctx.send(embed=embedVar)
+            file.close()
+
         else:
             file = open("kiss.txt", "r")
             embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
@@ -293,7 +301,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description = 'Kiddo umarmt dich 0 /// 0')
     async def hug(self, ctx, name: discord.Member = None):
-        if name:
+        if name != ctx.author:
             backup = name
             name = name.nick
             if name == None:
@@ -311,6 +319,17 @@ class KiddoBot(commands.Cog):
             await ctx.send(embed=embedVar)
             file.close()
 
+        elif name == ctx.author:
+            name = name.nick
+
+            file = open("hug.txt", "r")
+            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** Umarmt sich selber?! Wie geht das überhaupt :thinking:", value="",
+                               inline=False)
+            embedVar.set_image(url=str(random.choice(file.readlines())))
+            await ctx.send(embed=embedVar)
+            file.close()
+
         else:
             file = open("hug.txt", "r")
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
@@ -321,7 +340,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description = 'Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
-        if name:
+        if name != ctx.author:
             backup = name
             name = name.nick
             if name == None:
@@ -338,6 +357,18 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=str(random.choice(file.readlines())))
             await ctx.send(embed=embedVar)
             file.close()
+
+        elif name == ctx.author:
+            name = name.nick
+
+            file = open("hit.txt", "r")
+            embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** schlägt sich selber! Aber warum nur :thinking:", value="",
+                               inline=False)
+            embedVar.set_image(url=str(random.choice(file.readlines())))
+            await ctx.send(embed=embedVar)
+            file.close()
+
         else:
             file = open("hit.txt", "r")
             embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
@@ -376,19 +407,19 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Ewwor!")
 
+    # @bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
+    # async def profile(self, ctx, *, name=None):
+    #   if name:
+    #      await osu_handler.get_profile(name, ctx)
+    # else:
+    #    await osu_handler.get_profile(name, ctx)
+
     @bot.hybrid_command(aliases=['Wetter','heute'] , description = 'Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather(location, ctx)
         else:
             await ctx.send("Bitte gib einen Ort an!")
-
-    #@bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
-    #async def profile(self, ctx, *, name=None):
-     #   if name:
-      #      await osu_handler.get_profile(name, ctx)
-       # else:
-        #    await osu_handler.get_profile(name, ctx)
 
     @bot.hybrid_command(aliases=['Morgen'])
     async def morgen(self, ctx, *, location=None):
@@ -404,9 +435,9 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
-    @bot.hybrid_command()
+    @bot.hybrid_command(description = 'Schaue nach, wie lang Kiddo braucht um dir eine Antwort zu senden :)')
     async def pingr(self, ctx):
-        await ctx.send('Pong! mit {0}ms'.format(round(self.bot.latency, 1)))
+        await ctx.send('Pong! Mit {0}ms Verzögerung.'.format(round(self.bot.latency, 1)))
 
     @bot.event
     async def on_error(self, ctx, error):
