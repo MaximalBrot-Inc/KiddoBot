@@ -264,118 +264,139 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description = 'Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
-        if name != ctx.author:
-            backup = name
-            name = name.nick
-            if name == None:
-                name = backup
+        kisser = ctx.author.nick
+        if kisser == None:
+            kisser = ctx.author.name
 
-            kisser = ctx.author.nick
-            if kisser == None:
-                kisser = ctx.author.name
+        if name == None:
+            url = "https://waifu.it/api/kiss"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
 
-            file = open("kiss.txt", "r")
-            embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
-            embedVar.add_field(name=f"**{name}**!" f" Du wirst von **{kisser}** geküsst!", value="", inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{ctx.author.nick}** küsst jeden!", value="", inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         elif name == ctx.author:
             name = name.nick
 
-            file = open("kiss.txt", "r")
-            embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
-            embedVar.add_field(name=f"**{name}** Küsst sich selber! Geht das überhaupt??", value="", inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            url = "https://waifu.it/api/kiss"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** küsst sich selber?! Wie ist das möglich :thinking:", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         else:
-            file = open("kiss.txt", "r")
-            embedVar = discord.Embed(title="😘 Kiss", color=0xff00ff)
-            embedVar.add_field(name=f"**{ctx.author.nick}**! " 'küsst jeden!', value="", inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            url = "https://waifu.it/api/kiss"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{kisser}** geküsst!", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
     @bot.hybrid_command(description = 'Kiddo umarmt dich 0 /// 0')
     async def hug(self, ctx, name: discord.Member = None):
-        if name != ctx.author:
-            backup = name
-            name = name.nick
-            if name == None:
-                name = backup
+        hugger = ctx.author.nick
+        if hugger == None:
+            hugger = ctx.author.name
 
-            hugger = ctx.author.nick
-            if hugger == None:
-                hugger = ctx.author.name
+        if name == None:
+            url = "https://waifu.it/api/cuddle"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
 
-            file = open("hug.txt", "r")
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
-                               inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         elif name == ctx.author:
             name = name.nick
 
-            file = open("hug.txt", "r")
+            url = "https://waifu.it/api/cuddle"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{name}** Umarmt sich selber?! Wie geht das überhaupt :thinking:", value="",
                                inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         else:
-            file = open("hug.txt", "r")
+            url = "https://waifu.it/api/cuddle"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
     @bot.hybrid_command(description = 'Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
-        if name != ctx.author:
-            backup = name
-            name = name.nick
-            if name == None:
-                name = backup
+        hitter = ctx.author.nick
+        if hitter == None:
+            hitter = ctx.author.name
 
-            hitter = ctx.author.nick
-            if hitter == None:
-                hitter = ctx.author.name
+        if name == None:
+            url = "https://waifu.it/api/punch"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
 
-            file = open("hit.txt", "r")
-            embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von **' + f"{hitter}** geschlagen!", value="",
-                               inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         elif name == ctx.author:
             name = name.nick
 
-            file = open("hit.txt", "r")
-            embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}** schlägt sich selber! Aber warum nur :thinking:", value="",
-                               inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            url = "https://waifu.it/api/punch"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:', value="", inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
         else:
-            file = open("hit.txt", "r")
-            embedVar = discord.Embed(title="😠 Hit!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
-            embedVar.set_image(url=str(random.choice(file.readlines())))
+            url = "https://waifu.it/api/punch"
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+            })
+            data = response.json()
+
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!" , value="", inline=False)
+            embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-            file.close()
 
     @bot.hybrid_command(description = 'Kiddo kürzt dir einen beliebigen Link <3')
     async def shorten(self, ctx, link=None):
@@ -407,12 +428,13 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Ewwor!")
 
-    # @bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
-    # async def profile(self, ctx, *, name=None):
-    #   if name:
-    #      await osu_handler.get_profile(name, ctx)
-    # else:
-    #    await osu_handler.get_profile(name, ctx)
+###FIXFIXFIXFIXFIX###
+    @bot.hybrid_command(description = 'Lasse dir Daten zu deinem osu! Profil anzeigen :)')
+    async def profile(self, ctx, *, name=None):
+        if name:
+            await osu_handler.get_profile(name, ctx)
+        else:
+            await ctx.send('Hey ich brauche schon einen Namen sonst kann ich unmöglich suchen :/')
 
     @bot.hybrid_command(aliases=['Wetter','heute'] , description = 'Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
