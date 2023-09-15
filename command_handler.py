@@ -1,4 +1,5 @@
 import discord
+
 #import voice_handler
 import random
 import time
@@ -7,8 +8,10 @@ import requests
 import qrcode_handler
 import weather_handler
 from discord.ext import commands
+from discord import app_commands, Interaction
 from discord.ui import Button, View
 from Buttons import HL_Buttons
+
 #from discord_components import DiscordComponents, Button
 #import pathlib
 #import osu_handler
@@ -34,12 +37,11 @@ class KiddoBot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def freigabe():
-        def predicate(ctx):
-            return (ctx.author.id == 695885580629704734) or (ctx.author.id == 408627107795828746)
 
-        print(predicate)
-        return commands.check(predicate)
+    def freigabe():
+        async def case(ctx):
+            return (ctx.author.id == 695885580629704734) or (ctx.author.id == 408627107795828746)
+        return commands.check(case)
 
 
     @bot.hybrid_command()
@@ -87,12 +89,19 @@ class KiddoBot(commands.Cog):
     async def Geburtstag(self, ctx):
         await geburtstag_handler.geburtstag(ctx, bot)
 
+    @bot.hybrid_command()
+    @freigabe()
+    async def sync(self, ctx):
+
+        await ctx.bot.tree.sync()
+        await ctx.interaction.response.send_message("Sync complete")
 
     @bot.hybrid_command(aliases=['Hallo' , 'hallo kiddo' , 'Hallo kiddo' , 'hallo Kiddo' , 'Hallo Kiddo'])
     async def hallo(self,ctx):
         await ctx.send(f'Hallo {ctx.author.mention} :)')
 
     @bot.hybrid_command(aliases=['Hilfe'])
+    #@bot.help_command
     async def hilfe(self, ctx):
         button = Button(label=">>", style=discord.ButtonStyle.primary)
 
@@ -124,7 +133,7 @@ class KiddoBot(commands.Cog):
         await ctx.send(embed=embedVar , view=view)
 
 
-    @freigabe()
+    #@freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
     async def loesche(self, ctx, anzahl=0):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
@@ -276,7 +285,7 @@ class KiddoBot(commands.Cog):
             data = response.json()
 
             embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}** küsst jeden!", value="", inline=False)
+            embedVar.add_field(name='**' + f"{kisser}** küsst jeden!", value="", inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
@@ -461,14 +470,15 @@ class KiddoBot(commands.Cog):
     async def pingr(self, ctx):
         await ctx.send('Pong! Mit {0}ms Verzögerung.'.format(round(self.bot.latency, 1)))
 
-    @bot.event
-    async def on_error(self, ctx, error):
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("Dieser Befehl existiert nicht!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Bitte gib einen Ort an!")
         elif isinstance(error, commands.CheckFailure):
-            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)', epidermal=True)
+            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
         else:
             await ctx.send("Ein Fehler ist aufgetreten!")
             print(error)

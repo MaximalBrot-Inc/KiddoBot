@@ -14,7 +14,6 @@ import asyncio
 import command_handler
 import time
 import random
-import process_messages
 #import voice_handler
 
 
@@ -48,11 +47,8 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
-    bot.remove_command('help')
+    #bot.remove_command('help')
     await bot.add_cog(KiddoBot(bot))
-
-    print(await bot.tree.sync())
-    await bot.tree.sync()
 
 
 ##############################################################################################

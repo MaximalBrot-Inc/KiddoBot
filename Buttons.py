@@ -33,5 +33,3 @@ class HL_Buttons(discord.ui.View):
         self.stop()
 
 
-
-
