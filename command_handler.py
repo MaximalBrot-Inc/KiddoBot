@@ -274,13 +274,13 @@ class KiddoBot(commands.Cog):
         if kisser == None:
             kisser = ctx.author.name
 
-        if name == None:
-            url = "https://waifu.it/api/kiss"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
+        url = "https://waifu.it/api/kiss"
+        response = requests.get(url, headers={
+            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+        })
+        data = response.json()
 
+        if name == None:
             embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{kisser}** küsst jeden!", value="", inline=False)
             embedVar.set_image(url=data["url"])
@@ -288,13 +288,6 @@ class KiddoBot(commands.Cog):
 
         elif name == ctx.author:
             name = name.nick
-
-            url = "https://waifu.it/api/kiss"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
-
             embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{name}** küsst sich selber?! Wie ist das möglich :thinking:", value="",
                                inline=False)
@@ -302,12 +295,6 @@ class KiddoBot(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            url = "https://waifu.it/api/kiss"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
-
             embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{kisser}** geküsst!", value="",
                                inline=False)
@@ -320,13 +307,13 @@ class KiddoBot(commands.Cog):
         if hugger == None:
             hugger = ctx.author.name
 
-        if name == None:
-            url = "https://waifu.it/api/cuddle"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
+        url = "https://waifu.it/api/cuddle"
+        response = requests.get(url, headers={
+            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+        })
+        data = response.json()
 
+        if name == None:
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
             embedVar.set_image(url=data["url"])
@@ -334,13 +321,6 @@ class KiddoBot(commands.Cog):
 
         elif name == ctx.author:
             name = name.nick
-
-            url = "https://waifu.it/api/cuddle"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
-
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{name}** Umarmt sich selber?! Wie geht das überhaupt :thinking:", value="",
                                inline=False)
@@ -348,12 +328,6 @@ class KiddoBot(commands.Cog):
             await ctx.send(embed=embedVar)
 
         else:
-            url = "https://waifu.it/api/cuddle"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
-
             embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
             embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
                                inline=False)
@@ -363,45 +337,53 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
         hitter = ctx.author.nick
+        killmode = False
         if hitter == None:
             hitter = ctx.author.name
-
-        if name == None:
-            url = "https://waifu.it/api/punch"
+        if random.randint(1, 100) == random.randint(1, 100):
+            killmode = True
+            url = "https://waifu.it/api/die"
             response = requests.get(url, headers={
                 "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
             })
-            data = response.json()
 
-            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        elif name == ctx.author:
-            name = name.nick
-
-            url = "https://waifu.it/api/punch"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-            data = response.json()
-
-            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
-                               value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
 
         else:
             url = "https://waifu.it/api/punch"
             response = requests.get(url, headers={
                 "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
             })
-            data = response.json()
+        data = response.json()
 
+        if name == None:
             embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
+            if killmode:
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="", inline=False)
+            else:
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        elif name == ctx.author:
+            name = name.nick
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            if killmode:
+                embedVar.add_field(
+                    name='**' + f"{ctx.author.nick}**! " 'Hat zu fest zugeschalgen und sich selbest umgebracht :skull:',
+                    value="", inline=False)
+            else:
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
+                               value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        else:
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            if killmode:
+                embedVar.add_field(name='**' + f"{hitter}** " 'Schlägt zu fest zu und tötet ' f"**{name}** ", value="",
+                                   inline=False)
+            else:
+                embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
                                inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
