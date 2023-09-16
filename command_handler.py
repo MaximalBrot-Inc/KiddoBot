@@ -1,5 +1,4 @@
 import discord
-
 # import voice_handler
 import random
 import time
@@ -34,6 +33,7 @@ def Schalter():
 
 class KiddoBot(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
+
 
     def __init__(self, bot):
         self.bot = bot
@@ -99,7 +99,6 @@ class KiddoBot(commands.Cog):
         await ctx.send(f'Hallo {ctx.author.mention} :)')
 
     @bot.hybrid_command(aliases=['Hilfe'])
-    # @bot.help_command
     async def hilfe(self, ctx):
         button = Button(label=">>", style=discord.ButtonStyle.primary)
 
@@ -165,10 +164,12 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description='Kiddo tanzt!')
     async def dance(self, ctx):
-        dance = open("gifs.txt", "r")
-        dance = dance.readlines()
-        dance = random.choice(dance)
-        await ctx.send(dance)
+        url = "https://waifu.it/api/dance"
+        response = requests.get(url, headers={
+            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
+        })
+        data = response.json()
+        await ctx.send(data["url"])
 
     @bot.hybrid_command(description='Kiddo erzählt die einen Witz! Aber pass auf, vielleicht bist du der Witz...')
     async def witz(self, ctx):
@@ -517,3 +518,17 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
+
+
+
+    #@bot.help_command()
+    #async def help_command(self, ctx, command=None):
+        #await ctx.send("test")
+    #@bot.help_command.send_bot_help(bot)
+    #async def help(self, ctx, command=None):
+        #ctx.send("test")
+    #@bot.command()
+    #async def help(self, ctx, command=None):
+        #self.help_command = commands.DefaultHelpCommand()
+        #ctx.send(commands.DefaultHelpCommand().send_bot_help(ctx))
+    #bot.ad
