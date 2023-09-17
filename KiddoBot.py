@@ -51,7 +51,6 @@ async def on_ready ():
     bot.remove_command('help')
     await bot.add_cog(KiddoBot(bot))
 
-    print(await bot.tree.sync())
     await bot.tree.sync()
 
 
