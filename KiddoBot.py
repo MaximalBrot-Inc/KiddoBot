@@ -14,7 +14,7 @@ import asyncio
 import command_handler
 import time
 import random
-import process_messages
+from help_system import HelpCommand
 #import voice_handler
 
 
@@ -30,10 +30,11 @@ with open("data.txt") as token:
 
 TOKEN = TOKEN[0]
 
-bot = commands.Bot(command_prefix = '!!' , intents = discord.Intents.all())
+bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 #bot.remove_command('switchstate')
-bot.remove_command('help')
 
+
+bot.help_command = HelpCommand()
 ##############################################################################################
 
 @bot.event
@@ -48,10 +49,8 @@ async def on_ready ():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
-    bot.remove_command('help')
-    await bot.add_cog(KiddoBot(bot))
 
-    await bot.tree.sync()
+    await bot.add_cog(KiddoBot(bot))
 
 
 ##############################################################################################
