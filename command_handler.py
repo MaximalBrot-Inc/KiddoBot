@@ -8,6 +8,7 @@ import qrcode_handler
 import weather_handler
 from discord.ext import commands
 from discord.ui import Button, View
+from help_system import HelpCommand
 from Buttons import HL_Buttons
 
 # from discord_components import DiscordComponents, Button
@@ -100,48 +101,27 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(aliases=['Hilfe'])
     async def hilfe(self, ctx):
-        button = Button(label=">>", style=discord.ButtonStyle.primary)
+        # aktiviert den integrierten help command
+        await HelpCommand.send_pages(ctx.channel)
 
-        async def button_callback(interaction):
-            await interaction.response.edit_message(content="A")
 
-        button.callback = button_callback
 
-        view = View()
-        view.add_item(button)
-
-        embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
-        embedVar.set_thumbnail(url="https://i.imgur.com/ed0LHRk.jpg")
-        embedVar.add_field(name="!!hilfe", value="Zeigt dir alle Commands", inline=False)
-        embedVar.add_field(name="ping", value="pong", inline=False)
-        embedVar.add_field(name="!!roll_dice", value="Würfelt eine Zahl", inline=False)
-        embedVar.add_field(name="!!dance", value="Kiddo tanzt", inline=False)
-        embedVar.add_field(name="!!witz", value="Kiddo erzählt dir einen Witz", inline=False)
-        embedVar.add_field(name="!!qrcodepls", value="Kiddo erstellt dir einen QR-Code", inline=False)
-        embedVar.add_field(name="!!details", value="Zeigt dir die Konfigurationen des Channels", inline=True)
-        embedVar.add_field(name="!!details2", value="Zeigt dir die Konfigurationen des Servers", inline=False)
-        embedVar.add_field(name="!!ABFAHRT", value="KIDDO FÄHRT DAVON!!", inline=False)
-        embedVar.add_field(name="!!play", value="Spielt einen Song ab", inline=False)
-        embedVar.add_field(name="!!stop", value="Stoppt den Song", inline=False)
-        embedVar.add_field(name="!!hit", value="+ @User um jemanden zu schlagen", inline=False)
-        embedVar.add_field(name="!!kiss", value="+ @User um jemanden zu küssen", inline=False)
-        embedVar.add_field(name="!!hug", value="+ @User um jemanden zu umarmen", inline=False)
-        await ctx.send(embed=embedVar, view=view)
-
-    # @freigabe()
+    @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
-    async def loesche(self, ctx, anzahl=0):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            # await ctx.typing()
-            time.sleep(2)
-            async with ctx.typing():
-                await ctx.channel.purge(limit=int(anzahl))
+    async def loesche(self, ctx, anzahl=1):
+        #if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
+        # await ctx.typing()
+        #time.sleep(2)
+        async with ctx.typing():
+            await ctx.channel.purge(limit=int(anzahl+1))
 
-            if anzahl == 1:
-                await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
-            elif anzahl > 1:
-                await ctx.interaction.response.followup.send(content="Testt")
-                # await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
+        if anzahl == 2:
+            #await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
+            await ctx.send('Eine Nachricht wurde gelöscht... :)')
+        elif anzahl > 2:
+            #await ctx.interaction.response.followup.send(content="Testt")
+            await ctx.send(f'{anzahl-1} Nachrichten wurden gelöscht... :)')
+            # await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
 
             # ctx.interaction.response.followup
             # if Limit == 3:
@@ -152,8 +132,9 @@ class KiddoBot(commands.Cog):
             # await ctx.interaction.response.send_message(f"only you, , can see this!", ephemeral=True)
             # ctx.I
 
-        else:
-            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+
+        #else:
+            #await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
     @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
@@ -520,15 +501,3 @@ class KiddoBot(commands.Cog):
             await ctx.send("Da ist etwas falsch gelaufen :/")
 
 
-
-    #@bot.help_command()
-    #async def help_command(self, ctx, command=None):
-        #await ctx.send("test")
-    #@bot.help_command.send_bot_help(bot)
-    #async def help(self, ctx, command=None):
-        #ctx.send("test")
-    #@bot.command()
-    #async def help(self, ctx, command=None):
-        #self.help_command = commands.DefaultHelpCommand()
-        #ctx.send(commands.DefaultHelpCommand().send_bot_help(ctx))
-    #bot.ad
