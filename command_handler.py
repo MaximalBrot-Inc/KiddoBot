@@ -322,7 +322,7 @@ class KiddoBot(commands.Cog):
         killmode = False
         if hitter == None:
             hitter = ctx.author.name
-        if random.randint(1, 100) == random.randint(1, 100):
+        if random.randint(1, 100) == 69:
             killmode = True
             url = "https://waifu.it/api/die"
             response = requests.get(url, headers={
