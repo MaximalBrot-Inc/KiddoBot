@@ -1,17 +1,17 @@
-import discord
-# import voice_handler
-import random
 import time
+import random
+import discord
 import requests
-# import geburtstag_handler
+import music_handler
 import qrcode_handler
 import weather_handler
+from Buttons import HL_Buttons
 from discord.ext import commands
 from discord.ui import Button, View
 from help_system import HelpCommand
 from Buttons import HL_Buttons
 
-# from discord_components import DiscordComponents, Button
+# import geburtstag_handler
 # import pathlib
 # import osu_handler
 
@@ -69,7 +69,7 @@ class KiddoBot(commands.Cog):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
             await ctx.channel.send(
                 f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
-            
+
             response = await ctx.wait_for('ctx', check=check, timeout=15)
             if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
                 await ctx.channel.send('Der Schalter ist ' + Schalter())
@@ -103,8 +103,6 @@ class KiddoBot(commands.Cog):
     async def hilfe(self, ctx):
         # aktiviert den integrierten help command
         await HelpCommand.send_pages(ctx.channel)
-
-
 
     @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
@@ -165,6 +163,24 @@ class KiddoBot(commands.Cog):
             witze = str(witze)
             await ctx.send(witze)
 
+    @bot.hybrid_command(description='UwUify dein Text von Kiddo')
+    async def baller(self, ctx):
+        url = "https://waifu.it/api/uwuify"
+
+        text = "Hello world"  # Replace with your desired uwuify length (optional).
+
+        params = {
+            "text": text if text is not None else None,
+        }
+
+        response = requests.get(url, headers={
+            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333",
+        }, params=params)
+
+        data = response.json()
+
+        print(data)
+
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx):
         await qrcode_handler.qrcode(ctx, self)
@@ -173,7 +189,7 @@ class KiddoBot(commands.Cog):
 
     # Todo: Fix the voice handler
     '''
-    
+
     @bot.command()
     if ctx.content == '!!recordpls' or ctx.content =='!!stoppls' or ctx.content == '!!disconnectpls':
         await voice_handler.record_voice(bot, ctx)
@@ -249,15 +265,6 @@ class KiddoBot(commands.Cog):
 
         # comparen dann embed neu setzen
         await message.edit(embed=hlembed, view=view)  # anschließend ausführen
-
-    @bot.hybrid_command(description='Verwende Kiddo als Meinungsverstärker')
-    async def fuckyou(self, ctx, name: discord.Member = None):
-        if name == None:
-           await ctx.send("No fuck YOU >:(")
-        else:
-
-
-            await ctx.send("Yeah fuck you  ")
 
     @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
@@ -349,7 +356,8 @@ class KiddoBot(commands.Cog):
         if name == None:
             embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
             if killmode:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="", inline=False)
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="",
+                                   inline=False)
             else:
                 embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
             embedVar.set_image(url=data["url"])
@@ -363,8 +371,9 @@ class KiddoBot(commands.Cog):
                     name='**' + f"{ctx.author.nick}**! " 'Hat zu fest zugeschalgen und sich selbest umgebracht :skull:',
                     value="", inline=False)
             else:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
-                               value="", inline=False)
+                embedVar.add_field(
+                    name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
+                    value="", inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
@@ -375,7 +384,7 @@ class KiddoBot(commands.Cog):
                                    inline=False)
             else:
                 embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
-                               inline=False)
+                                   inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
@@ -446,7 +455,7 @@ class KiddoBot(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Dieser Befehl existiert nicht!")
+            await ctx.send("Dieser Befehl existiert nicht bozo!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Bitte gib einen Ort an!")
         elif isinstance(error, commands.CheckFailure):
