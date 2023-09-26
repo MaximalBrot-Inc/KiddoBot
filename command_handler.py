@@ -2,7 +2,7 @@ import time
 import random
 import discord
 import requests
-import music_handler
+#import music_handler
 import qrcode_handler
 import weather_handler
 from Buttons import HL_Buttons
@@ -265,6 +265,14 @@ class KiddoBot(commands.Cog):
 
         # comparen dann embed neu setzen
         await message.edit(embed=hlembed, view=view)  # anschließend ausführen
+
+    @bot.hybrid_command(description='Verwende Kiddo als Meinungsverstärker')
+    async def fuckyou(self, ctx, name: discord.Member = None):
+        if name == None:
+            await ctx.send("No fuck YOU >:(")
+        else:
+
+            await ctx.send("Yeah fuck you {} ".format(name.mention))
 
     @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
