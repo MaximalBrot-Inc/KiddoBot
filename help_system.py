@@ -4,8 +4,11 @@ from discord.ui import Button, View
 
 class HelpCommand(commands.DefaultHelpCommand):
     async def send_pages(self):
-        destination = self.get_destination()
-
+        try:
+            destination = self.get_destination()
+        except AttributeError:
+            destination = self
+        print(destination)
         select = discord.ui.Select(placeholder="Wähle eine Kategorie", options=[discord.SelectOption(label="Fun", value="Fun"),
                                                                     discord.SelectOption(label="Spiele", value="Spiele"),
                                                                     discord.SelectOption(label="Musik", value="Musik"),
