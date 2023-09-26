@@ -1,17 +1,17 @@
-import discord
-# import voice_handler
-import random
 import time
+import random
+import discord
 import requests
-# import geburtstag_handler
+import music_handler
 import qrcode_handler
 import weather_handler
+from Buttons import HL_Buttons
 from discord.ext import commands
 from discord.ui import Button, View
 from help_system import HelpCommand
 from Buttons import HL_Buttons
 
-# from discord_components import DiscordComponents, Button
+# import geburtstag_handler
 # import pathlib
 # import osu_handler
 
@@ -34,7 +34,6 @@ def Schalter():
 
 class KiddoBot(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
-
 
     def __init__(self, bot):
         self.bot = bot
@@ -69,7 +68,7 @@ class KiddoBot(commands.Cog):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
             await ctx.channel.send(
                 f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
-            
+
             response = await ctx.wait_for('ctx', check=check, timeout=15)
             if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
                 await ctx.channel.send('Der Schalter ist ' + Schalter())
@@ -104,23 +103,21 @@ class KiddoBot(commands.Cog):
         # aktiviert den integrierten help command
         await HelpCommand.send_pages(ctx.channel)
 
-
-
     @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
     async def loesche(self, ctx, anzahl=1):
-        #if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
+        # if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
         # await ctx.typing()
-        #time.sleep(2)
+        # time.sleep(2)
         async with ctx.typing():
-            await ctx.channel.purge(limit=int(anzahl+1))
+            await ctx.channel.purge(limit=int(anzahl + 1))
 
         if anzahl == 2:
-            #await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
+            # await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
             await ctx.send('Eine Nachricht wurde gelöscht... :)')
         elif anzahl > 2:
-            #await ctx.interaction.response.followup.send(content="Testt")
-            await ctx.send(f'{anzahl-1} Nachrichten wurden gelöscht... :)')
+            # await ctx.interaction.response.followup.send(content="Testt")
+            await ctx.send(f'{anzahl - 1} Nachrichten wurden gelöscht... :)')
             # await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
 
             # ctx.interaction.response.followup
@@ -132,9 +129,8 @@ class KiddoBot(commands.Cog):
             # await ctx.interaction.response.send_message(f"only you, , can see this!", ephemeral=True)
             # ctx.I
 
-
-        #else:
-            #await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+        # else:
+        # await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
     @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
@@ -165,6 +161,24 @@ class KiddoBot(commands.Cog):
             witze = str(witze)
             await ctx.send(witze)
 
+    @bot.hybrid_command(description='UwUify dein Text von Kiddo')
+    async def baller(self, ctx):
+        url = "https://waifu.it/api/uwuify"
+
+        text = "Hello world"  # Replace with your desired uwuify length (optional).
+
+        params = {
+            "text": text if text is not None else None,
+        }
+
+        response = requests.get(url, headers={
+            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333",
+        }, params=params)
+
+        data = response.json()
+
+        print(data)
+
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx):
         await qrcode_handler.qrcode(ctx, self)
@@ -173,7 +187,7 @@ class KiddoBot(commands.Cog):
 
     # Todo: Fix the voice handler
     '''
-    
+
     @bot.command()
     if ctx.content == '!!recordpls' or ctx.content =='!!stoppls' or ctx.content == '!!disconnectpls':
         await voice_handler.record_voice(bot, ctx)
@@ -222,6 +236,25 @@ class KiddoBot(commands.Cog):
                                              f"```")
         else:
             pass
+
+    @bot.hybrid_command(description='Lasse dir von Kiddo einen beliebigen Song vorspielen :)')
+    async def play(self, ctx, url=None):
+        if url == None:
+            await ctx.send("Du musst schon einen Link senden :)")
+        else:
+            await music_handler.yt(ctx, url)
+
+    @bot.hybrid_command(description='Pausiere den Song')
+    async def pause(self, ctx):
+        await music.pause(ctx)
+
+    @bot.hybrid_command(description='Setze den Song fort')
+    async def resume(self, ctx):
+        await music.resume(ctx)
+
+    @bot.hybrid_command(description='Ich verlasse den VoiceChannel')
+    async def leave(self, ctx):
+        await music.leave(ctx)
 
     @bot.hybrid_command(description='Ist die nächste Zahl größer oder kleiner?')
     async def higherlower(self, ctx):
@@ -340,7 +373,8 @@ class KiddoBot(commands.Cog):
         if name == None:
             embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
             if killmode:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="", inline=False)
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="",
+                                   inline=False)
             else:
                 embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
             embedVar.set_image(url=data["url"])
@@ -354,8 +388,9 @@ class KiddoBot(commands.Cog):
                     name='**' + f"{ctx.author.nick}**! " 'Hat zu fest zugeschalgen und sich selbest umgebracht :skull:',
                     value="", inline=False)
             else:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
-                               value="", inline=False)
+                embedVar.add_field(
+                    name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
+                    value="", inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
@@ -366,7 +401,7 @@ class KiddoBot(commands.Cog):
                                    inline=False)
             else:
                 embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
-                               inline=False)
+                                   inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
@@ -437,7 +472,7 @@ class KiddoBot(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Dieser Befehl existiert nicht!")
+            await ctx.send("Dieser Befehl existiert nicht bozo!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Bitte gib einen Ort an!")
         elif isinstance(error, commands.CheckFailure):
@@ -499,5 +534,4 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
-
 
