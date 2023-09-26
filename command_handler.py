@@ -1,16 +1,15 @@
-import discord
-# import voice_handler
-import random
 import time
+import random
+import discord
 import requests
-# import geburtstag_handler
+import help_system
+import music_handler
 import qrcode_handler
 import weather_handler
+from Buttons import HL_Buttons
 from discord.ext import commands
 from discord.ui import Button, View
-from Buttons import HL_Buttons
-
-# from discord_components import DiscordComponents, Button
+# import geburtstag_handler
 # import pathlib
 # import osu_handler
 
@@ -184,6 +183,24 @@ class KiddoBot(commands.Cog):
             witze = str(witze)
             await ctx.send(witze)
 
+    @bot.hybrid_command(description='UwUify dein Text von Kiddo')
+    async def baller(self, ctx):
+            url = "https://waifu.it/api/uwuify"
+
+            text = "Hello world"  # Replace with your desired uwuify length (optional).
+
+            params = {
+                "text": text if text is not None else None,
+            }
+
+            response = requests.get(url, headers={
+                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333",
+            }, params=params)
+
+            data = response.json()
+
+            print(data)
+
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx):
         await qrcode_handler.qrcode(ctx, self)
@@ -241,6 +258,25 @@ class KiddoBot(commands.Cog):
                                              f"```")
         else:
             pass
+
+    @bot.hybrid_command(description='Lasse dir von Kiddo einen beliebigen Song vorspielen :)')
+    async def play(self, ctx, url=None):
+        if url == None:
+            await ctx.send("Du musst schon einen Link senden :)")
+        else:
+            await music_handler.yt(ctx, url)
+
+    @bot.hybrid_command(description='Pausiere den Song')
+    async def pause(self, ctx):
+        await music.pause(ctx)
+
+    @bot.hybrid_command(description='Setze den Song fort')
+    async def resume(self, ctx):
+        await music.resume(ctx)
+
+    @bot.hybrid_command(description='Ich verlasse den VoiceChannel')
+    async def leave(self, ctx):
+        await music.leave(ctx)
 
     @bot.hybrid_command(description='Ist die nächste Zahl größer oder kleiner?')
     async def higherlower(self, ctx):
@@ -456,7 +492,7 @@ class KiddoBot(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Dieser Befehl existiert nicht!")
+            await ctx.send("Dieser Befehl existiert nicht bozo!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Bitte gib einen Ort an!")
         elif isinstance(error, commands.CheckFailure):

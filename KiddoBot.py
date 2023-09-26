@@ -5,18 +5,18 @@ Maximilian && Phillip
 12.01.2023
 '''
 
-import discord
-from discord.ext import commands
-from discord import app_commands
+
 import csv
-from command_handler import KiddoBot
-import asyncio
-import command_handler
 import time
 import random
+import asyncio
+import discord
+import command_handler
+from discord import app_commands
+from discord.ext import commands
 from help_system import HelpCommand
+from command_handler import KiddoBot
 #import voice_handler
-
 
 
 def getname(ctx):
@@ -50,8 +50,10 @@ async def on_ready ():
     print(f'Servermitglieder: \n - {members}')
     print("Moiners werter Herr!")
 
-    await bot.add_cog(KiddoBot(bot))
 
+
+    await bot.add_cog(KiddoBot(bot))
+    await bot.tree.sync()
 
 ##############################################################################################
 
