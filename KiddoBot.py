@@ -77,9 +77,9 @@ async def on_member_join(member):
 ##############################################################################################
 
 
-@bot.event
-async def on_voice_state_update(member, before, after):
-    await voice_handler.voice(member, before, after)
+#@bot.event
+#async def on_voice_state_update(member, before, after):
+ #   await voice_handler.voice(member, before, after)
 
 
 ##############################################################################################
