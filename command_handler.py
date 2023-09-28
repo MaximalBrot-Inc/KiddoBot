@@ -554,8 +554,3 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
-
-
-    @bot.hybrid_command(description='Kiddo sagt dir, wie lange er schon online ist :)')
-    async def uptime(self, ctx):
-        await ctx.send(f"Ich bin seit {self.bot.uptime} online :3")
