@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ui import Button, View
+from discord.ui import View
 
 class HelpCommand(commands.DefaultHelpCommand):
     async def send_pages(self):
