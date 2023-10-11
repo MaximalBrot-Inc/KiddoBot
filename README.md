@@ -8,4 +8,4 @@ Passionate C-Haters and Python enjoyers
 
 ![](https://tokei.rs/b1/github/MaximalBrot-Inc/KiddoBot?category=lines)
 ![](https://tokei.rs/b1/github/MaximalBrot-Inc/KiddoBot?category=files)
-![](https://komarev.com/ghpvc/?username=MaximalBrot-Inc&color=ff00ff)
+
