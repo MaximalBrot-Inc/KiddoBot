@@ -2,6 +2,7 @@ import time
 import random
 import discord
 import requests
+import yt_handler
 import music_handler
 import qrcode_handler
 import weather_handler
@@ -424,6 +425,18 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Ewwor!")
+
+    @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
+    async def downloader(self, ctx, *, link=None):
+        if link:
+            await yt_handler.downloadvideo(link, ctx)
+        else:
+            await ctx.send('Du bist ja lustig... Ich brauche einen Youtube Link >:(')
+
+    @bot.hybrid_command(description="A")
+    async def testtest(self, ctx):
+        await ctx.send(file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\GPT.pptx"))
+
 
     ###FIXFIXFIXFIXFIX###
     @bot.hybrid_command(description='Lasse dir Daten zu deinem osu! Profil anzeigen :)')
