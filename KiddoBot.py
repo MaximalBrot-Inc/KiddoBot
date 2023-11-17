@@ -1,9 +1,9 @@
-'''
+"""
 The new and improved KiddoBot.py file
 Maximilian && Phillip
 ❤
 12.01.2023
-'''
+"""
 
 
 import csv
