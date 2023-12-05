@@ -44,11 +44,18 @@ async def on_ready ():
        if guild.name == GUILD:
            break
 
-    print(f'{bot.user.name} hat sich in folgenden Server eingespeist: \n' f'{guild.name}(id: {guild.id})')
+    print(f'{bot.user.name} hat sich in folgenden Server eingespeist: \n\n' f'{guild.name}(id: {guild.id})')
 
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Servermitglieder: \n - {members}')
-    print("Moiners werter Herr!")
+    members = '\n        - '.join([member.name for member in guild.members])
+    print(f'    Servermitglieder: \n        - {members}')
+
+    print("\n    Alle Rollen in diesem Server:")
+    for role in guild.roles:
+        print(f'        {role}')
+
+    print("----------------------------------")
+
+    print("Moiners werter Herr :3    <3")
 
 
 
