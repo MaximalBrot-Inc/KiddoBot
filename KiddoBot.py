@@ -24,32 +24,38 @@ def getname(ctx):
     return user
 
 with open("data.txt") as token:
-  reader = csv.reader(token)
-  TOKEN = next(reader)
-  GUILD = next(reader)
+    reader = csv.reader(token)
+    TOKEN = next(reader)
+    GUILD = next(reader)
 
 TOKEN = TOKEN[0]
 
-bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
+bot = commands.AutoShardedBot(
+    commands.when_mentioned_or('!!'),
+    intents=discord.Intents.all())
+
 #bot.remove_command('switchstate')
 
-
 bot.help_command = HelpCommand()
-##############################################################################################
+
+########################################################################
 
 @bot.event
 async def on_ready ():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='durch dein Fenster :)'))
+    await bot.change_presence(
+        activity=discord.Activity(type=discord.ActivityType.watching,
+                                  name='durch dein Fenster :)'))
     for guild in bot.guilds:
-       if guild.name == GUILD:
-           break
+        if guild.name == GUILD:
+            break
 
-    print(f'{bot.user.name} hat sich in folgenden Server eingespeist: \n\n' f'{guild.name}(id: {guild.id})')
+    print(f'{bot.user.name} hat sich in folgenden Server eingespeist: \n\n'
+          f'{guild.name} (id: {guild.id})')
 
     members = '\n        - '.join([member.name for member in guild.members])
     print(f'    Servermitglieder: \n        - {members}')
 
-    print("\n    Alle Rollen in diesem Server:")
+    print("\n    Alle Rollen in diesem Server (Von unten nach oben):")
     for role in guild.roles:
         print(f'        {role}')
 
@@ -62,7 +68,7 @@ async def on_ready ():
     await bot.add_cog(KiddoBot(bot))
     await bot.tree.sync()
 
-##############################################################################################
+########################################################################
 
 
 @bot.event
@@ -73,15 +79,20 @@ async def on_member_join(member):
     switch_state = readline.read()
     if switch_state == 'True':
         ###Banne alle neuen Mitglieder###
-        await member.dm_channel.send('Tut mir leid, aber du bist noch nicht groß genug für den Server... :( Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
-        await member.ban(reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. Du bist gebannt :)")
+        await member.dm_channel.send(
+            'Tut mir leid, aber du bist noch nicht groß genug für den Server... :('
+            'Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
+        await member.ban(
+            reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. "
+                     "Du bist gebannt :)")
 
     else:
     ###Nette Nachrichten für neue Mitglieder###
         await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
-                                 f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. Also keine Zeit verschwenden!!')
+                                    f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. '
+                                     f'Also keine Zeit verschwenden!!')
 
-##############################################################################################
+########################################################################
 
 
 #@bot.event
@@ -89,6 +100,6 @@ async def on_member_join(member):
  #   await voice_handler.voice(member, before, after)
 
 
-##############################################################################################
+########################################################################
 
 bot.run(TOKEN)
