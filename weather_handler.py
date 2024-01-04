@@ -52,10 +52,9 @@ def emoji_lookup (status):
             emoji = '💨'
         case 'Tornado':
             emoji = '🌪️'
-        case _ :
+        case _:
             emoji = '??'
     return emoji
-
 
 
 async def get_weather(message, ctx):
@@ -84,8 +83,6 @@ async def get_weather(message, ctx):
         await ctx.send(f'Ich konnte {message} nicht finden :(')
     except IndexError:
         await ctx.send('Bitte gib einen Ort an :)')
-    except:
-         await ctx.send('Es ist ein Fehler aufgetreten :(')
 
 
 async def get_weather_forecast(message, ctx):
@@ -117,8 +114,7 @@ async def get_weather_forecast(message, ctx):
         await ctx.send(f'Ich konnte {message} nicht finden :(')
     except IndexError:
         await ctx.send('Bitte gib einen Ort an :)')
-    except:
-        await ctx.send('Es ist ein Fehler aufgetreten :(')
+
 
 async def get_weather_alert(message, ctx):
     try:
@@ -140,6 +136,4 @@ async def get_weather_alert(message, ctx):
         await ctx.send(f'Ich konnte {message} nicht finden :(')
     except AssertionError:
         await ctx.send('Bitte gib einen Ort an :)')
-    #except:
-        #await ctx.send('Es ist ein Fehler aufgetreten :(')
 

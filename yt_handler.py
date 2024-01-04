@@ -1,7 +1,7 @@
 import os
 import discord
 import command_handler
-from pytube import YouTube
+from pytube import YouTube, exceptions
 
 dir_path = os.path.dirname(os.path.realpath("C:\_FSST\Jaeger\Shooting Range\KiddoBot"))
 
@@ -20,8 +20,10 @@ async def downloadvideo(link, ctx):
 
         #await ctx.send(find(name, path="C:\_FSST\Jaeger\Shooting Range\KiddoBot"))
 
-    except:
-        await ctx.send('HAAAAAAALT STOP! Der Link ist nicht von YouTube!!')
+    except exceptions.RegexMatchError:
+        await ctx.send('HAAAAAAALT STOP! Das ist kein Link!')
+    except exceptions.VideoUnavailable:
+        await ctx.send('Das Video ist nicht verfügbar :(')
     await ctx.send("Fertiiiig :333")
 
 #def Download(link):

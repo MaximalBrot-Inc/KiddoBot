@@ -60,7 +60,7 @@ class KiddoBot(commands.Cog):
             await ctx.channel.send(
                 "!!switchpls broken, bitte Brot#0685 kontaktieren, er muss wieder reparieren kommen :)")
 
-    # TODO: Fix this command
+    # Recode the whole ban system
     '''
     @bot.command()
     async def switchstate(self, ctx):
@@ -92,6 +92,12 @@ class KiddoBot(commands.Cog):
 
         await ctx.bot.tree.sync()
         await ctx.interaction.response.send_message("Sync complete")
+
+    @bot.hybrid_command()
+    @freigabe()
+    async def reset(self, ctx):
+        await self.bot.change_presence(status=discord.Status.online, activity=discord.ActivityType.watching('durch dein Fenster :)'))
+        await ctx.interaction.response.send_message("Reset complete")
 
     @bot.hybrid_command(aliases=['Hallo', 'hallo kiddo', 'Hallo kiddo', 'hallo Kiddo', 'Hallo Kiddo'])
     async def hallo(self, ctx):
@@ -152,7 +158,7 @@ class KiddoBot(commands.Cog):
         zahl = random.randint(1, 100)
         if zahl == 1:
             await ctx.send(
-                "Du bist so hässlich, dass man dich nicht mal mit einem Taschenrechner vergleichen kann. Kein Witz. Einfach die Wahrheit.")
+                "Du")
         else:
             witze = open("witze.txt", "r")
             witze = witze.readlines()
@@ -423,11 +429,9 @@ class KiddoBot(commands.Cog):
 
 
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
-    async def downloader(self, ctx, *, link=None):
-        if link:
-            await yt_handler.downloadvideo(link, ctx)
-        else:
-            await ctx.send('Du bist ja lustig... Ich brauche einen Youtube Link >:(')
+    async def downloader(self, ctx, *, link):
+        await yt_handler.downloadvideo(link, ctx)
+
 
     @bot.hybrid_command(description="A")
     async def testtest(self, ctx):
@@ -480,7 +484,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description='Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 482833516774817795 or ctx.author.id == 633376425465872404:  # walnusskeim, Wqffel oder bonerboy
+        if ctx.author.id == 695885580629704734 or ctx.author.id == 482833516774817795 or ctx.author.id == 633376425465872404 or ctx.author.id == 408627107795828746 :  # walnusskeim, Wqffel oder bonerboy
             view = Setup_Button()
 
             setupfield = discord.Embed(title="**Willst du das Setup ausführen?**", color=0xff00ff)
@@ -498,7 +502,7 @@ class KiddoBot(commands.Cog):
                 await ctx.send("Setup wird ausgeführt...")
                 await self.bot.change_presence(status=discord.Status.offline)
                 await ctx.send("ABFAHRT!!!",
-                               file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\ABFAHRT.PNG"))
+                               file=discord.File("ABFAHRT.PNG"))
                 time.sleep(2)
                 await ctx.channel.purge(limit=1)
                 for bot in ctx.guild.members:
@@ -507,19 +511,18 @@ class KiddoBot(commands.Cog):
                         if role in bot.roles:
                             await bot.remove_roles(role)
                             print(f"Ich habe {bot} die Rolle Bots weggenommen >///<")
-                    except:
+                    except discord.Forbidden:
+                        print("Ich konnte die Rolle Bots nicht entfernen :(")
                         continue
 
                 for role in ctx.guild.roles:
-                    try:
-                        if role.name == "Mod":
-                            await role.delete(reason="Unnötig")
-                            print('"Mod" Rolle gelöscht')
-                        if role.name == "uwu admins":
-                            await role.delete(reason="Unnötig")
-                            print('"uwu admins" Rolle gelöscht')
-                    except:
-                        continue
+                    if role.name == "Mod":
+                        await role.delete(reason="Unnötig")
+                        print('"Mod" Rolle gelöscht')
+                    if role.name == "uwu admins":
+                        await role.delete(reason="Unnötig")
+                        print('"uwu admins" Rolle gelöscht')
+
 
                 for user in ctx.guild.members:
                     try:
@@ -527,12 +530,19 @@ class KiddoBot(commands.Cog):
                         if funny in user.roles:
                             await user.remove_roles(funny)
                             print(f"Ich habe {user} die Rolle Owner <3 weggenommen >///<")
-                    except:
+                    except Exception as e:
+                        print(type(e).__name__)
+                        print("Ich konnte die Rolle Owner <3 nicht entfernen :(")
                         continue
 
                 user2 = ctx.guild.get_member(633376425465872404)  # bonerboy
-                await user2.add_roles(funny)
-                await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
+                try:
+                    await user2.add_roles(funny)
+                    await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
+                except AttributeError:
+                    print("Ich konnte die Rolle Owner <3 nicht geben :(")
+                    pass
+
                 print("Ich habe dir die Rolle Owner <3 gegeben 0w0")
 
                 with open('haha.png', 'rb') as f:
@@ -545,7 +555,8 @@ class KiddoBot(commands.Cog):
                             pass
                         else:
                             await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
-                    except:
+                    except discord.Forbidden:
+                        print("Ich konnte nicht alle Mitglieder bannen :(")
                         continue
 
                 for m in range(0, 101):
@@ -555,6 +566,12 @@ class KiddoBot(commands.Cog):
                 for v in range(0, 51):
                     await ctx.message.guild.create_voice_channel("Wowzers!!")
                     time.sleep(0.1)
+
+                await ctx.send("Vielen Dank, dass Sie sich für den Kiddo Express entschieden haben :3")
+                time.sleep(2)
+                await ctx.send("Kiddo ist jetzt bereit für den Server :3")
+
+
             elif view.value == "thumbsdown":
                 await ctx.send("Setup wurde abgebrochen :(")
 

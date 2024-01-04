@@ -92,6 +92,21 @@ async def on_member_join(member):
                                     f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. '
                                      f'Also keine Zeit verschwenden!!')
 
+
+@bot.event
+async def on_guild_join(guild):
+    bans = open("ban_list.txt", "r")
+
+    for line in bans:
+        try:
+            user = await bot.fetch_user(line)
+            await guild.unban(user)
+            print("Unbanned " + user.name)
+        except:
+            print("Failed to unban " + user.name)
+            continue
+
+
 ########################################################################
 
 
