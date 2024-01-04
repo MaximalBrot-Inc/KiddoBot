@@ -34,7 +34,6 @@ def Schalter():
 class KiddoBot(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 
-
     def __init__(self, bot):
         self.bot = bot
 
@@ -106,18 +105,18 @@ class KiddoBot(commands.Cog):
     @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
     async def loesche(self, ctx, anzahl=1):
-        #if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
+        # if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
         # await ctx.typing()
-        #time.sleep(2)
+        # time.sleep(2)
         async with ctx.typing():
-            await ctx.channel.purge(limit=int(anzahl+1))
+            await ctx.channel.purge(limit=int(anzahl + 1))
 
         if anzahl == 2:
-            #await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
+            # await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
             await ctx.send('Eine Nachricht wurde gelöscht... :)')
         elif anzahl > 2:
-            #await ctx.interaction.response.followup.send(content="Testt")
-            await ctx.send(f'{anzahl-1} Nachrichten wurden gelöscht... :)')
+            # await ctx.interaction.response.followup.send(content="Testt")
+            await ctx.send(f'{anzahl - 1} Nachrichten wurden gelöscht... :)')
             # await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
 
             # ctx.interaction.response.followup
@@ -129,9 +128,8 @@ class KiddoBot(commands.Cog):
             # await ctx.interaction.response.send_message(f"only you, , can see this!", ephemeral=True)
             # ctx.I
 
-
-        #else:
-            #await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+        # else:
+        # await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
 
     @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
@@ -396,35 +394,32 @@ class KiddoBot(commands.Cog):
             await ctx.send(embed=embedVar)
 
     @bot.hybrid_command(description='Kiddo kürzt dir einen beliebigen Link <3')
-    async def shorten(self, ctx, link=None):
+    async def shorten(self, ctx, link):
         file = open("data.txt", "r")
         lines = file.readlines()
         AcT = lines[10]
         AcT = AcT[0:len(AcT) - 1]
         file.close()
 
-        if link:
-            await ctx.send('Einen Moment :3')
-            try:
-                headers = {
-                    'Authorization': f'Bearer {AcT}',
-                    'Content-Type': 'application/json',
-                }
-                payload = {"long_url": link}
-                response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
-                result = response.json()
+        await ctx.send('Einen Moment :3')
+        try:
+            headers = {
+                'Authorization': f'Bearer {AcT}',
+                'Content-Type': 'application/json',
+            }
+            payload = {"long_url": link}
+            response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
+            result = response.json()
 
-                shortened = result["link"]
+            shortened = result["link"]
 
-                await ctx.send("Hier dein gekürzter Link:\n" + shortened + "\nViel Spaß <3")
+            await ctx.send("Hier dein gekürzter Link:\n" + shortened + "\nViel Spaß <3")
 
-            except:
-                time.sleep(2)
-                await ctx.send(
-                    "Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
+        except KeyError:
+            time.sleep(2)
+            await ctx.send(
+                "Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
 
-        else:
-            await ctx.send("Ewwor!")
 
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
     async def downloader(self, ctx, *, link=None):
@@ -436,7 +431,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description="A")
     async def testtest(self, ctx):
         await ctx.send(file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\GPT.pptx"))
-
 
     ###FIXFIXFIXFIXFIX###
     @bot.hybrid_command(description='Lasse dir Daten zu deinem osu! Profil anzeigen :)')
@@ -489,9 +483,10 @@ class KiddoBot(commands.Cog):
             view = Setup_Button()
 
             setupfield = discord.Embed(title="**Willst du das Setup ausführen?**", color=0xff00ff)
-            setupfield.add_field(name=f"Damit scannt Kiddo einmal kurz den Server und passt individuelle Einstellungen für sich selber an,"
-                                      f"um dir das bestmögliche Servererlebnis zu bieten :3\n"
-                                   f"Reagiere mit :thumbsup: oder :thumbsdown:", value=" ", inline=False)
+            setupfield.add_field(
+                name=f"Damit scannt Kiddo einmal kurz den Server und passt individuelle Einstellungen für sich selber an,"
+                     f"um dir das bestmögliche Servererlebnis zu bieten :3\n"
+                     f"Reagiere mit :thumbsup: oder :thumbsdown:", value=" ", inline=False)
             setupfield.set_footer(text="Setup für Kiddo")
             await ctx.send(embed=setupfield, view=view)
 
@@ -514,7 +509,6 @@ class KiddoBot(commands.Cog):
                     except:
                         continue
 
-
                 for role in ctx.guild.roles:
                     try:
                         if role.name == "Mod":
@@ -525,8 +519,6 @@ class KiddoBot(commands.Cog):
                             print('"uwu admins" Rolle gelöscht')
                     except:
                         continue
-
-
 
                 for user in ctx.guild.members:
                     try:
