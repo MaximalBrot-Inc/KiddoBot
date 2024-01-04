@@ -179,10 +179,11 @@ class KiddoBot(commands.Cog):
         print(data)
 
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
-    async def qrcodepls(self, ctx):
-        await qrcode_handler.qrcode(ctx, self)
+    async def qrcodepls(self, ctx, link):
+        await ctx.send('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + link)
 
-    # TODO: Fix the qrcode handler
+
+
 
     # Todo: Fix the voice handler
     '''
