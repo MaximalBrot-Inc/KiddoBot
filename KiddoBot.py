@@ -102,7 +102,7 @@ async def on_guild_join(guild):
             user = await bot.fetch_user(line)
             await guild.unban(user)
             print("Unbanned " + user.name)
-        except:
+        except discord.NotFound:
             print("Failed to unban " + user.name)
             continue
 
