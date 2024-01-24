@@ -108,34 +108,20 @@ class KiddoBot(commands.Cog):
         # aktiviert den integrierten help command
         await HelpCommand.send_pages(ctx.channel)
 
-    @freigabe()
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
+    @freigabe()
     async def loesche(self, ctx, anzahl=1):
-        # if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-        # await ctx.typing()
-        # time.sleep(2)
         async with ctx.typing():
             await ctx.channel.purge(limit=int(anzahl + 1))
-
+        time.sleep(1)
         if anzahl == 2:
-            # await ctx.interaction.response.send_message('Eine Nachricht wurde gelöscht... :)', ephemeral=True)
             await ctx.send('Eine Nachricht wurde gelöscht... :)')
+            time.sleep(2)
+            await ctx.channel.purge(1)
         elif anzahl > 2:
-            # await ctx.interaction.response.followup.send(content="Testt")
             await ctx.send(f'{anzahl - 1} Nachrichten wurden gelöscht... :)')
-            # await responese.send(f'{anzahl} Nachrichten wurden gelöscht... :)')
-
-            # ctx.interaction.response.followup
-            # if Limit == 3:
-            # print('Eine Nachricht wurde gelöscht. Glückwunsch!')
-            # else:
-            # print(f'{Limit - 2} Nachrichten wurden gelöscht. Glückwunsch!')
-
-            # await ctx.interaction.response.send_message(f"only you, , can see this!", ephemeral=True)
-            # ctx.I
-
-        # else:
-        # await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+            time.sleep(2)
+            await ctx.channel.purge(1)
 
     @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
@@ -168,7 +154,7 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description='UwUify dein Text von Kiddo')
     async def baller(self, ctx):
-        url = "https://waifu.it/api/uwuify"
+        url = "https://waifu.it/api/v4/uwuify"
 
         text = "Hello world"  # Replace with your desired uwuify length (optional).
 
@@ -280,11 +266,15 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
+        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
+                       " hart daran, ihn wieder zu richten :)")
+
+        """
         kisser = ctx.author.nick
         if kisser == None:
             kisser = ctx.author.name
 
-        url = "https://waifu.it/api/kiss"
+        url = "https://waifu.it/api/v4/kiss"
         response = requests.get(url, headers={
             "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
         })
@@ -310,14 +300,19 @@ class KiddoBot(commands.Cog):
                                inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
+        """
 
     @bot.hybrid_command(description='Kiddo umarmt dich 0 /// 0')
     async def hug(self, ctx, name: discord.Member = None):
+        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
+                       " hart daran, ihn wieder zu richten :)")
+
+        """
         hugger = ctx.author.nick
         if hugger == None:
             hugger = ctx.author.name
 
-        url = "https://waifu.it/api/cuddle"
+        url = "https://waifu.it/api/v4/cuddle"
         response = requests.get(url, headers={
             "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
         })
@@ -343,23 +338,28 @@ class KiddoBot(commands.Cog):
                                inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
+        """
 
     @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
+        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
+                       " hart daran, ihn wieder zu richten :)")
+
+        """
         hitter = ctx.author.nick
         killmode = False
         if hitter == None:
             hitter = ctx.author.name
         if random.randint(1, 100) == 69:
             killmode = True
-            url = "https://waifu.it/api/die"
+            url = "https://waifu.it/api/v4/die"
             response = requests.get(url, headers={
                 "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
             })
 
 
         else:
-            url = "https://waifu.it/api/punch"
+            url = "https://waifu.it/api/v4/punch"
             response = requests.get(url, headers={
                 "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
             })
@@ -399,6 +399,7 @@ class KiddoBot(commands.Cog):
                                    inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
+        """
 
     @bot.hybrid_command(description='Kiddo kürzt dir einen beliebigen Link <3')
     async def shorten(self, ctx, link):
@@ -427,15 +428,9 @@ class KiddoBot(commands.Cog):
             await ctx.send(
                 "Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
 
-
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
-
-
-    @bot.hybrid_command(description="A")
-    async def testtest(self, ctx):
-        await ctx.send(file=discord.File("C:\_FSST\Jaeger\Shooting Range\KiddoBot\GPT.pptx"))
 
     ###FIXFIXFIXFIXFIX###
     @bot.hybrid_command(description='Lasse dir Daten zu deinem osu! Profil anzeigen :)')
@@ -492,7 +487,7 @@ class KiddoBot(commands.Cog):
                 name=f"Damit scannt Kiddo einmal kurz den Server und passt individuelle Einstellungen für sich selber an,"
                      f"um dir das bestmögliche Servererlebnis zu bieten :3\n"
                      f"Reagiere mit :thumbsup: oder :thumbsdown:", value=" ", inline=False)
-            setupfield.set_footer(text="Setup für Kiddo")
+            setupfield.set_footer(text="Setup für Kiddo <3")
             await ctx.send(embed=setupfield, view=view)
 
             await view.wait()
