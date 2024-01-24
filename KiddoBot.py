@@ -77,7 +77,7 @@ async def on_member_join(member):
     ###Nicht so nette Nachrichten lol###
     readline = open("switch.txt", "r")
     switch_state = readline.read()
-    if switch_state == 'True':
+    if switch_state == 'on':
         ###Banne alle neuen Mitglieder###
         await member.dm_channel.send(
             'Tut mir leid, aber du bist noch nicht groß genug für den Server... :('

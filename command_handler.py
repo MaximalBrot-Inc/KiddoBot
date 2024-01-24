@@ -6,7 +6,7 @@ import yt_handler
 import music_handler
 import qrcode_handler
 import weather_handler
-from Buttons import HL_Buttons, Setup_Button
+from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
 from discord.ext import commands
 from help_system import HelpCommand
 
@@ -27,9 +27,6 @@ def Schalter():
         switch = "aus"
     return switch
 
-    def check(m):
-        return m.content == 'y' or m.content == 'yes' or m.content == 'n' or m.content == 'no' or m.content == 'ja' or m.content == 'nein'
-
 
 class KiddoBot(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
@@ -46,40 +43,32 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command()
     @freigabe()
     async def switchpls(self, ctx):
-        readline = open("switch.txt", "r")
-        switch_state = readline.read()
-        if switch_state == 'False':
-            await ctx.channel.send("Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)")
-            readline = open("switch.txt", "w")
-            readline.write('True')
-        elif switch_state == 'True':
-            await ctx.channel.send("Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt. :)")
-            readline = open("switch.txt", "w")
-            readline.write('False')
-        else:
-            await ctx.channel.send(
-                "!!switchpls broken, bitte Brot#0685 kontaktieren, er muss wieder reparieren kommen :)")
+        view = Switch_Buttons()
+        switch_field = discord.Embed(title="**Willst du den Schalter umlegen?**", color=0xff00ff)
+        switch_field.add_field(name="Der Schalter dient dazu Eindringlinge vom Server fernzuhalten", value="",
+                               inline=False)
+        await ctx.send(embed=switch_field, view=view)
+        await view.wait()
+        switch_field.clear_fields()
+        if view.value == "on":
+            switch_field.add_field(name="Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)", value="",
+                                   inline=False)
 
-    # Recode the whole ban system
-    '''
-    @bot.command()
+        else:
+            switch_field.add_field(name="Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt. :)", value="",
+                                      inline=False)
+        await ctx.send(embed=switch_field, view=view)
+        readline = open("switch.txt", "w")
+        readline.write(view.value)
+
+    @bot.hybrid_command()
+    @freigabe()
     async def switchstate(self, ctx):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            await ctx.channel.send(
-                f'Möchtest du den status deines Schalters erfahren? (y , yes , ja / n, no, nein)')
+        readline = open("switch.txt", "r")
+        switch_field = discord.Embed(title="**Der Schalter ist " + readline.read() + "**", color=0xff00ff)
+        await ctx.send(embed=switch_field)
 
-            response = await ctx.wait_for('ctx', check=check, timeout=15)
-            if response.clean_content.lower() == 'y' or response.clean_content.lower() == 'yes' or response.clean_content.lower() == 'ja':
-                await ctx.channel.send('Der Schalter ist ' + Schalter())
 
-            elif response.clean_content.lower() == 'n' or response.clean_content.lower() == 'no' or response.clean_content.lower() == 'nein':
-                await ctx.channel.send('Okidoki, dann halt nicht :)')
-
-            else:
-                await ctx.channel.send("Du bist zu dumm um zu verstehen, was ich dir sage :)")
-        else:
-            await ctx.channel.send("Du bist nicht berechtigt diesen Befehl auszuführen. Tut mir leid :)")
-    '''
 
     #####MEGA GEBURTSTAG EVENT AAAAAAAAAAAAAAAAAAAAAAAAAAAA#############################################################
     @bot.command()
@@ -132,12 +121,15 @@ class KiddoBot(commands.Cog):
 
     @bot.hybrid_command(description='Kiddo tanzt!')
     async def dance(self, ctx):
-        url = "https://waifu.it/api/dance"
+        ctx.send("Soon™")
+        '''
+        url = "https://waifu.it/api/v4/dance"
         response = requests.get(url, headers={
             "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
         })
         data = response.json()
         await ctx.send(data["url"])
+        '''
 
     @bot.hybrid_command(description='Kiddo erzählt die einen Witz! Aber pass auf, vielleicht bist du der Witz...')
     async def witz(self, ctx):
@@ -267,7 +259,7 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
         await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
-                       " hart daran, ihn wieder zu richten :)")
+                       " hart daran, ihn wieder zu richten :) ")
 
         """
         kisser = ctx.author.nick
