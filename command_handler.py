@@ -17,17 +17,6 @@ from help_system import HelpCommand
 icon_path = "D:\a\haha.png"
 
 
-def Schalter():
-    readline = open("switch.txt", "r")
-    switch_state = readline.read()
-    switch = "error"
-    if switch_state == 'True':
-        switch = "an"
-    if switch_state == 'False':
-        switch = "aus"
-    return switch
-
-
 class KiddoBot(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 
