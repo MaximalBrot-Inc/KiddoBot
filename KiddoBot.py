@@ -96,16 +96,23 @@ async def on_member_join(member):
 @bot.event
 async def on_guild_join(guild):
     bans = open("ban_list.txt", "r")
+    link = "https://discord.gg/wrPWp3THwb"
 
     for line in bans:
         try:
             user = await bot.fetch_user(line)
+            print(user)
             await guild.unban(user)
             print("Unbanned " + user.name)
+
+            await user.create_dm()
+            await user.dm_channel.send(
+                f'Hewwow {user.name}, du wurdest erfolgreich von mir entbannt >////< \n'
+                f'Mit diesem Link kannst du wieder auf den Server: {link} :33\n')
+
         except discord.NotFound:
             print("Failed to unban " + user.name)
             continue
-
 
 ########################################################################
 
