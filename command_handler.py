@@ -97,18 +97,6 @@ class KiddoBot(commands.Cog):
         for i in range(int(numberofrolls)):
             await ctx.send(random.randint(1, int(numberofsides)))
 
-    @bot.hybrid_command(description='Kiddo tanzt!')
-    async def dance(self, ctx):
-        ctx.send("Soon™")
-        '''
-        url = "https://waifu.it/api/v4/dance"
-        response = requests.get(url, headers={
-            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-        })
-        data = response.json()
-        await ctx.send(data["url"])
-        '''
-
     @bot.hybrid_command(description='Kiddo erzählt die einen Witz! Aber pass auf, vielleicht bist du der Witz...')
     async def witz(self, ctx):
         zahl = random.randint(1, 100)
@@ -120,24 +108,6 @@ class KiddoBot(commands.Cog):
             witze = random.choice(witze)
             witze = str(witze)
             await ctx.send(witze)
-
-    @bot.hybrid_command(description='UwUify dein Text von Kiddo')
-    async def baller(self, ctx):
-        url = "https://waifu.it/api/v4/uwuify"
-
-        text = "Hello world"  # Replace with your desired uwuify length (optional).
-
-        params = {
-            "text": text if text is not None else None,
-        }
-
-        response = requests.get(url, headers={
-            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333",
-        }, params=params)
-
-        data = response.json()
-
-        print(data)
 
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx, link):
