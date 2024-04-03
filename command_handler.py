@@ -3,16 +3,13 @@ import random
 import discord
 import requests
 import yt_handler
-import music_handler
-import qrcode_handler
 import weather_handler
 from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
 from discord.ext import commands
 from help_system import HelpCommand
+#from Sparboss_implement import SparbossCommand
 
-# import geburtstag_handler
 # import pathlib
-# import osu_handler
 
 icon_path = "D:\a\haha.png"
 
@@ -57,17 +54,9 @@ class KiddoBot(commands.Cog):
         switch_field = discord.Embed(title="**Der Schalter ist " + readline.read() + "**", color=0xff00ff)
         await ctx.send(embed=switch_field)
 
-
-
-    #####MEGA GEBURTSTAG EVENT AAAAAAAAAAAAAAAAAAAAAAAAAAAA#############################################################
-    @bot.command()
-    async def Geburtstag(self, ctx):
-        await geburtstag_handler.geburtstag(ctx, bot)
-
     @bot.hybrid_command()
     @freigabe()
     async def sync(self, ctx):
-
         await ctx.bot.tree.sync()
         await ctx.interaction.response.send_message("Sync complete")
 
@@ -124,8 +113,7 @@ class KiddoBot(commands.Cog):
     async def witz(self, ctx):
         zahl = random.randint(1, 100)
         if zahl == 1:
-            await ctx.send(
-                "Du")
+            await ctx.send("Du")
         else:
             witze = open("witze.txt", "r")
             witze = witze.readlines()
@@ -154,8 +142,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx, link):
         await ctx.send('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + link)
-
-
 
 
     # Todo: Fix the voice handler
@@ -245,143 +231,6 @@ class KiddoBot(commands.Cog):
 
             await ctx.send("Yeah fuck you {} ".format(name.mention))
 
-    @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
-    async def kiss(self, ctx, name: discord.Member = None):
-        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
-                       " hart daran, ihn wieder zu richten :) ")
-
-        """
-        kisser = ctx.author.nick
-        if kisser == None:
-            kisser = ctx.author.name
-
-        url = "https://waifu.it/api/v4/kiss"
-        response = requests.get(url, headers={
-            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-        })
-        data = response.json()
-
-        if name == None:
-            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{kisser}** küsst jeden!", value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        elif name == ctx.author:
-            name = name.nick
-            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}** küsst sich selber?! Wie ist das möglich :thinking:", value="",
-                               inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        else:
-            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{kisser}** geküsst!", value="",
-                               inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-        """
-
-    @bot.hybrid_command(description='Kiddo umarmt dich 0 /// 0')
-    async def hug(self, ctx, name: discord.Member = None):
-        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
-                       " hart daran, ihn wieder zu richten :)")
-
-        """
-        hugger = ctx.author.nick
-        if hugger == None:
-            hugger = ctx.author.name
-
-        url = "https://waifu.it/api/v4/cuddle"
-        response = requests.get(url, headers={
-            "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-        })
-        data = response.json()
-
-        if name == None:
-            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        elif name == ctx.author:
-            name = name.nick
-            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}** Umarmt sich selber?! Wie geht das überhaupt :thinking:", value="",
-                               inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        else:
-            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
-            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
-                               inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-        """
-
-    @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
-    async def hit(self, ctx, name: discord.Member = None):
-        await ctx.send("Der Command ist zu Zeit kaputt, doch Kiddos Helferlein arbeiten"
-                       " hart daran, ihn wieder zu richten :)")
-
-        """
-        hitter = ctx.author.nick
-        killmode = False
-        if hitter == None:
-            hitter = ctx.author.name
-        if random.randint(1, 100) == 69:
-            killmode = True
-            url = "https://waifu.it/api/v4/die"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-
-
-        else:
-            url = "https://waifu.it/api/v4/punch"
-            response = requests.get(url, headers={
-                "Authorization": "Njk1ODg1NTgwNjI5NzA0NzM0.MTY5NDQxMjEwMQ--.90b1ac3ae333"
-            })
-        data = response.json()
-
-        if name == None:
-            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            if killmode:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="",
-                                   inline=False)
-            else:
-                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        elif name == ctx.author:
-            name = name.nick
-            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            if killmode:
-                embedVar.add_field(
-                    name='**' + f"{ctx.author.nick}**! " 'Hat zu fest zugeschalgen und sich selbest umgebracht :skull:',
-                    value="", inline=False)
-            else:
-                embedVar.add_field(
-                    name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
-                    value="", inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-
-        else:
-            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
-            if killmode:
-                embedVar.add_field(name='**' + f"{hitter}** " 'Schlägt zu fest zu und tötet ' f"**{name}** ", value="",
-                                   inline=False)
-            else:
-                embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
-                                   inline=False)
-            embedVar.set_image(url=data["url"])
-            await ctx.send(embed=embedVar)
-        """
-
     @bot.hybrid_command(description='Kiddo kürzt dir einen beliebigen Link <3')
     async def shorten(self, ctx, link):
         file = open("data.txt", "r")
@@ -412,14 +261,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
-
-    ###FIXFIXFIXFIXFIX###
-    @bot.hybrid_command(description='Lasse dir Daten zu deinem osu! Profil anzeigen :)')
-    async def profile(self, ctx, *, name=None):
-        if name:
-            await osu_handler.get_profile(name, ctx)
-        else:
-            await ctx.send('Hey ich brauche schon einen Namen sonst kann ich unmöglich suchen :/')
 
     @bot.hybrid_command(aliases=['Wetter', 'heute'], description='Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
@@ -458,9 +299,59 @@ class KiddoBot(commands.Cog):
             await ctx.send("Ein Fehler ist aufgetreten!")
             print(error)
 
+    @bot.hybrid_command(description='Kiddo')
+    async def avatar(self, ctx, img: discord.Attachment):
+        await self.bot.user.edit(avatar = await img.read())
+        await ctx.send("Avatar geändert", file = await img.read())
+
+
+    @bot.hybrid_command(description='Wieder was gespart?')
+    async def sparboss(self, ctx):
+        select = discord.ui.Select(placeholder="Wähle eine Kategorie",
+                                   options=[discord.SelectOption(label="Zeige ausgeliehene Menge", value="stolen"),
+                                            discord.SelectOption(label="Neuen Preis hinzf.", value="add")])
+
+        async def select_callback(interaction, ctx):
+            match select.values[0]:
+                case "stolen":
+                    embedVar = discord.Embed(title="Moral down but money up!", color=0xff00ff)
+                    embedVar.set_author(name="Büro von Mr. Sparboss")
+                    embedVar.set_thumbnail(url="https://c.tenor.com/-1phYTnql_kAAAAd/tenor.gif")
+                    embedVar.add_field(name="Gesamte Menge:", value=amount_stolen, inline=False)
+                    embedVar.set_footer(text="Du Schlawiner")
+
+                    await interaction.response.edit_message(embed=embedVar)
+
+                case "add":
+                    modal = Modal(custom_id="add_modal",
+                                  title="Neuen Preis hinzufügen",
+                                  compoents=[
+                                      TextInput(
+                                          style=TextStyleType.SHORT,
+                                          custom_id="amount_stolen",
+                                          label="Wie viel Euro hättest du bezahlt?",
+                                      )
+                                  ])
+                    await ctx.popup(modal)
+
+
+
+                    #await interaction.response.edit_message(embed=embedVar)
+
+        select.callback = select_callback
+
+        view = View()
+        view.add_item(select)
+
+        embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
+        embedVar.add_field(
+            name="Wähle weise...", value="",
+            inline=False)
+
+
     @bot.hybrid_command(description='Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 482833516774817795 or ctx.author.id == 633376425465872404 or ctx.author.id == 408627107795828746 :  # walnusskeim, Wqffel oder bonerboy
+        if ctx.author.id == 695885580629704734 or ctx.author.id == 633376425465872404 or ctx.author.id == 408627107795828746:  # walnusskeim, Wqffel oder bonerboy
             view = Setup_Button()
 
             setupfield = discord.Embed(title="**Willst du das Setup ausführen?**", color=0xff00ff)
@@ -523,7 +414,7 @@ class KiddoBot(commands.Cog):
 
                 with open('haha.png', 'rb') as f:
                     icon = f.read()
-                await ctx.guild.edit(name="FOR TEA AND KIDDO!", icon=icon)
+                await ctx.guild.edit(name="For Tea and Kiddo!", icon=icon)
 
                 not_ban = [408627107795828746, 527216051839303681, 695885580629704734, 734058138096893953,
                            942161973511086190, 487271904315703308, 455319131135410177, 633376425465872404]
@@ -550,7 +441,7 @@ class KiddoBot(commands.Cog):
                 await ctx.send("Vielen Dank, dass Sie sich für den Kiddo Express entschieden haben :3")
                 time.sleep(2)
                 await ctx.send("Kiddo ist jetzt bereit für den Server :3")
-
+                await ctx.send("https://tenor.com/view/champoy-el-risitas-kek-issou-etu-gif-17837830")
 
             elif view.value == "thumbsdown":
                 await ctx.send("Setup wurde abgebrochen :(")
