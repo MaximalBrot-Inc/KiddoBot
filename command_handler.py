@@ -97,6 +97,14 @@ class KiddoBot(commands.Cog):
         for i in range(int(numberofrolls)):
             await ctx.send(random.randint(1, int(numberofsides)))
 
+    @bot.hybrid_command(description='Kiddo tanzt!')
+    async def dance(self, ctx):
+
+        url = "https://api.otakugifs.xyz/gif?reaction=dance"
+        response = requests.get(url)
+        data = response.json()
+        await ctx.send(data["url"])
+
     @bot.hybrid_command(description='Kiddo erzählt die einen Witz! Aber pass auf, vielleicht bist du der Witz...')
     async def witz(self, ctx):
         zahl = random.randint(1, 100)
@@ -200,6 +208,128 @@ class KiddoBot(commands.Cog):
         else:
 
             await ctx.send("Yeah fuck you {} ".format(name.mention))
+
+    @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
+    async def kiss(self, ctx, name: discord.Member = None):
+
+
+        kisser = ctx.author.nick
+        if kisser == None:
+            kisser = ctx.author.name
+
+        url = "https://api.otakugifs.xyz/gif?reaction=kiss"
+        response = requests.get(url)
+        data = response.json()
+
+        if name == None:
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{kisser}** küsst jeden!", value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        elif name == ctx.author:
+            name = name.nick
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** küsst sich selber?! Wie ist das möglich :thinking:", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        else:
+            embedVar = discord.Embed(title="😘 Kiss!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{kisser}** geküsst!", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+
+    @bot.hybrid_command(description='Kiddo umarmt dich 0 /// 0')
+    async def hug(self, ctx, name: discord.Member = None):
+
+        hugger = ctx.author.nick
+        if hugger == None:
+            hugger = ctx.author.name
+
+        url = "https://api.otakugifs.xyz/gif?reaction=hug"
+        response = requests.get(url)
+        data = response.json()
+
+        if name == None:
+            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{ctx.author.nick}** umarmt jeden!", value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        elif name == ctx.author:
+            name = name.nick
+            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}** Umarmt sich selber?! Wie geht das überhaupt :thinking:", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        else:
+            embedVar = discord.Embed(title="🥰 Hug!", color=0xff00ff)
+            embedVar.add_field(name='**' + f"{name}**! " 'Du wirst von ' f"**{hugger}** umarmt!", value="",
+                               inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+
+    @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
+    async def hit(self, ctx, name: discord.Member = None):
+
+
+        hitter = ctx.author.nick
+        killmode = False
+        if hitter == None:
+            hitter = ctx.author.name
+        if random.randint(1, 100) == 69:
+            killmode = True
+            url = "https://api.otakugifs.xyz/gif?reaction=nosebleed"
+            response = requests.get(url)
+
+
+        else:
+            url = "https://api.otakugifs.xyz/gif?reaction=punch"
+            response = requests.get(url)
+        data = response.json()
+
+        if name == None:
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            if killmode:
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt zu fest zu und tötet jeden!', value="",
+                                   inline=False)
+            else:
+                embedVar.add_field(name='**' + f"{ctx.author.nick}**! " 'schlägt jeden!', value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        elif name == ctx.author:
+            name = name.nick
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            if killmode:
+                embedVar.add_field(
+                    name='**' + f"{ctx.author.nick}**! " 'Hat zu fest zugeschalgen und sich selbest umgebracht :skull:',
+                    value="", inline=False)
+            else:
+                embedVar.add_field(
+                    name='**' + f"{ctx.author.nick}**! " 'schlägt sich selber?! Warum aber nur :thinking:',
+                    value="", inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
+        else:
+            embedVar = discord.Embed(title="😠 Punch!", color=0xff00ff)
+            if killmode:
+                embedVar.add_field(name='**' + f"{hitter}** " 'Schlägt zu fest zu und tötet ' f"**{name}** ", value="",
+                                   inline=False)
+            else:
+                embedVar.add_field(name='**' + f"{name}** " 'Du wirst von ' f"**{hitter}** geschlagen!", value="",
+                                   inline=False)
+            embedVar.set_image(url=data["url"])
+            await ctx.send(embed=embedVar)
+
 
     @bot.hybrid_command(description='Kiddo kürzt dir einen beliebigen Link <3')
     async def shorten(self, ctx, link):
