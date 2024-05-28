@@ -5,23 +5,20 @@ Maximilian && Phillip
 12.01.2023
 """
 
-
 import csv
-import time
-import random
-import asyncio
 import discord
-import command_handler
-from discord import app_commands
 from discord.ext import commands
 from help_system import HelpCommand
 from command_handler import KiddoBot
-#import voice_handler
+
+
+# import voice_handler
 
 
 def getname(ctx):
     user = ctx.author.guild.fetch_member.name(id)
     return user
+
 
 with open("data.txt") as token:
     reader = csv.reader(token)
@@ -34,14 +31,15 @@ bot = commands.AutoShardedBot(
     commands.when_mentioned_or('!!'),
     intents=discord.Intents.all())
 
-#bot.remove_command('switchstate')
+# bot.remove_command('switchstate')
 
 bot.help_command = HelpCommand()
+
 
 ########################################################################
 
 @bot.event
-async def on_ready ():
+async def on_ready():
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching,
                                   name='durch dein Fenster :)'))
@@ -63,10 +61,9 @@ async def on_ready ():
 
     print("Moiners werter Herr :3    <3")
 
-
-
     await bot.add_cog(KiddoBot(bot))
     await bot.tree.sync()
+
 
 ########################################################################
 
@@ -83,13 +80,13 @@ async def on_member_join(member):
             'Tut mir leid, aber du bist noch nicht groß genug für den Server... :('
             'Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
         await member.ban(
-            reason = "Kiddo meint, du bist noch nicht groß genug für diesen Server. "
-                     "Du bist gebannt :)")
+            reason="Kiddo meint, du bist noch nicht groß genug für diesen Server. "
+                   "Du bist gebannt :)")
 
     else:
-    ###Nette Nachrichten für neue Mitglieder###
+        ###Nette Nachrichten für neue Mitglieder###
         await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
-                                    f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. '
+                                     f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. '
                                      f'Also keine Zeit verschwenden!!')
 
 
@@ -114,12 +111,13 @@ async def on_guild_join(guild):
             print("Failed to unban " + user.name)
             continue
 
+
 ########################################################################
 
 
-#@bot.event
-#async def on_voice_state_update(member, before, after):
- #   await voice_handler.voice(member, before, after)
+# @bot.event
+# async def on_voice_state_update(member, before, after):
+#   await voice_handler.voice(member, before, after)
 
 
 ########################################################################

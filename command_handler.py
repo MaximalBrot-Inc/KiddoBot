@@ -362,6 +362,10 @@ class KiddoBot(commands.Cog):
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
 
+    @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video abspielen :)')
+    async def play(self, ctx, *, link):
+        await yt_handler.play(link, ctx, self)
+
     @bot.hybrid_command(aliases=['Wetter', 'heute'], description='Frage Kiddo nach dem Wetter :)')
     async def wetter(self, ctx, *, location=None):
         if location:

@@ -57,10 +57,9 @@ def emoji_lookup (status):
     return emoji
 
 
-async def get_weather(message, ctx):
-
+async def get_weather(location, ctx):
     try:
-        observation = mgr.weather_at_place(message)
+        observation = mgr.weather_at_place(location)
         w = observation.weather
         temp = w.temperature('celsius')['temp']
         daten = w.detailed_status
@@ -75,18 +74,18 @@ async def get_weather(message, ctx):
             color = 0x36a822
 
         embedVar = discord.Embed(title="**Wetterbericht**", color=color)
-        embedVar.add_field(name="**Wetter**", value=f'In {message} ist es gerade {daten} {emoji}', inline=False)
-        embedVar.add_field(name="**Temperatur**", value=f'In {message} hat es gerade {temp}°C 🌡', inline=False)
+        embedVar.add_field(name="**Wetter**", value=f'In {location} ist es gerade {daten} {emoji}', inline=False)
+        embedVar.add_field(name="**Temperatur**", value=f'In {location} hat es gerade {temp}°C 🌡', inline=False)
 
         await ctx.send(embed=embedVar)
     except NotFoundError:
-        await ctx.send(f'Ich konnte {message} nicht finden :(')
+        await ctx.send(f'Ich konnte {location} nicht finden :(')
     except IndexError:
         await ctx.send('Bitte gib einen Ort an :)')
 
 
-async def get_weather_forecast(message, ctx):
-    gps = decoder(message)
+async def get_weather_forecast(location, ctx):
+    gps = decoder(location)
     try:
         one_call = mgr.one_call(lon=gps[0], lat=gps[1])
         w = one_call.forecast_daily
@@ -103,37 +102,37 @@ async def get_weather_forecast(message, ctx):
 
 
         embedVar = discord.Embed(title="**Wettervorschau**", color=color)
-        embedVar.add_field(name="**Wetter**", value=f'In {message} gibt es morgen {daten} {emoji}', inline=False)
-        embedVar.add_field(name="**Temperatur**", value=f'In {message} hat es morgen minimal {temp["min"]}°C 🌡'
+        embedVar.add_field(name="**Wetter**", value=f'In {location} gibt es morgen {daten} {emoji}', inline=False)
+        embedVar.add_field(name="**Temperatur**", value=f'In {location} hat es morgen minimal {temp["min"]}°C 🌡'
                                                         f'und maximal {temp["max"]}🌡', inline=False)
 
         await ctx.send(embed=embedVar)
 
 
     except NotFoundError:
-        await ctx.send(f'Ich konnte {message} nicht finden :(')
+        await ctx.send(f'Ich konnte {location} nicht finden :(')
     except IndexError:
         await ctx.send('Bitte gib einen Ort an :)')
 
 
-async def get_weather_alert(message, ctx):
+async def get_weather_alert(location, ctx):
     try:
-        gps = decoder(message)
+        gps = decoder(location)
 
         one_call = mgr.one_call(lon=gps[0], lat=gps[1])
         try:
             w = one_call.national_weather_alerts
             daten = w[0].description
             embedVar = discord.Embed(title="**Wetterwarnung**", color=0xff0000)
-            embedVar.add_field(name="**Warnung**", value=f'In {message} gibt es eine Wetterwarnung: {daten}', inline=False)
+            embedVar.add_field(name="**Warnung**", value=f'In {location} gibt es eine Wetterwarnung: {daten}', inline=False)
         except TypeError:
             embedVar = discord.Embed(title="**Wetterwarnung**", color=0x36a822)
-            embedVar.add_field(name="**Warnung**", value=f'In {message} gibt es keine Wetterwarnung.', inline=False)
+            embedVar.add_field(name="**Warnung**", value=f'In {location} gibt es keine Wetterwarnung.', inline=False)
 
         await ctx.send(embed=embedVar)
 
     except NotFoundError:
-        await ctx.send(f'Ich konnte {message} nicht finden :(')
+        await ctx.send(f'Ich konnte {location} nicht finden :(')
     except AssertionError:
         await ctx.send('Bitte gib einen Ort an :)')
 
