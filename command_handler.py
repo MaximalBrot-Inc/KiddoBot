@@ -82,6 +82,7 @@ class KiddoBot(commands.Cog):
     async def hilfe(self, ctx):
         # aktiviert den integrierten help command
         await HelpCommand.send_pages(ctx.channel)
+        await ctx.send("⠀")
 
     @bot.hybrid_command(description='Löscht eine bestimmte Anzahl an Nachrichten')
     @freigabe()

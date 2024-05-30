@@ -94,7 +94,7 @@ class Weather(commands.Cog):
             await ctx.send('Bitte gib einen Ort an :)')
 
     @commands.hybrid_command(name="alarm", aliases=['Wetterwarnung', 'warnung'], brief='Gibt die Wetterwarnung aus',
-                             description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarung gibt')
+                             description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarnung gibt')
     async def get_weather_alert(self, ctx, location):
         try:
             gps = decoder(location)
