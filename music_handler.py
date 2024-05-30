@@ -1,18 +1,25 @@
 import os
+import time
+
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.utils import get
 from pytube import YouTube, exceptions, Search
 
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
+source = None
+
 
 async def stream_audio(ctx, audio_stream):
-    source = discord.FFmpegPCMAudio(audio_stream.url, **FFMPEG_OPTIONS)
+    global source
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(audio_stream.url, **FFMPEG_OPTIONS), volume=0.5)
 
     discord.VoiceClient.play(source=source, after=None, self=ctx.voice_client)
 
     await ctx.interaction.followup.send(f'Spiele {audio_stream.title} ab')
+    return source
 
 
 async def stream_youtube(ctx, query):
@@ -25,7 +32,6 @@ async def stream_youtube(ctx, query):
         await ctx.interaction.followup.send('Das Video ist nicht verfügbar :(')
         return
 
-    await ctx.interaction.followup.send(f'Spiele {audio_stream.title} ab')
 
 
 async def search_and_play(ctx, query):
@@ -39,7 +45,6 @@ async def search_and_play(ctx, query):
         await ctx.interaction.followup.send('Ich konnte das Video nicht finden :(')
         return
 
-    await ctx.interaction.followup.send(f'Spiele {audio_stream.title} ab')
 
 
 class Music(commands.Cog):
@@ -103,3 +108,31 @@ class Music(commands.Cog):
             discord.VoiceClient.resume(self=ctx.voice_client)
         except AttributeError:
             await ctx.send('Ich bin nicht in einem Voice Channel!')
+
+    @commands.hybrid_command(alias=['vol'], brief='Ändert die Lautstärke', description='Ändert die Lautstärke')
+    async def volume(self, ctx, volume: int):
+
+        volume_float = volume/100
+
+        if ctx.voice_client.source is None:
+            await ctx.send('Ich spiele gerade keine Musik ab')
+            return
+
+        elif (volume < 0) or (volume > 100):
+            await ctx.send('Bitte gib eine Zahl zwischen 0 und 100 an')
+            return
+
+        if (ctx.voice_client.source.volume-volume_float) < .1:
+            while ctx.voice_client.source.volume < volume_float:
+                ctx.voice_client.source.volume += 0.05
+                time.sleep(0.1)
+        elif (ctx.voice_client.source.volume-volume_float) > -.1:
+            while ctx.voice_client.source.volume > volume_float:
+                ctx.voice_client.source.volume -= 0.05
+                time.sleep(0.1)
+        else:
+            ctx.voice_client.source.volume = volume_float
+
+        await ctx.send(f'Lautstärke auf {volume}% gesetzt')
+
+
