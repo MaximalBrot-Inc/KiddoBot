@@ -1,12 +1,16 @@
 import time
 import random
+import typing
+
 import discord
 import requests
 import yt_handler
+import music_handler
 import weather_handler
 from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
 from discord.ext import commands
 from help_system import HelpCommand
+
 #from Sparboss_implement import SparbossCommand
 
 # import pathlib
@@ -42,7 +46,7 @@ class KiddoBot(commands.Cog):
 
         else:
             switch_field.add_field(name="Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt. :)", value="",
-                                      inline=False)
+                                   inline=False)
         await ctx.send(embed=switch_field, view=view)
         readline = open("switch.txt", "w")
         readline.write(view.value)
@@ -57,13 +61,17 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command()
     @freigabe()
     async def sync(self, ctx):
+        print("Syncing...")
+        await ctx.interaction.response.defer(ephemeral=True, thinking=True)
         await ctx.bot.tree.sync()
-        await ctx.interaction.response.send_message("Sync complete")
+        await ctx.interaction.followup.send("Sync complete")
+        print("Sync complete")
 
     @bot.hybrid_command()
     @freigabe()
     async def reset(self, ctx):
-        await self.bot.change_presence(status=discord.Status.online, activity=discord.ActivityType.watching('durch dein Fenster :)'))
+        await self.bot.change_presence(status=discord.Status.online,
+                                       activity=discord.ActivityType.watching('durch dein Fenster :)'))
         await ctx.interaction.response.send_message("Reset complete")
 
     @bot.hybrid_command(aliases=['Hallo', 'hallo kiddo', 'Hallo kiddo', 'hallo Kiddo', 'Hallo Kiddo'])
@@ -120,7 +128,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx, link):
         await ctx.send('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + link)
-
 
     # Todo: Fix the voice handler
     '''
@@ -212,7 +219,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Kiddo küsst dich 0 /// 0')
     async def kiss(self, ctx, name: discord.Member = None):
 
-
         kisser = ctx.author.nick
         if kisser == None:
             kisser = ctx.author.name
@@ -241,7 +247,6 @@ class KiddoBot(commands.Cog):
                                inline=False)
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
-
 
     @bot.hybrid_command(description='Kiddo umarmt dich 0 /// 0')
     async def hug(self, ctx, name: discord.Member = None):
@@ -275,10 +280,8 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
-
     @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
     async def hit(self, ctx, name: discord.Member = None):
-
 
         hitter = ctx.author.nick
         killmode = False
@@ -330,7 +333,6 @@ class KiddoBot(commands.Cog):
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
-
     @bot.hybrid_command(description='Kiddo kürzt dir einen beliebigen Link <3')
     async def shorten(self, ctx, link):
         file = open("data.txt", "r")
@@ -362,26 +364,35 @@ class KiddoBot(commands.Cog):
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
 
-    @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video abspielen :)')
-    async def play(self, ctx, *, link):
-        await yt_handler.play(link, ctx, self)
+    '''
+    @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video abspielen :)',)
+    async def play(self, ctx, *, link: typing.Optional[str]):
+        if link is None:
+            await ctx.send('Bitte gib einen Link an!')
+            return
+        if ctx.author.voice is None:
+            await ctx.send('Du bist in keinem Voice Channel!')
+            return
+
+        await music_handler.play(link, ctx, self)
+        '''
 
     @bot.hybrid_command(aliases=['Wetter', 'heute'], description='Frage Kiddo nach dem Wetter :)')
-    async def wetter(self, ctx, *, location=None):
+    async def wetter(self, ctx, *, location):
         if location:
             await weather_handler.get_weather(location, ctx)
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
     @bot.hybrid_command(description='Wie wird denn wohl das Wetter morgen?')
-    async def morgen(self, ctx, *, location=None):
+    async def morgen(self, ctx, *, location):
         if location:
             await weather_handler.get_weather_forecast(location, ctx)
         else:
             await ctx.send("Bitte gib einen Ort an!")
 
     @bot.hybrid_command(description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarung gibt')
-    async def alarm(self, ctx, *, location=None):
+    async def alarm(self, ctx, *, location):
         if location:
             await weather_handler.get_weather_alert(location, ctx)
         else:
@@ -391,23 +402,10 @@ class KiddoBot(commands.Cog):
     async def pingr(self, ctx):
         await ctx.send('Pong! Mit {0}ms Verzögerung.'.format(round(self.bot.latency, 1)))
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Dieser Befehl existiert nicht bozo!")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Bitte gib einen Ort an!")
-        elif isinstance(error, commands.CheckFailure):
-            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
-        else:
-            await ctx.send("Ein Fehler ist aufgetreten!")
-            print(error)
-
     @bot.hybrid_command(description='Kiddo')
     async def avatar(self, ctx, img: discord.Attachment):
-        await self.bot.user.edit(avatar = await img.read())
-        await ctx.send("Avatar geändert", file = await img.read())
-
+        await self.bot.user.edit(avatar=await img.read())
+        await ctx.send("Avatar geändert", file=await img.read())
 
     @bot.hybrid_command(description='Wieder was gespart?')
     async def sparboss(self, ctx):
@@ -438,8 +436,6 @@ class KiddoBot(commands.Cog):
                                   ])
                     await ctx.popup(modal)
 
-
-
                     #await interaction.response.edit_message(embed=embedVar)
 
         select.callback = select_callback
@@ -451,7 +447,6 @@ class KiddoBot(commands.Cog):
         embedVar.add_field(
             name="Wähle weise...", value="",
             inline=False)
-
 
     @bot.hybrid_command(description='Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
@@ -493,7 +488,6 @@ class KiddoBot(commands.Cog):
                     if role.name == "uwu admins":
                         await role.delete(reason="Unnötig")
                         print('"uwu admins" Rolle gelöscht')
-
 
                 for user in ctx.guild.members:
                     try:
@@ -552,3 +546,15 @@ class KiddoBot(commands.Cog):
 
         else:
             await ctx.send("Da ist etwas falsch gelaufen :/")
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send("Dieser Befehl existiert nicht bozo!")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Bitte gib einen Ort an!")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+        else:
+            await ctx.send("Ein Fehler ist aufgetreten!")
+            print(error)

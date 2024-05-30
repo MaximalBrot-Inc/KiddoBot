@@ -10,6 +10,7 @@ import discord
 from discord.ext import commands
 from help_system import HelpCommand
 from command_handler import KiddoBot
+from music_handler import Music
 
 
 # import voice_handler
@@ -62,7 +63,8 @@ async def on_ready():
     print("Moiners werter Herr :3    <3")
 
     await bot.add_cog(KiddoBot(bot))
-    await bot.tree.sync()
+    await bot.add_cog(Music(bot))
+    #await bot.tree.sync()
 
 
 ########################################################################
