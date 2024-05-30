@@ -23,40 +23,14 @@ def decoder(ort):
 
 
 def emoji_lookup(status):
-    match status:
-        case 'Clear':
-            emoji = '☀️'
-        case 'Clouds':
-            emoji = '☁️'
-        case 'Rain':
-            emoji = '☔'
-        case 'Snow':
-            emoji = '❄️'
-        case 'Thunderstorm':
-            emoji = '⛈️'
-        case 'Drizzle':
-            emoji = '🌧️'
-        case 'Mist':
-            emoji = '🌫️'
-        case 'Smoke':
-            emoji = '🔥'
-        case 'Haze':
-            emoji = '😶‍🌫️'
-        case 'Dust':
-            emoji = '🌫️'
-        case 'Fog':
-            emoji = '🌁'
-        case 'Sand':
-            emoji = '🌫️'
-        case 'Ash':
-            emoji = '🌋'
-        case 'Squall':
-            emoji = '💨'
-        case 'Tornado':
-            emoji = '🌪️'
-        case _:
-            emoji = '??'
-    return emoji
+    emoji_list = {'Clear': '☀️', 'Clouds': '☁️', 'Rain': '☔', 'Snow': '❄️', 'Thunderstorm': '⛈️', 'Drizzle': '🌧️',
+                  'Mist': '🌫️', 'Smoke': '🔥', 'Haze': '😶‍🌫️', 'Dust': '🌫️', 'Fog': '🌁', 'Sand': '🌫️', 'Ash': '🌋',
+                  'Squall': '💨', 'Tornado': '🌪️'}
+
+    if status not in emoji_list:
+        return '??'
+    else:
+        return emoji_list[status]
 
 
 class Weather(commands.Cog):
@@ -72,9 +46,9 @@ class Weather(commands.Cog):
             daten_einfach = w.status
             emoji = emoji_lookup(daten_einfach)
 
-            if (temp <= 0):
+            if temp <= 0:
                 color = 0x34c0eb
-            elif (temp >= 30):
+            elif temp >= 30:
                 color = 0xeb8334
             else:
                 color = 0x36a822
@@ -100,9 +74,9 @@ class Weather(commands.Cog):
             daten = w[0].detailed_status
             daten_einfach = w[0].status
             emoji = emoji_lookup(daten_einfach)
-            if (temp["min"] <= 0):
+            if temp["min"] <= 0:
                 color = 0x34c0eb
-            elif (temp["max"] >= 30):
+            elif temp["max"] >= 30:
                 color = 0xeb8334
             else:
                 color = 0x36a822
