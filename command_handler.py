@@ -364,39 +364,9 @@ class KiddoBot(commands.Cog):
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
 
-    '''
-    @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video abspielen :)',)
-    async def play(self, ctx, *, link: typing.Optional[str]):
-        if link is None:
-            await ctx.send('Bitte gib einen Link an!')
-            return
-        if ctx.author.voice is None:
-            await ctx.send('Du bist in keinem Voice Channel!')
-            return
 
-        await music_handler.play(link, ctx, self)
-        '''
 
-    @bot.hybrid_command(aliases=['Wetter', 'heute'], description='Frage Kiddo nach dem Wetter :)')
-    async def wetter(self, ctx, *, location):
-        if location:
-            await weather_handler.get_weather(location, ctx)
-        else:
-            await ctx.send("Bitte gib einen Ort an!")
 
-    @bot.hybrid_command(description='Wie wird denn wohl das Wetter morgen?')
-    async def morgen(self, ctx, *, location):
-        if location:
-            await weather_handler.get_weather_forecast(location, ctx)
-        else:
-            await ctx.send("Bitte gib einen Ort an!")
-
-    @bot.hybrid_command(description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarung gibt')
-    async def alarm(self, ctx, *, location):
-        if location:
-            await weather_handler.get_weather_alert(location, ctx)
-        else:
-            await ctx.send("Bitte gib einen Ort an!")
 
     @bot.hybrid_command(description='Schaue nach, wie lang Kiddo braucht um dir eine Antwort zu senden :)')
     async def pingr(self, ctx):

@@ -8,9 +8,10 @@ Maximilian && Phillip
 import csv
 import discord
 from discord.ext import commands
+from music_handler import Music
 from help_system import HelpCommand
 from command_handler import KiddoBot
-from music_handler import Music
+from weather_handler import Weather
 
 
 # import voice_handler
@@ -64,7 +65,8 @@ async def on_ready():
 
     await bot.add_cog(KiddoBot(bot))
     await bot.add_cog(Music(bot))
-    #await bot.tree.sync()
+    await bot.add_cog(Weather(bot))
+    await bot.tree.sync()
 
 
 ########################################################################
