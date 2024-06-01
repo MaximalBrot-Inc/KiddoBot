@@ -6,7 +6,10 @@ Maximilian && Phillip
 """
 
 import csv
+import sys
+
 import discord
+import ctypes.util
 from discord.ext import commands
 from music_handler import Music
 from help_system import HelpCommand
@@ -28,6 +31,13 @@ with open("data.txt") as token:
     GUILD = next(reader)
 
 TOKEN = TOKEN[0]
+
+if sys.platform == "linux":
+    #discord.opus.load_opus()
+    discord.opus.load_opus(ctypes.util.find_library('opus'))
+    print(ctypes.util.find_library('opus'))
+    print(discord.opus.is_loaded())
+
 
 bot = commands.AutoShardedBot(
     commands.when_mentioned_or('!!'),
