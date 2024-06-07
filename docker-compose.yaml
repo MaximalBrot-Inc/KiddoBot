@@ -1,0 +1,6 @@
+services:
+  kiddow:
+    build:
+      context: .
+    volumes:
+      - ./data.txt:/usr/src/app/data.txt:ro
