@@ -17,11 +17,11 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
-RUN apt-get update
+#RUN apt-get update
 
-RUN apt install libopus0 libopus-dev \
-    sudo apt-get install opus-tools
-RUN apt-get install -y --no-install-recommends ffmpeg
+#RUN apt install libopus0 libopus-dev \
+#    sudo apt-get install opus-tools
+#RUN apt-get install -y --no-install-recommends ffmpeg
 
 
 
