@@ -17,7 +17,13 @@ from command_handler import KiddoBot
 from weather_handler import Weather
 
 
-# import voice_handler
+import logging
+
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+
+# Assume client refers to a discord.Client subclass...
+
+
 
 
 def getname(ctx):
@@ -31,13 +37,13 @@ with open("data.txt") as token:
     GUILD = next(reader)
 
 TOKEN = TOKEN[0]
-
+'''
 if sys.platform == "linux":
     #discord.opus.load_opus()
     discord.opus.load_opus(ctypes.util.find_library('opus'))
     print(ctypes.util.find_library('opus'))
     print(discord.opus.is_loaded())
-
+'''
 
 bot = commands.AutoShardedBot(
     commands.when_mentioned_or('!!'),
@@ -136,4 +142,4 @@ async def on_guild_join(guild):
 
 ########################################################################
 
-bot.run(TOKEN)
+bot.run(TOKEN, log_handler=handler, log_level=logging.DEBUG)
