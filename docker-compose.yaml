@@ -1,5 +1,6 @@
 services:
-  kiddow:
+  Kiddo:
+    image: ghcr.io/maximalbrot-inc/kiddobot:latest
     build:
       context: .
     volumes:

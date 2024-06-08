@@ -25,6 +25,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 
 
-COPY --exclude=data.txt . .
+COPY  . .
 
 CMD [ "python", "-u", "./KiddoBot.py" ]
