@@ -28,6 +28,7 @@ class KiddoBot(commands.Cog):
 
         return commands.check(case)
 
+    @client.event
     async def on_message(self, ctx):
         counter = 0
         if "lmao" in message.content or "Lmao" in message.content or "LMAO" in message.content and ctx.author.id == 695885580629704734:
