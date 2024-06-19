@@ -28,14 +28,12 @@ class KiddoBot(commands.Cog):
 
         return commands.check(case)
 
-    @bot.command()
-    async def lmao_counter(self, ctx):
+    async def on_message(self, ctx):
         counter = 0
-        if ctx.author.id == 1014865506152480828:
-            if ctx.content == "lmao" or ctx.content == "LMAO" or ctx.content == "Lmao":
-                member = 1014865506152480828
-                counter += 1
-                await member.edit(nick = f"Leo (1CHEL) | lmao-counter = {counter}")
+        if "lmao" in message.content or "Lmao" in message.content or "LMAO" in message.content and ctx.author.id == 695885580629704734:
+            member = 695885580629704734
+            counter += 1
+            await member.edit(nick = f"Leo (1CHEL) | lmao-counter = {counter}")
 
     @bot.hybrid_command()
     @freigabe()
