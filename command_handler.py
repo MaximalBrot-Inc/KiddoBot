@@ -28,6 +28,15 @@ class KiddoBot(commands.Cog):
 
         return commands.check(case)
 
+    @bot.command()
+    async def lmao_counter(self, ctx):
+        counter = 0
+        if ctx.author.id == 1014865506152480828:
+            if ctx.content == "lmao" or ctx.content == "LMAO" or ctx.content == "Lmao":
+                member = 1014865506152480828
+                counter += 1
+                await member.edit(nick = f"Leo (1CHEL) | lmao-counter = {counter}")
+
     @bot.hybrid_command()
     @freigabe()
     async def switchpls(self, ctx):
@@ -362,10 +371,6 @@ class KiddoBot(commands.Cog):
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
     async def downloader(self, ctx, *, link):
         await yt_handler.downloadvideo(link, ctx)
-
-
-
-
 
     @bot.hybrid_command(description='Schaue nach, wie lang Kiddo braucht um dir eine Antwort zu senden :)')
     async def pingr(self, ctx):
