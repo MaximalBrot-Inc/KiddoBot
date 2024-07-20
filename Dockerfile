@@ -13,9 +13,8 @@ WORKDIR /usr/src/app
 
 #RUN  echo 'Acquire::http { Proxy "http://10.5.5.51:3142"; };' >> /etc/apt/apt.conf.d/90proxy
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install --no-cache-dir -r requirements.txt
 
 #RUN apt-get update
 
