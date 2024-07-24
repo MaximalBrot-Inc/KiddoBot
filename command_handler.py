@@ -28,14 +28,6 @@ class KiddoBot(commands.Cog):
 
         return commands.check(case)
 
-    @client.event
-    async def on_message(self, ctx):
-        counter = 0
-        if "lmao" in message.content or "Lmao" in message.content or "LMAO" in message.content and ctx.author.id == 695885580629704734:
-            member = 695885580629704734
-            counter += 1
-            await member.edit(nick = f"Leo (1CHEL) | lmao-counter = {counter}")
-
     @bot.hybrid_command()
     @freigabe()
     async def switchpls(self, ctx):
@@ -379,6 +371,11 @@ class KiddoBot(commands.Cog):
     async def avatar(self, ctx, img: discord.Attachment):
         await self.bot.user.edit(avatar=await img.read())
         await ctx.send("Avatar geändert", file=await img.read())
+
+    @bot.hybrid_command(description='Kiddo')
+    async def banner(self, ctx, img: discord.Attachment):
+        await self.bot.user.edit(banner=await img.read())
+        await ctx.send("Banner geändert", file=await img.read())
 
     @bot.hybrid_command(description='Wieder was gespart?')
     async def sparboss(self, ctx):
