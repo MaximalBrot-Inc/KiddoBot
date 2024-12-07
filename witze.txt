@@ -9,12 +9,12 @@ Steht ein Baum allein im Wald.
 Sitzt einer im Stehcafe.
 Wie heist der Schutzpatron der Vergesslichen? Dings
 Was machen Mathematiker im Garten? Wurzeln ziehen
-Wollte Spiderman ansrufen aber der hatte kein Netz.
+Wollte Spiderman anrufen aber der hatte kein Netz.
 Weil es dann nicht mehr lustig ist. Warum sollte man die Pointe nie zuerst erzählen?
 Wann gehen U-Boote unter? Am Tag der offenen Tür
-Meister Yoda, können Sie was zum schiefen Turm von Pisa sagen? Gerade nicht.
+Meister Yoda, können Sie was zum Schiefen Turm von Pisa sagen? Gerade nicht.
 Warum klaut Robin Hood Deodorant? Um es unter den Armen zu verteilen
-Treffen sich zwei Kerzen: Sagt die eine zur anderen: „Gehen wir heute aus?"
+Treffen sich zwei Kerzen: Sagt die eine zur anderen: „Gehen wir heute aus?“
 Zu welchem Arzt geht Pinocchio? Zum Holz-Nasen-Ohren-Arzt
 Was liegt am Strand und spricht undeutlich? Eine Nuschel
 Was ist gross, grau und telefoniert? Ein Telefant
@@ -55,3 +55,9 @@ Deine Mutter arbeitet am Strand als Schatten.
 Deine Mutter arbeitet auf der Baustelle als Gegengewicht vom Kran.
 Wenn deine Mutter am Strand liegt, kommt Greenpeace und rollt sie zurück ins Meer.
 Du bist so hässlich, dass man dich nicht mal mit einem Taschenrechner vergleichen kann. Kein Witz. Einfach die Wahrheit.
+Wie nennt man einen Schneemann ohne Schneebälle? Schneefrau
+Was ist grün und steht vor der Tür? Ein Klopfsalat
+Was ist gelb und kann nicht schwimmen? Ein Bagger
+Was ist braun lecker und läuft durch den Wald? Ein Kuchen
+Was ist braun, läuft durch den Wald und ist gefährlich? Ein Kuchen mit Messer
+Was ist braun, läuft durch den Wald und schreit die ganze Zeit "Kugel, Kugel"? Ein Kugel-schrei-bär
