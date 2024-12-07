@@ -1,25 +1,15 @@
 import discord
+import requests
 from discord.ext import commands
-from pyowm.owm import OWM
-from pyowm.utils.config import get_default_config
-from pyowm.commons.exceptions import NotFoundError
 
-config_dict = get_default_config()
-config_dict['language'] = 'de'
-owm = OWM('18bca685e2b3a0f410b5f71a66a8a621', config_dict)
-mgr = owm.weather_manager()
-mgg = owm.geocoding_manager()
+api_key = open("data.txt", "r").readlines()[17]
+units = 'metric'
+lang = 'de'
 
-
-#observation = mgr.weather_at_place('Paris, FR')
 
 def decoder(ort):
-    ruckgabe = []
-    list_of_locations = mgg.geocode(ort)
-    gps = list_of_locations[0]
-    ruckgabe.append(gps.lon)
-    ruckgabe.append(gps.lat)
-    return ruckgabe
+    api_data = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?limit=5&q={ort}&appid={api_key}').json()
+    return api_data[0]['lon'], api_data[0]['lat']
 
 
 def emoji_lookup(status):
@@ -39,12 +29,16 @@ class Weather(commands.Cog):
                              description='Frage Kiddo nach dem Wetter :)')
     async def get_weather(self, ctx, location):
         try:
-            observation = mgr.weather_at_place(location)
-            w = observation.weather
-            temp = w.temperature('celsius')['temp']
-            daten = w.detailed_status
-            daten_einfach = w.status
-            emoji = emoji_lookup(daten_einfach)
+            gps = decoder(location)
+
+            api_data = requests.get(
+                f'https://api.openweathermap.org/data/3.0/onecall?lat={gps[1]}&lon={gps[0]}&exclude=current,minutely,'
+                f'daily,alerts&appid={api_key}&units={units}&lang={lang}').json()
+
+            api_data = api_data['hourly'][0]
+            temp = api_data['temp']
+            daten = api_data['weather'][0]['description']
+            emoji = emoji_lookup(api_data['weather'][0]['main'])
 
             if temp <= 0:
                 color = 0x34c0eb
@@ -58,22 +52,23 @@ class Weather(commands.Cog):
             embedVar.add_field(name="**Temperatur**", value=f'In {location} hat es gerade {temp}°C 🌡', inline=False)
 
             await ctx.send(embed=embedVar)
-        except NotFoundError:
-            await ctx.send(f'Ich konnte {location} nicht finden :(')
         except IndexError:
-            await ctx.send('Bitte gib einen Ort an :)')
+            await ctx.send('Bitte gib einen echten Ort an :)')
 
     @commands.hybrid_command(name="morgen", aliases=['Wettervorhersage'], brief='Gibt die Wettervorhersage aus',
                              description='Wie wird denn wohl das Wetter morgen?')
     async def get_weather_forecast(self, ctx, location):
-        gps = decoder(location)
         try:
-            one_call = mgr.one_call(lon=gps[0], lat=gps[1])
-            w = one_call.forecast_daily
-            temp = w[0].temperature('celsius')
-            daten = w[0].detailed_status
-            daten_einfach = w[0].status
-            emoji = emoji_lookup(daten_einfach)
+            gps = decoder(location)
+
+            api_data = requests.get(
+                f'https://api.openweathermap.org/data/3.0/onecall?lat={gps[1]}&lon={gps[0]}&exclude=current,minutely,'
+                f'&appid={api_key}&units={units}&lang={lang}').json()
+
+            api_data = api_data['daily'][1]
+            temp = api_data['temp']
+            daten = api_data['weather'][0]['description']
+            emoji = emoji_lookup(api_data['weather'][0]['main'])
             if temp["min"] <= 0:
                 color = 0x34c0eb
             elif temp["max"] >= 30:
@@ -88,10 +83,8 @@ class Weather(commands.Cog):
 
             await ctx.send(embed=embedVar)
 
-        except NotFoundError:
-            await ctx.send(f'Ich konnte {location} nicht finden :(')
         except IndexError:
-            await ctx.send('Bitte gib einen Ort an :)')
+            await ctx.send('Bitte gib einen echten Ort an :)')
 
     @commands.hybrid_command(name="alarm", aliases=['Wetterwarnung', 'warnung'], brief='Gibt die Wetterwarnung aus',
                              description='Frage nach, ob es in deiner Umgebung gerade eine Wetterwarnung gibt')
@@ -99,21 +92,21 @@ class Weather(commands.Cog):
         try:
             gps = decoder(location)
 
-            one_call = mgr.one_call(lon=gps[0], lat=gps[1])
+            api_data = (requests.get(f'https://api.openweathermap.org/data/3.0/onecall?lat={gps[1]}&lon={gps[0]}'
+                                     'f&exclude=current,minutely,hourly,daily&appid={api_key}&units={units}'
+                                     'f&lang={lang}').json())
+
             try:
-                w = one_call.national_weather_alerts
-                daten = w[0].description
                 embedVar = discord.Embed(title="**Wetterwarnung**", color=0xff0000)
-                embedVar.add_field(name="**Warnung**", value=f'In {location} gibt es eine Wetterwarnung: {daten}',
-                                   inline=False)
-            except TypeError:
+                embedVar.add_field(name="**Warnung**",
+                                   value=f'In {location} gibt es eine Wetterwarnung: '
+                                         f'{api_data["alerts"][0]["description"]}', inline=False)
+            except KeyError:
                 embedVar = discord.Embed(title="**Wetterwarnung**", color=0x36a822)
                 embedVar.add_field(name="**Warnung**", value=f'In {location} gibt es keine Wetterwarnung.',
                                    inline=False)
 
             await ctx.send(embed=embedVar)
 
-        except NotFoundError:
-            await ctx.send(f'Ich konnte {location} nicht finden :(')
-        except AssertionError:
-            await ctx.send('Bitte gib einen Ort an :)')
+        except IndexError:
+            await ctx.send('Bitte gib einen echten Ort an :)')
