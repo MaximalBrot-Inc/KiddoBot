@@ -1,32 +1,30 @@
-import time
 import random
-import typing
 import asyncio
 import discord
 import requests
 import yt_handler
-import music_handler
-import weather_handler
 from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
 from discord.ext import commands
 from help_system import HelpCommand
+
 
 #from Sparboss_implement import SparbossCommand
 
 # import pathlib
 
 
-class KiddoBot(commands.Cog):
+def freigabe():
+    async def case(ctx):
+        return (ctx.author.id == 695885580629704734) or (ctx.author.id == 408627107795828746)
+
+    return commands.check(case)
+
+
+class Commands(commands.Cog):
     bot = commands.AutoShardedBot(commands.when_mentioned_or('!!'), intents=discord.Intents.all())
 
     def __init__(self, bot):
         self.bot = bot
-
-    def freigabe():
-        async def case(ctx):
-            return (ctx.author.id == 695885580629704734) or (ctx.author.id == 408627107795828746)
-
-        return commands.check(case)
 
     @bot.hybrid_command()
     @freigabe()

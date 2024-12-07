@@ -13,7 +13,7 @@ import ctypes.util
 from discord.ext import commands
 from music_handler import Music
 from help_system import HelpCommand
-from command_handler import KiddoBot
+from command_handler import Commands
 from weather_handler import Weather
 
 
@@ -79,7 +79,7 @@ async def on_ready():
 
     print("Moiners werter Herr :3    <3")
 
-    await bot.add_cog(KiddoBot(bot))
+    await bot.add_cog(Commands(bot))
     await bot.add_cog(Music(bot))
     await bot.add_cog(Weather(bot))
     await bot.tree.sync()
