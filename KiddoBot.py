@@ -34,6 +34,7 @@ with open("data.txt") as token:
     GUILD = next(reader)
 
 TOKEN = TOKEN[0]
+
 '''
 if sys.platform == "linux":
     #discord.opus.load_opus()
@@ -74,7 +75,7 @@ async def on_ready():
 
     print("----------------------------------")
 
-    print("Moiners werter Herr :3    <3")
+    print("Moiners werter Herr :3")
 
     await bot.add_cog(Commands(bot))
     await bot.add_cog(Music(bot))
