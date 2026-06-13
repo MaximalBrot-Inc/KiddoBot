@@ -7,6 +7,7 @@ Maximilian && Phillip
 
 import csv
 import sys
+import logging
 
 import discord
 import ctypes.util
@@ -17,13 +18,9 @@ from command_handler import Commands
 from weather_handler import Weather
 
 
-import logging
-
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
-# Assume client refers to a discord.Client subclass...
-
-
+# Assume client refers to a discord.Client subclass..
 
 
 def getname(ctx):
@@ -90,24 +87,14 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    await member.create_dm()
-    ###Nicht so nette Nachrichten lol###
     readline = open("switch.txt", "r")
     switch_state = readline.read()
-    if switch_state == 'on':
+    if switch_state == "on":
+        reason = "Oopsie!"
+        await member.create_dm()
         ###Banne alle neuen Mitglieder###
-        await member.dm_channel.send(
-            'Tut mir leid, aber du bist noch nicht groß genug für den Server... :('
-            'Versuche es in ein paar Jahren nochmal :) Tschüssi :)')
-        await member.ban(
-            reason="Kiddo meint, du bist noch nicht groß genug für diesen Server. "
-                   "Du bist gebannt :)")
-
-    else:
-        ###Nette Nachrichten für neue Mitglieder###
-        await member.dm_channel.send(f'Hi {member.name}, willkommen auf dem Server! Regeln? Durchlesen? Schwachsinn! '
-                                     f'Niemand liest sich die Regeln durch und glaub mir, sie sind unnötig. '
-                                     f'Also keine Zeit verschwenden!!')
+        await member.dm_channel.send("Oopsie, fehler! :face_with_spiral_eyes:")
+        await member.ban(reason=reason)
 
 
 @bot.event
