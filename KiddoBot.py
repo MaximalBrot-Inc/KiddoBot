@@ -75,7 +75,7 @@ async def on_ready():
 
     print("----------------------------------")
 
-    print("Moiners werter Herr :3")
+    print("Moiners, werter Herr :3")
 
     await bot.add_cog(Commands(bot))
     await bot.add_cog(Music(bot))
